@@ -1,0 +1,246 @@
+@bg_color: #515a6e;
+@border_color: #515970;
+@iv_font_size: 0.829166vw;
+@media screen and (max-width: 2000px) {
+  .now-date-bar {
+    transform: scale(1);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(1);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+@media screen and (max-width: 1500px) {
+  .now-date-bar {
+    transform: scale(1);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(0.8);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+@media screen and (max-width: 1300px) {
+  .now-date-bar {
+    transform: scale(1);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(.7);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+@media screen and (max-width: 1200px) {
+  .now-date-bar {
+    transform: scale(0.9);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(0.6);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+@media screen and (max-width: 1100px) {
+  .now-date-bar {
+    transform: scale(0.8);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(0.5);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+@media screen and (max-width: 1000px) {
+  .now-date-bar {
+    transform: scale(0.6);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(0.4);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+@media screen and (max-width: 800px) {
+  .now-date-bar {
+    transform: scale(0.6);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(0.4);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+@media screen and (max-width: 800px) {
+  .now-date-bar {
+    transform: scale(0.6);
+    -webkit-transform-origin-x: 100%;
+    -moz-transform-origin-x: 100%;
+    -ms-transform-origin-x: 100%;
+    -o-transform-origin-x: 100% ;
+  }
+  .query-bar-left-item {
+    transform: scale(0.4);
+    -webkit-transform-origin-x: 0;
+    -moz-transform-origin-x: 0;
+    -ms-transform-origin-x: 0;
+    -o-transform-origin-x: 0 ;
+    z-index: 999;
+  }
+}
+.sh-label-title{
+  color: #0acddf;
+  font-weight: bold;
+}
+
+.bg-color{
+  color: #fff;
+  background-color: #22272d;
+  .query-bar-left {
+    margin-bottom: 0.520833vw;
+  }
+  .sh-select-width {
+    width: 150px;
+  }
+  @font-face {
+    font-family: 'sh-font-time';
+    src: url("../../../styles/fonts/DIGITAL-Dreamfat.ttf");
+  }
+  .now-date-bar {
+    margin-bottom: 0.520833vw;
+    .now-date-label{
+      line-height: 1.666666vw;
+      font-size: @iv_font_size;
+      word-break: normal;
+      white-space: nowrap;
+    }
+    .now-date-value {
+      color: #bcbcbc;
+      font-family: 'sh-font-time';
+      font-size: @iv_font_size;
+      line-height: 1.666666vw;
+      word-break: normal;
+      white-space: nowrap;
+    }
+  }
+  .ivu-select-single .ivu-select-selection .ivu-select-placeholder, .ivu-select-single .ivu-select-selection .ivu-select-selected-value {
+    display: block;
+    background: #2f343d;
+    color: #fff;
+    height: 30px;
+    border: 1px solid #515970;
+    line-height: 30px;
+    font-size: 12px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    padding-left: 8px;
+    border-radius: 2px;
+    padding-right: 24px;
+  }
+  .ivu-select-selection {
+    display: block;
+    box-sizing: border-box;
+    outline: 0;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    cursor: pointer;
+    position: relative;
+    background-color: #fff;
+    border-radius: 4px;
+    transition: all .2s ease-in-out;
+  }
+  .ivu-select-dropdown {
+    max-height: 200px;
+    overflow:auto;
+    margin: 5px 0;
+    border: 1px solid #2f343d;
+    padding: 5px 0;
+    background-color: #2f343d;
+    color: #fff;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 1px 6px rgba(0,0,0,.2);
+    z-index: 9999999999
+  }
+  .ivu-select-item {
+    margin: 0;
+    line-height: normal;
+    padding: 7px 16px;
+    clear: both;
+    color: gainsboro;
+    font-size: 12px !important;
+    white-space: nowrap;
+    list-style: none;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+  }
+  .ivu-select-item:hover {
+    margin: 0;
+    line-height: normal;
+    padding: 7px 16px;
+    clear: both;
+    color: #fff;
+    font-size: 12px !important;
+    white-space: nowrap;
+    list-style: none;
+    background: #616878;
+    cursor: pointer;
+    transition: background .2s ease-in-out;
+  }
+  .ivu-select-item-selected, .ivu-select-item-selected:hover {
+    color: #2d8cf0;
+    background: #616878;
+  }
+}

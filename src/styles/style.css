@@ -1,0 +1,226 @@
+.tab-state{
+    vertical-align: top;
+    display: inline-block;
+    background-color: #f8f8f8;
+    /*height: 810px;*/
+}
+.flex-justify{
+    display: flex;
+    justify-content: space-between;
+}
+.flexLayOutBetween{
+    display: flex;
+    justify-content: space-between;
+    /*align-items: flex-start;*/
+    /*justify-items: flex-start;*/
+    /*vertical-align: top;*/
+}
+.tab-state-item{
+    border-bottom: 1px solid #f1f1f1;
+    width: 120px;
+    text-align: center;
+    height: 48px;
+    line-height: 48px;
+    font-size: 12px;
+}
+.tab-state-item:hover{
+    background-color: #f1f1f1;
+}
+.tab-title{
+    width: 120px;
+    text-align: center;
+    height: 40px;
+    line-height: 40px;
+
+    background-color: #ddd;
+    font-size: 14px;
+    font-weight: bold;
+}
+.tab-data{
+    /*height: 810px;*/
+    /*vertical-align: top;*/
+    padding-left: 20px;
+    overflow: hidden;
+}
+/* addMachines ------------------------------*/
+/* 机台里面搜索的宽度 */
+.addMachineFormWidth{
+    width: 120px !important;
+    display: inline-block;
+}
+/* table表已选机台的颜色 */
+.ivu-table .tableSelectedColor td {
+    background-color: #ebf7ff;
+}
+/* addMachines ------------------------------*/
+
+.user-message-block{
+    padding: 10px 10px 10px 16px;
+    border: 1px solid #eee;
+    border-radius: 5px;
+}
+/*// 选择物料的模块*/
+.select-product .ivu-modal-wrap{
+    z-index: 2222 !important;
+}
+.select-product-search .ivu-select-selection{
+    border-bottom-right-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+}
+/*// modal只显示名称不可以编辑*/
+.modal-readonly{
+    height: 32px;
+    line-height: 32px;
+    padding-left: 8px;
+    background-color: #f8f8f8;
+    border-radius: 4px;
+    color: #aab2bd;
+    /*display: inline-block;*/
+}
+/*// 搜索框架中字符串 */
+.formSpanWidth {
+    text-align: right;
+    width: 150px;
+    display: inline-block;
+}
+.inputNumberWidth {
+    width: 100%!important;
+}
+/**/
+/*.flexLayOutBetween*/
+.cycle{
+    font-weight: bold;
+    text-align: center;
+    display: inline-block;
+    line-height: 32px;
+    vertical-align: middle;
+    /*margin-left: 4px;*/
+    margin-left: 8px;
+    margin-right: 8px;
+    /*margin: 8px 8px;*/
+}
+.whiteSpace{
+    color: #ff9900;
+    width: 150px;
+    display: block;
+    overflow: hidden;
+    textOverflow: ellipsis;
+    whiteSpace: nowrap
+}
+.codeWidth{
+    width: 200px;
+    display: inline-block;
+}
+.transfer-class-name .ivu-select-selection{
+    /*background-color: #22272d !important;*/
+    color: #fff;
+    background-color: transparent !important
+}
+.transfer-class .ivu-input{
+    background-color: transparent !important
+}
+.xw-chart-Table .ivu-table{
+    color: #fff;
+    font-weight: normal;
+    background-color: transparent !important;
+}
+.xw-chart-Table .ivu-table th{
+    background-color: transparent !important;
+}
+.xw-chart-Table .ivu-table tr{
+    background-color: transparent !important;
+}
+.xw-chart-Table .ivu-table td{
+    background-color: transparent !important;
+}
+/*//工艺参数*/
+.selectParams-code-hover{
+    background-color: #bcbcbc;
+}
+.report-sheet-date .ivu-select-selection{
+    background-color: #2D8CF0!important;
+}
+.report-sheet-date .ivu-icon-ios-arrow-down:before{
+    color: #fff;
+}
+/*包装*/
+.user-report .ivu-form .ivu-form-item-label {
+    font-size: 20px !important;
+    padding: 10px 8px 10px 0 !important;
+}
+.user-report-return{
+    background-color: #f9f9f9;
+    border-radius: 2px;
+    padding: 5px 20px;
+    font-size: 14px;
+    border: 1px solid #515a6e;
+}
+.margin-right-5{
+    margin-right: 5px;
+}
+#view-pack .ivu-table{
+    font-size: 20px !important;
+}
+#view-pack .ivu-table th{
+    height: 60px !important;
+}
+#view-pack .ivu-table td{
+    height: 60px !important;
+}
+#pack-bar .table-color .ivu-table {
+    color: #fff;
+    font-weight: normal;
+    background: #22272d;
+}
+/*#pack-bar .order-title{*/
+    /*color: #fff!important;*/
+/*}*/
+#pack-bar .ivu-select-single .ivu-select-selection .ivu-select-placeholder, #pack-bar .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    font-size: 18px !important;
+}
+#screen .ivu-select-single .ivu-select-selection .ivu-select-placeholder, #screen .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    font-size: 18px !important;
+}
+#tv .ivu-select-single .ivu-select-selection .ivu-select-placeholder, #tv .ivu-select-single .ivu-select-selection .ivu-select-selected-value{
+    font-size: 12px !important;
+    line-height: 24px;
+}
+#pack-bar .ivu-table{
+    font-weight: normal;
+    color: #f1f1f1!important;
+}
+#pack-bar .ivu-table th {
+    background-color: #5b657e !important;
+    /*line-height: 50px !important;*/
+    padding: 10px 0;
+    font-size: 36px !important;
+}
+#pack-bar .ivu-table td {
+    font-size: 36px !important;
+    /*line-height: 50px !important;*/
+    padding: 10px 0;
+    background-color: #22272d !important;
+}
+#pack-bar .ivu-table td, #pack-bar .ivu-table th{
+    border-bottom: 1px solid #515970 !important;
+    border-right: 1px solid #515970 !important;
+}
+#pack-bar .ivu-table td:last-child, #pack-bar .ivu-table th:last-child{
+    border-right: none;
+}
+#pack-bar .ivu-table-wrapper{
+    /*border: 1px solid #515970 !important;*/
+}
+.selectBackground{
+    background:#2f343d !important;
+    color: #fff;
+    width:200px;
+}
+.selectBackground .ivu-select-selection{
+    background:#2f343d;
+    color: #fff;
+    border:solid 1px #50596f;
+}
+#tv .ivu-select-single .ivu-select-selection {
+    height: 24px !important;
+}

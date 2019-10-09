@@ -1,0 +1,448 @@
+/*命名规则：
+    使用“-”间隔，不可使用驼峰命名
+*/
+.margin-bottom-0{
+    margin-bottom: 0;
+}
+.margin-top-15{
+    margin-top: 15px;
+}
+.margin-right-10{
+    margin-right: 10px;
+}
+.margin-top-20{
+    margin-top:20px;
+}
+.margin-top-10{
+    margin-top:10px;
+}
+.margin-left-10{
+    margin-left: 10px;
+}
+.margin-bottom-10{
+    margin-bottom: 10px;
+}
+.margin-bottom-15 {
+    margin-bottom: 15px;
+}
+.padding-20 {
+    padding: 20px;
+}
+.padding-left-4{
+    padding-left: 4px;
+}
+
+/*flex*/
+.flex-left {
+    display: flex;
+}
+.flex-between-center{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.flex-end-center {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+}
+.flex-right {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.width-percentage {
+    width:100%;
+}
+
+/*upload组件样式*/
+.upload-bar{
+    display: inline-block;width:58px;
+}
+.upload-icon{
+    width: 58px;
+    height:58px;
+    line-height: 58px;
+}
+.demo-upload-list{
+    display: inline-block;
+    width: 60px;
+    height: 60px;
+    text-align: center;
+    line-height: 60px;
+    border: 1px solid transparent;
+    border-radius: 4px;
+    overflow: hidden;
+    background: #fff;
+    position: relative;
+    box-shadow: 0 1px 1px rgba(0,0,0,.2);
+    margin-right: 4px;
+}
+.demo-upload-list img{
+    width: 100%;
+    height: 100%;
+}
+.demo-upload-list-cover{
+    display: none;
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: rgba(0,0,0,.6);
+}
+.demo-upload-list:hover .demo-upload-list-cover{
+    display: block;
+}
+.demo-upload-list-cover i{
+    color: #fff;
+    font-size: 20px;
+    cursor: pointer;
+    margin: 0 2px;
+}
+/*modal组件content相对定位，主要用于modal组件的loading*/
+.ivu-modal-body {
+    position: relative;
+    padding: 16px;
+    font-size: 12px;
+    line-height: 1.5;
+}
+.queryBarMarginLeft{
+    margin-left:4px;
+}
+.text-right {
+    text-align: right;
+}
+.text-center {
+    text-align: center;
+}
+/*只读、不可输入的且宽度撑满的文本*/
+.read-only-item{
+    width:100%;
+    padding-left: 6px;
+    line-height: 32px;
+    height: 32px;
+    background: #f8f8f8;
+    border-radius: 4px;
+    font-size: 12px;
+    color: #c5c8ce;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+/*
+
+    请使用以上代码，以下代码后期可能删除
+
+*/
+
+
+/*通知单合计框样式*/
+.total-num-big-box{
+    line-height: 32px;
+}
+.total-num-box-width{
+    width: 161px;
+}
+.total-num-box{
+    border: solid 1px #e8eaec;
+    padding: 0 16px;
+    font-size: 13px;
+    border-top: none;
+}
+.border-right-none{
+    border-right: none;
+}
+.modal-input-length{
+    width:200px;
+}
+.line-height-27{
+    line-height: 27px
+}
+.add-batch-code-button{
+    width: 26px;
+    margin-left: -1px;
+}
+.add-batch-code-button:hover{
+    border-left: 1px solid #57A3F3;
+    width: 27px;
+    margin-left: 0;
+}
+.searchHurdles{
+    width:140px;
+}
+.cancelButton{
+    background:#bcbcbc;
+    color:white;
+    border:1px solid #bcbcbc;
+}
+.cancelButton:hover{
+    background:#bcbcbc;
+    color:white;
+    border:1px solid #bcbcbc;
+}
+.tooltip-text-color{
+    color: #515a6e;
+}
+.operatingSpaceMargin{
+    margin-bottom:10px;
+}
+.menuPaddingRight{
+    padding:0 16px 0 0;
+}
+.datePickerWidth{
+    width:100%;
+}
+.remoteSearchButton{
+    margin-left:-2px;
+    z-index: 99;
+}
+.ivu-table-cell{
+    padding-left: 8px;
+    padding-right: 8px;
+}
+.newAddLowerColor{
+    color: #2e961d;
+}
+.otherMessageBarNameWidth{
+    width:120px;
+    margin-right: 30px;
+}
+.otherMessageBarTimeWidth{
+    width:180px;
+}
+.otherFontStyle{
+    color:#b3b2b2;
+    font-size:12px;
+}
+.marginBottom-10{
+    margin-bottom: 10px;
+}
+.searchMargin{
+    margin-left: 4px;
+}
+.otherColumn{
+    width:190px;
+}
+.formItemMargin{
+    margin-bottom:10px !important;
+}
+.editFormErrorStyle{
+    color:#ff0000;
+}
+.modalFooterStyle{
+    display:flex;
+    justify-content: space-between;
+}
+/*表单自定义label宽度*/
+.custom-label-title {
+    height: 32px;
+    font-size:12px;
+    text-align: right;
+    padding: 10px 12px 10px 0;
+    box-sizing: border-box;
+    line-height: 1;
+}
+.widthPercentage {
+    width:100%;
+}
+.tableMargin{
+    padding:10px 0 10px 0;
+}
+.inputLength{
+    width:260px;
+}
+.pageStyle{
+    float:right;
+}
+.moreStyle{
+    font-weight: bold;
+    text-align: center;
+    margin: 0 8px;
+}
+.searchButtonStyle{
+    display:flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.queryBarMarginRight{
+    margin-right: 4px;
+}
+.screenLeftCenter{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+.screenRightCenter{
+    align-items: center;
+}
+.leftMenu{
+    position: absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:0;
+    width:200px;
+}
+.rightContent{
+    position: absolute;
+    top:0;
+    right:0;
+    bottom:0;
+    left:200px;
+}
+.rightContentTitleFont{
+    font: bold 18px/28px '';
+}
+.flexAlignCenter{
+    display: flex;
+    align-items: center;
+}
+.exhibitionInputBackground{
+    line-height:32px;
+    padding-left:6px;
+    background: #f8f8f8;
+    border-radius: 4px;
+    font-size: 12px;
+    color:#c5c8ce;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    /*word-wrap:break-word*/
+}
+/*按钮bottom 10px*/
+.buttonBottom{
+    margin-bottom: 10px;
+}
+.labelWidth{
+    width:80px;
+    text-align: right;
+    padding-right: 10px;
+}
+/*模块限高300px*/
+.moduleAssembly{
+    height: 600px;
+    overflow: auto;
+}
+.textCenter{
+    text-align: center;
+}
+.textRight{
+    text-align: right;
+}
+.marginRight{
+    margin-right: 20px;
+}
+.marginLeft{
+    margin-left: 20px;
+}
+.marginLeft-10{
+    margin-left: 10px;
+}
+.marginButtonLeft{
+    margin-left: 4px;
+}
+.marginBottom{
+    margin-bottom: 10px;
+}
+.textLeft{
+    text-align: left;
+}
+.ivu-table-fixed{
+    box-shadow:0 0 0 #fff;
+}
+.ivu-table-fixed-right{
+    box-shadow:0 0 0 #fff;
+}
+.halfWidth{
+    width: 50%;
+    display: inline-block;
+    float: left;
+    line-height: 24px;
+}
+/* 机台分配i里面已选机台的背景颜色 */
+.ivu-table .tableColor td {
+    background-color: #ebf7ff;
+}
+/*form表格的宽度*/
+.formWidth {
+    width: 150px;
+}
+/*表格数据样式*/
+.formEachStyle {
+    width:150px;
+    margin-bottom: 10px;
+    vertical-align: middle;
+}
+.formSpanStyle{
+    line-height: 32px;
+    display: inline-block;
+    margin-bottom: 10px;
+    vertical-align: middle;
+    margin-left: 10px;
+}
+/*// 搜索条件弹性和自*/
+.parentFlex{
+    flex-direction: row-reverse;
+    display: -webkit-flex; /* Safari */
+    display: flex;
+}
+.parentFlexBetween{
+    display: flex;
+    justify-content: space-between;
+    display: -webkit-flex; /* Safari */
+}
+.flexBetween {
+    display: -webkit-flex;
+    display: flex;
+    justify-content: space-between;
+    flex: auto;
+    align-items: flex-start;
+}
+.leftFlex{
+    display: -webkit-flex;
+    display: flex;
+    justify-content: flex-start;
+    flex: auto;
+    align-items: center;
+    margin-right: 10px;
+}
+.endFlex{
+    display: -webkit-flex;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+}
+.columnFlex{
+    display: -webkit-flex;
+    display: flex;
+    flex-direction: column;
+}
+.ivu-table-fixed, .ivu-table-fixed-right{}
+/*// deleteWarning警告板块的border设置 vue*/
+.deleteWarning .ivu-modal-footer{
+    border-top: none!important;
+}
+.deleteWarning .ivu-modal-header {
+    border-bottom: none!important;
+}
+/*// */
+.fontBold {
+    font-weight: bold;
+    display: inline-block;
+    line-height: 24px;
+    margin-bottom: 10px;
+}
+.fontTableBold {
+    font-weight: bold;
+}
+.fontInherit{
+    display: inline-block;
+    line-height: 24px;
+}
+

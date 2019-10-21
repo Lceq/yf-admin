@@ -33,7 +33,7 @@ module.exports = merge(webpackBaseConfig, {
             minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
-            title: '昇虹生产管理平台' + package.version,
+            title: '远纺实际开发项目' + package.version,
             filename: '../index.html',
             inject: false
         }),

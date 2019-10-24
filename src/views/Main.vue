@@ -265,22 +265,19 @@
                             };
                         });
                         this.getTrees(lst, pId);
-                        let arr = JSON.parse(JSON.stringify(this.getTrees(lst, pId)));
-                        arr.forEach(item => {
+                        let addRouterArr = JSON.parse(JSON.stringify(this.getTrees(lst, pId)));
+                        addRouterArr.forEach(item => {
                             item.component = () => import('@/views/Main.vue');
                             item.children.forEach(chilItem => {
                                 chilItem.component = routerReference[chilItem.path];
                             });
                             item.path = ''
                         });
-                        localStorage.setItem('addRouterList', JSON.stringify(arr));
-                        console.log('路由后', arr)
-                        this.menuList = arr;
+                        localStorage.setItem('addRouterList', JSON.stringify(addRouterArr));
+                        this.$store.state.app.routers = [...this.$store.state.app.routers, ...addRouterArr];
+                        this.menuList = addRouterArr;
                         // this.$router.options.routes = this.getTrees(lst, pId);
-                        this.$router.addRoutes(arr);
-
-
-
+                        this.$router.addRoutes(addRouterArr);
 
 
                         this.menuOpenShow = true;

@@ -31,7 +31,7 @@ const app = {
         routers: [
             otherRouter,
             ...appRouter,
-            ...JSON.parse(localStorage.getItem('addRouterList'))
+            // ...JSON.parse(localStorage.getItem('addRouterList'))
         ],
         tagsList: [...otherRouter.children],
         messageCount: 0,

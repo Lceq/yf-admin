@@ -74,14 +74,18 @@ new Vue({
     },
     created () {
         let tagsList = [];
-        let addRouterList = JSON.parse(localStorage.getItem('addRouterList'));
-        addRouterList.map((item) => {
-            if (item.children.length <= 1) {
-                tagsList.push(item.children[0]);
-            } else {
-                tagsList.push(...item.children);
-            }
-        });
+        let addRouterList = [];
+        addRouterList = JSON.parse(localStorage.getItem('addRouterList'));
+        if (addRouterList && addRouterList.length !== 0) {
+            addRouterList.map((item) => {
+                if (item.children.length <= 1) {
+                    tagsList.push(item.children[0]);
+                } else {
+                    tagsList.push(...item.children);
+                }
+            });
+        };
+
         this.$store.commit('setTagsList', tagsList);
     }
 });

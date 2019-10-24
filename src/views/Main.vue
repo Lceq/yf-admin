@@ -114,6 +114,7 @@
     import { mapGetters } from 'vuex';
     import errorModal from './components/error-modal/errorModal';
     import iView from 'iview';
+    import routerReference from "../libs/router-reference";
     export default {
         components: {
             shrinkableMenu,
@@ -257,13 +258,31 @@
                                 path: moInfo.navUrl,
                                 title: moInfo.name,
                                 id: moInfo.id,
-                                component: Main,
+                                navUrl: moInfo.navUrl,
                                 parentId: moInfo.parentId,
                                 sortNum: parseInt(moInfo.sortNum),
                                 children: []
                             };
                         });
                         this.getTrees(lst, pId);
+                        let arr = JSON.parse(JSON.stringify(this.getTrees(lst, pId)));
+                        arr.forEach(item => {
+                            item.component = () => import('@/views/Main.vue');
+                            item.children.forEach(chilItem => {
+                                chilItem.component = routerReference[chilItem.path];
+                            });
+                            item.path = ''
+                        });
+                        localStorage.setItem('addRouterList', JSON.stringify(arr));
+                        console.log('路由后', arr)
+                        this.menuList = arr;
+                        // this.$router.options.routes = this.getTrees(lst, pId);
+                        this.$router.addRoutes(arr);
+
+
+
+
+
                         this.menuOpenShow = true;
                     }
                 });

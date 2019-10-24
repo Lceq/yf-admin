@@ -30,7 +30,8 @@ const app = {
         ], // 面包屑数组
         routers: [
             otherRouter,
-            ...appRouter
+            ...appRouter,
+            ...JSON.parse(localStorage.getItem('addRouterList'))
         ],
         tagsList: [...otherRouter.children],
         messageCount: 0,

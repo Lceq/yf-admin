@@ -74,7 +74,8 @@ new Vue({
     },
     created () {
         let tagsList = [];
-        appRouter.map((item) => {
+        let addRouterList = JSON.parse(localStorage.getItem('addRouterList'));
+        addRouterList.map((item) => {
             if (item.children.length <= 1) {
                 tagsList.push(item.children[0]);
             } else {

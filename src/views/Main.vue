@@ -273,13 +273,13 @@
                             });
                             item.path = ''
                         });
+
                         localStorage.setItem('addRouterList', JSON.stringify(addRouterArr));
+                        console.log('路由后', this.$store.state)
                         this.$store.state.app.routers = [...this.$store.state.app.routers, ...addRouterArr];
                         this.menuList = addRouterArr;
                         // this.$router.options.routes = this.getTrees(lst, pId);
                         this.$router.addRoutes(addRouterArr);
-
-
                         this.menuOpenShow = true;
                     }
                 });

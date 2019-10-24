@@ -15,6 +15,9 @@ const RouterConfig = {
 };
 export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
+    let addRouterArr = [];
+    addRouterArr = JSON.parse(localStorage.getItem('addRouterList'));
+    // router.addRoutes(addRouterArr)
     // 这里获取权限设置
     iView.LoadingBar.start();
     if (Cookies.get('locking') === '1' && to.name !== 'locking') { // 判断当前是否是锁定状态
@@ -36,6 +39,7 @@ router.beforeEach((to, from, next) => {
                 name: 'home_index'
             });
         } else {
+
             if (to.name !== 'home_index') {
                 (async () => {
                     try {

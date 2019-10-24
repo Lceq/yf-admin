@@ -228,6 +228,10 @@ util.setCurrentPath = function (vm, name) {
 };
 
 util.openNewPage = function (vm, name, argu, query, attr) {
+    console.log('参数', name)
+    console.log('参数', argu)
+    console.log('参数', query)
+    console.log('参数', attr)
     // 如果是动态路由，设置页面名称
     let moduleName = '';
     if (name.indexOf('dynamic-router') !== -1) {
@@ -273,11 +277,14 @@ util.openNewPage = function (vm, name, argu, query, attr) {
         i++;
     }
     if (!tagHasOpened) { // 不存在
+        // console.log('所有', vm.$store.state.app.tagsList)
+        // console.log('名称', name)
+
         let tag = vm.$store.state.app.tagsList.filter((item) => {
             if (item.children) {
-                return name === item.children[0].name;
+                // return name === item.children[0].name;
             } else {
-                return name === item.name;
+                // return name === item.name;
             }
         });
         tag = tag[0];

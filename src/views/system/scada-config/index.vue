@@ -2,7 +2,7 @@
     <div>
         <div class="content-bar">
             <Menu @on-select="onSelectMenuEvent" :active-name="activeName" class="content-left" style="width: 160px;">
-<!--                <MenuItem name="QH">清花</MenuItem>-->
+                <MenuItem name="QH">清花</MenuItem>
                 <MenuItem name="SM">梳棉</MenuItem>
                 <MenuItem name="YB">预并</MenuItem>
                 <MenuItem name="TJ">条卷</MenuItem>
@@ -65,7 +65,7 @@
                 tableHeight: this.$store.state.maniViewHeight - 50,
                 confirmLoading: false,
                 showLoading: false,
-                activeName: 'SM',
+                activeName: 'QH',
                 menuVal: '',
                 savePropsModalTitle: '',
                 savePropsModalState: false,

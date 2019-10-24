@@ -273,7 +273,6 @@ util.openNewPage = function (vm, name, argu, query, attr) {
         i++;
     }
     if (!tagHasOpened) { // 不存在
-        debugger
         let tag = vm.$store.state.app.tagsList.filter((item) => {
             if (item.children) {
                 return name === item.children[0].name;

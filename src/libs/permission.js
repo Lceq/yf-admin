@@ -72,7 +72,7 @@
                         item.children.forEach(chilItem => chilItem.component = routerReference[chilItem.path]);
                         item.path = '';
                     });
-                    store.state.addRouterList = addRouterArr;
+                    store.commit('SET_ADD_ROUTER_LIST', addRouterArr)
                     store.state.app.routers = [...store.state.app.routers, ...addRouterArr];
                     router.addRoutes(addRouterArr);
                     if (to.name === 'home_index') {

@@ -17,6 +17,9 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
+        SET_ADD_ROUTER_LIST (state, payload) {
+            state.addRouterList = payload;
+        },
         MANI_VIEW_HEIGHT (state, payload) {
             state.maniViewHeight = payload.payload;
         },
@@ -46,6 +49,9 @@ const store = new Vuex.Store({
     getters: {
         getManiViewHeight (state) {
             return state.maniViewHeight;
+        },
+        getAddRouterList (state) {
+            return state.addRouterList;
         }
     },
     modules: {

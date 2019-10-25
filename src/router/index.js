@@ -16,33 +16,43 @@ let addRouterArr = [];
 export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
     addRouterArr = store.state.addRouterList;
-    // 这里获取权限设置
-    iView.LoadingBar.start();
-    // 角色对应的模块存在的情况下
-    if (addRouterArr && addRouterArr.length !== 0) {
-        if (!Cookies.get('user') && to.name !== 'login' && !Cookies.get('routeName')) { // 未登录且前往的页面不是登录页
-            iView.LoadingBar.finish();
-            next({
-                name: 'login'
-            });
-        } else if (Cookies.get('user') && to.name === 'login') { // 已经登录且前往的是登录页
+    // 已登录
+    if (Cookies.get('token')) { // 未登录且前往的页面不是登录页
+        // 已经登录且前往的是登录页
+        if (Cookies.get('user') && to.name === 'login') {
             Util.title();
             next({
                 name: 'home_index'
             });
         } else {
-            // 缓存打开的路由
-            localStorage.setItem('activeRouteName', JSON.stringify({
-                name: to.name,
-                query: to.query,
-                params: to.params
-            }));
-            next();
+            // 角色对应的模块存在的情况下
+            if (addRouterArr && addRouterArr.length !== 0) {
+                // 缓存打开的路由
+                localStorage.setItem('activeRouteName', JSON.stringify({
+                    name: to.name,
+                    query: to.query,
+                    params: to.params
+                }));
+                next();
+            } else {
+                // 获取角色对应的模块
+                getRoleModuleList(to, next);
+            };
+            // next();
         }
-    } else {
-        // 获取角色对应的模块
-        getRoleModuleList(to, next);
-    };
+        iView.LoadingBar.finish();
+    } else if (!Cookies.get('token')) {
+        if (to.name === 'login') {
+            next();
+        } else {
+            next({
+                name: 'login'
+            });
+        };
+        // 未登录
+        iView.LoadingBar.finish();
+    }
+
   /*  if (Cookies.get('locking') === '1' && to.name !== 'locking') { // 判断当前是否是锁定状态
         next({
             replace: true,

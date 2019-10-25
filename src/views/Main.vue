@@ -25,7 +25,7 @@
                     :theme="menuTheme"
                     :before-push="beforePush"
                     :open-names="openedSubmenuArr"
-                    :menu-list="menuList">
+                    :menu-list="getAddRouterList">
                 <!--<div slot="top" class="logo-bar">
                     <div v-show="!shrink" class="flex-left">
                         <img src="../images/menu-logo-min.png" key="min-logo" />
@@ -140,7 +140,7 @@
         },
         computed: {
             ...mapGetters([
-                'getLoading', 'getOrder', 'getErrorStatus', 'returnErrorMsg'
+                'getLoading', 'getOrder', 'getErrorStatus', 'returnErrorMsg', 'getAddRouterList'
             ]),
             pageTagsList () {
                 return this.$store.state.app.pageOpenedList; // 打开的页面的页面对象
@@ -190,6 +190,7 @@
                     // 退出登录
                     // Cookies.remove('token');
                     Cookies.remove('routeName');
+                    Cookies.remove('token');
                     this.$store.commit('logout', this);
                     this.$store.commit('clearOpenedSubmenu');
                     this.$router.push({
@@ -277,7 +278,6 @@
             }
         },
         mounted () {
-            this.menuList = this.$store.state.addRouterList;
             window.addEventListener('resize', () => {
                 let Height = document.getElementsByClassName('single-page-con')[0].offsetHeight;
                 this.$store.dispatch({type: 'calManiViewHeight', payload: Height});

@@ -193,6 +193,7 @@
                     Cookies.remove('token');
                     this.$store.commit('logout', this);
                     this.$store.commit('clearOpenedSubmenu');
+                    this.$store.state.addRouterList = [];
                     this.$router.push({
                         name: 'login'
                     });

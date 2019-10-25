@@ -39,9 +39,7 @@
         let addRouterArr = [];
         fetch('module/list').then((res) => {
             content = res.data;
-            if (content.status === 200) {
-                moduleAllList = content.res;
-            }
+            if (content.status === 200) moduleAllList = content.res;
         }).then(() => {
             fetch('module/right/list').then(res => {
                 let content = res.data;
@@ -85,5 +83,5 @@
                 }
             });
         });
-    }
+    };
     export default getRoleModuleList;

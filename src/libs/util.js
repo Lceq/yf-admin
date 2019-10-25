@@ -118,7 +118,6 @@ util.handleTitle = function (vm, item) {
 };
 
 util.setCurrentPath = function (vm, name) {
-    // console.log('刷新', vm, name)
     let title = '';
     let isOtherRouter = false;
     vm.$store.state.app.routers.forEach(item => {
@@ -179,7 +178,6 @@ util.setCurrentPath = function (vm, name) {
                 return false;
             }
         })[0];
-        console.log('路哟集合', currentPathArr)
         if (currentPathObj.children.length <= 1 && currentPathObj.name === 'home') {
             currentPathArr = [
                 {
@@ -279,9 +277,6 @@ util.openNewPage = function (vm, name, argu, query, attr) {
         i++;
     }
     if (!tagHasOpened) { // 不存在
-        // console.log('所有', vm.$store.state.app.tagsList)
-        // console.log('名称', name)
-
         let tag = vm.$store.state.app.tagsList.filter((item) => {
             if (item.children) {
                 // return name === item.children[0].name;
@@ -316,14 +311,12 @@ util.toDefaultPage = function (routers, name, route, next) {
                 name: routers[i].children[0].name
             });
             notHandle = false;
-            console.log('kkkkkkk')
             next();
             break;
         }
         i++;
     }
     if (notHandle) {
-        console.log('ohhhhhhhhhhhh')
         next();
     }
 };

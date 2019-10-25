@@ -18,7 +18,7 @@
 </style>
 <template>
     <div class="main" :class="{'main-hide-text': shrink}">
-        <div v-if="menuOpenShow" class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
+        <div class="sidebar-menu-con" :style="{width: shrink?'60px':'200px', overflow: shrink ? 'visible' : 'auto'}">
             <shrinkable-menu
                     :shrink="shrink"
                     @on-change="handleSubmenuChange"
@@ -108,13 +108,11 @@
     import messageTip from './main-components/message-tip.vue';
     import themeSwitch from './main-components/theme-switch/theme-switch.vue';
     import Cookies from 'js-cookie';
-    import Main from '@/views/Main.vue';
     import util from '@/libs/util.js';
     import loading from '../loading/loading';
     import { mapGetters } from 'vuex';
     import errorModal from './components/error-modal/errorModal';
     import iView from 'iview';
-    import routerReference from "../libs/router-reference";
     export default {
         components: {
             shrinkableMenu,
@@ -137,17 +135,13 @@
                 userName: '',
                 isFullScreen: false,
                 openedSubmenuArr: this.$store.state.app.openedSubmenuArr,
-                pageTagsActiveName: '',
-                // openedSubmenuArr: Array.of(Cookies.get('addOpenSubmenu'))
+                pageTagsActiveName: ''
             };
         },
         computed: {
             ...mapGetters([
                 'getLoading', 'getOrder', 'getErrorStatus', 'returnErrorMsg'
             ]),
-            // menuList () {
-            //     return this.$store.state.app.menuList;
-            // },
             pageTagsList () {
                 return this.$store.state.app.pageOpenedList; // 打开的页面的页面对象
             },
@@ -227,58 +221,6 @@
                 return true;
             },
             fullscreenChange (isFullScreen) {},
-            getModel () {
-                const _this = this;
-                this.$fetch('module/list').then((res) => {
-                    let content = res.data;
-                    if (content.status === 200) {
-                        _this.moduleAllList = content.res;
-                        _this.getMenuList();
-                    }
-                });
-            },
-            getMenuList () {
-                const _this = this;
-                this.$fetch('module/right/list').then(res => {
-                    this.$store.commit('setAllMenuLsit', res.data.res);
-                    let content = res.data;
-                    if (content.status === 200) {
-                        let data = content.res;
-                        let pId = this.moduleAllList.find(x => x.parentId === 0).id;
-                        for (let i of content.res) {
-                            if (i.parentId !== 0 && i.parentId !== pId && !data.map(x => x.id).includes(i.parentId)) {
-                                data.push(_this.moduleAllList.find(x => x.id === i.parentId));
-                            }
-                        }
-                        let lst = data.sort((a, b) => a.sortNum - b.sortNum).map(moInfo => {
-                            return {
-                                code: moInfo.code,
-                                icon: moInfo.iconUrl,
-                                name: moInfo.navUrl,
-                                path: moInfo.navUrl,
-                                title: moInfo.name,
-                                id: moInfo.id,
-                                navUrl: moInfo.navUrl,
-                                parentId: moInfo.parentId,
-                                sortNum: parseInt(moInfo.sortNum),
-                                children: []
-                            };
-                        });
-                        this.getTrees(lst, pId);
-                        let addRouterArr = JSON.parse(JSON.stringify(this.getTrees(lst, pId)));
-                        addRouterArr.forEach(item => {
-                            item.component = () => import('@/views/Main.vue');
-                            item.children.forEach(chilItem => {
-                                chilItem.component = routerReference[chilItem.path];
-                            });
-                            item.path = ''
-                        });
-
-                        this.menuList = addRouterArr;
-                        this.menuOpenShow = true;
-                    }
-                });
-            },
             getTrees (list, parentId) {
                 let items = {};
                 // 获取每个节点的直属子节点，*记住是直属，不是所有子节点
@@ -335,19 +277,15 @@
             }
         },
         mounted () {
-            console.log('菜单', this.$store.state.addRouterList)
-            // this.menuList = this.$store.state.addRouterList;
+            this.menuList = this.$store.state.addRouterList;
             window.addEventListener('resize', () => {
                 let Height = document.getElementsByClassName('single-page-con')[0].offsetHeight;
                 this.$store.dispatch({type: 'calManiViewHeight', payload: Height});
                 this.$store.commit('UPDATE_DOCUMENT_HEIGHT', Height);
-            })
+            });
             this.init();
-            this.getModel();
         },
         created () {
-            // this.$router.addRoutes(JSON.parse(localStorage.getItem('addRouterList')));
-            // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
         }
     };

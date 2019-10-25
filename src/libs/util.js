@@ -228,10 +228,10 @@ util.setCurrentPath = function (vm, name) {
 };
 
 util.openNewPage = function (vm, name, argu, query, attr) {
-    // console.log('参数', name)
-    // console.log('参数', argu)
-    // console.log('参数', query)
-    // console.log('参数', attr)
+    // console.log('参数1', name)
+    // console.log('参数2', argu)
+    // console.log('参数3', query)
+    // console.log('参数4', attr)
     // 如果是动态路由，设置页面名称
     let moduleName = '';
     if (name.indexOf('dynamic-router') !== -1) {
@@ -249,11 +249,14 @@ util.openNewPage = function (vm, name, argu, query, attr) {
         };
     };
     let pageOpenedList = vm.$store.state.app.pageOpenedList;
+    // console.log('选项卡列表', vm.$store.state.app.tagsList)
     let openedPageLen = pageOpenedList.length;
     let i = 0;
     let tagHasOpened = false;
     while (i < openedPageLen) {
-        if (name === 'dynamic-router') { // 页面已经打开
+        // iframe嵌套的页面(已经打开过的)
+        if (name === 'dynamic-router') {
+            // 页面已经打开
             if (name === pageOpenedList[i].name && pageOpenedList[i].argu.aId === attr.params.aId) {
                 vm.$store.commit('pageOpenedList', {
                     index: i,
@@ -264,6 +267,7 @@ util.openNewPage = function (vm, name, argu, query, attr) {
                 break;
             }
         } else {
+            // 普通页面(已经打开过的)
             if (name === pageOpenedList[i].name) {
                 vm.$store.commit('pageOpenedList', {
                     index: i,
@@ -276,26 +280,39 @@ util.openNewPage = function (vm, name, argu, query, attr) {
         };
         i++;
     }
-    if (!tagHasOpened) { // 不存在
-        let tag = vm.$store.state.app.tagsList.filter((item) => {
+
+    // console.log('路由名', vm.$store.state.app.tagsList)
+
+    // 如果没有打开过
+    if (!tagHasOpened) {
+        /*let tag = vm.$store.state.app.tagsList.filter((item) => {
             if (item.children) {
                 // return name === item.children[0].name;
             } else {
                 // return name === item.name;
             }
+        });*/
+        let tag = vm.$store.state.app.tagsList.filter((item) => {
+            return item.name === name;
+
         });
         tag = tag[0];
-        if (tag) {
+        // console.log('创建1', tag)
+        // 处理路由携带的参数
+        /*if (tag) {
             tag = tag.children ? tag.children[0] : tag;
             if (argu) {
-                tag.argu = argu;
+                // tag.argu = argu;
             }
             if (query) {
-                tag.query = query;
+                // tag.query = query;
             }
-            moduleName ? tag.title = moduleName : false;
-            vm.$store.commit('increateTag', tag);
-        }
+            console.log('创建2', tag)
+            // moduleName ? tag.title = moduleName : false;
+            // vm.$store.commit('increateTag', tag);
+        }*/
+        vm.$store.commit('increateTag', tag);
+
     }
     // vm.$route.meta.keepAlive = true;// 创建并缓存视图
     // vm.$store.commit('setCurrentPageName', name);

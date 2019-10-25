@@ -188,18 +188,15 @@
                     });
                 } else if (name === 'loginout') {
                     // 退出登录
-                    // Cookies.remove('token');
-                    Cookies.remove('routeName');
                     Cookies.remove('token');
+                    Cookies.remove('routeName');
                     this.$store.commit('logout', this);
                     this.$store.commit('clearOpenedSubmenu');
                     this.$store.state.addRouterList = [];
                     this.$router.push({
                         name: 'login'
                     });
-                    setTimeout(function () {
-                        iView.LoadingBar.finish();
-                    }, 0);
+                    iView.LoadingBar.finish();
                 }
             },
             checkTag (name) {

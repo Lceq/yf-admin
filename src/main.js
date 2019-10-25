@@ -79,7 +79,7 @@ new Vue({
         this.$store.commit('updateMenulist');
     },
     created () {
-        let tagsList = [];
+        /*let tagsList = [];
         let addRouterList = [];
         addRouterList = JSON.parse(JSON.stringify(store.state.addRouterList));
         if (addRouterList && addRouterList.length !== 0) {
@@ -91,7 +91,7 @@ new Vue({
                 }
             });
         };
-
-        this.$store.commit('setTagsList', tagsList);
+        console.log('数据', tagsList)
+        this.$store.commit('setTagsList', tagsList);*/
     }
 });

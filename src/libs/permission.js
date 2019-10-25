@@ -74,6 +74,21 @@
                     });
                     store.commit('SET_ADD_ROUTER_LIST', addRouterArr)
                     store.state.app.routers = [...store.state.app.routers, ...addRouterArr];
+
+                    let tagsList = [];
+                    let addRouterList = [];
+                    addRouterList = JSON.parse(JSON.stringify(store.state.addRouterList));
+                    if (addRouterList && addRouterList.length !== 0) {
+                        addRouterList.map((item) => {
+                            if (item.children.length <= 1) {
+                                tagsList.push(item.children[0]);
+                            } else {
+                                tagsList.push(...item.children);
+                            }
+                        });
+                    };
+                    // console.log('数据', tagsList)
+                    store.commit('setTagsList', tagsList);
                     router.addRoutes(addRouterArr);
                     if (to.name === 'home_index') {
                         next();

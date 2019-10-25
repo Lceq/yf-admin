@@ -9,6 +9,7 @@ const state = {
     documentHeight: '',
     // 是否会乱码
     codeTestChinese: false,
-    maniViewHeight: 0
+    maniViewHeight: 0,
+    addRouterList: []
 };
 export default state;

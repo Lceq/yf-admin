@@ -274,12 +274,7 @@
                             item.path = ''
                         });
 
-                        localStorage.setItem('addRouterList', JSON.stringify(addRouterArr));
-                        console.log('路由后', this.$store.state)
-                        this.$store.state.app.routers = [...this.$store.state.app.routers, ...addRouterArr];
                         this.menuList = addRouterArr;
-                        // this.$router.options.routes = this.getTrees(lst, pId);
-                        this.$router.addRoutes(addRouterArr);
                         this.menuOpenShow = true;
                     }
                 });
@@ -311,7 +306,7 @@
                     };
                     result.push(t);
                 }
-                return this.menuList = result;
+                return result;
             }
         },
         watch: {
@@ -340,6 +335,8 @@
             }
         },
         mounted () {
+            console.log('菜单', this.$store.state.addRouterList)
+            // this.menuList = this.$store.state.addRouterList;
             window.addEventListener('resize', () => {
                 let Height = document.getElementsByClassName('single-page-con')[0].offsetHeight;
                 this.$store.dispatch({type: 'calManiViewHeight', payload: Height});
@@ -349,6 +346,7 @@
             this.getModel();
         },
         created () {
+            // this.$router.addRoutes(JSON.parse(localStorage.getItem('addRouterList')));
             // 显示打开的页面的列表
             this.$store.commit('setOpenedList');
         }

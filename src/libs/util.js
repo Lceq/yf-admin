@@ -118,6 +118,7 @@ util.handleTitle = function (vm, item) {
 };
 
 util.setCurrentPath = function (vm, name) {
+    // console.log('刷新', vm, name)
     let title = '';
     let isOtherRouter = false;
     vm.$store.state.app.routers.forEach(item => {
@@ -178,6 +179,7 @@ util.setCurrentPath = function (vm, name) {
                 return false;
             }
         })[0];
+        console.log('路哟集合', currentPathArr)
         if (currentPathObj.children.length <= 1 && currentPathObj.name === 'home') {
             currentPathArr = [
                 {
@@ -228,10 +230,10 @@ util.setCurrentPath = function (vm, name) {
 };
 
 util.openNewPage = function (vm, name, argu, query, attr) {
-    console.log('参数', name)
-    console.log('参数', argu)
-    console.log('参数', query)
-    console.log('参数', attr)
+    // console.log('参数', name)
+    // console.log('参数', argu)
+    // console.log('参数', query)
+    // console.log('参数', attr)
     // 如果是动态路由，设置页面名称
     let moduleName = '';
     if (name.indexOf('dynamic-router') !== -1) {
@@ -314,12 +316,14 @@ util.toDefaultPage = function (routers, name, route, next) {
                 name: routers[i].children[0].name
             });
             notHandle = false;
+            console.log('kkkkkkk')
             next();
             break;
         }
         i++;
     }
     if (notHandle) {
+        console.log('ohhhhhhhhhhhh')
         next();
     }
 };

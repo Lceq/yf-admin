@@ -10,6 +10,7 @@ import 'iview/dist/styles/iview.css';
 import 'font-awesome/css/font-awesome.min.css';
 import VueI18n from 'vue-i18n';
 import axios from 'axios';
+import Router from 'vue-router';
 import api from './api';
 import global from './libs/common';
 import globalLoading from './loading/index';
@@ -55,6 +56,11 @@ Vue.use(VueI18n);
 Vue.use(iView);
 Vue.use(globalLoading);
 Vue.use(yfModal);
+// fix NavigationDuplicated
+const originalPush = Router.prototype.push
+Router.prototype.push = function push(location) {
+    return originalPush.call(this, location).catch(err => err)
+};
 new Vue({
     el: '#app',
     router: router,

@@ -32,8 +32,14 @@
                 <FormItem label="上级模块：" class="formItemMargin" prop="parentModel">
                     <Cascader v-model="moduleFormValidate.parentName" :data="moduleCascader" change-on-select></Cascader>
                 </FormItem>
-                <FormItem label="Url地址：" class="formItemMargin" prop="navUrl">
-                    <Input v-model="moduleFormValidate.navUrl" placeholder="请输入Url地址"></Input>
+                <FormItem label="项目名称：" class="formItemMargin" prop="tag">
+                    <Input v-model="moduleFormValidate.tag" placeholder="请输入项目"></Input>
+                </FormItem>
+                <FormItem label="路由地址：" class="formItemMargin" prop="navUrl">
+                    <Input v-model="moduleFormValidate.navUrl" placeholder="请输入路由地址"></Input>
+                </FormItem>
+                <FormItem label="URL地址：" class="formItemMargin" prop="navFullUrl">
+                    <Input v-model="moduleFormValidate.navFullUrl" placeholder="请输入URL地址"></Input>
                 </FormItem>
                 <FormItem label="图标样式：" class="formItemMargin" prop="iconUrl">
                     <Icon v-if="moduleFormValidate.iconUrl.indexOf('sh-iconfont') === -1" class="iconStyle" :type="moduleFormValidate.iconUrl" />
@@ -47,7 +53,7 @@
                     <Checkbox v-model="moduleFormValidate.state">显示</Checkbox>
                 </FormItem>
                 <FormItem class="formItemMargin" prop="remark" label="备注：">
-                    <Input v-model="moduleFormValidate.remark" type="textarea" :rows="2" placeholder="..."></Input>
+                    <Input v-model="moduleFormValidate.remark" type="textarea" :rows="2" placeholder="请输入..."></Input>
                 </FormItem>
             </Form>
         </div>
@@ -252,7 +258,9 @@ export default {
                 iconUrl: '',
                 sortNum: 0,
                 state: true,
-                remark: ''
+                remark: '',
+                navFullUrl: '',
+                tag: ''
             },
             moduleFormValidateRules: {
                 code: [
@@ -260,7 +268,8 @@ export default {
                 ],
                 name: [
                     {required: true, validator: xwValidate.input, trigger: 'blur'}
-                ]
+                ],
+                tag: [{ required: true, validator: xwValidate.input, trigger: 'blur' }]
             },
             moduleCascader: [],
             moduleWarnShow: false,
@@ -409,6 +418,8 @@ export default {
                     this.moduleFormValidate.code = content.res.code;
                     this.moduleFormValidate.name = content.res.name;
                     this.moduleFormValidate.navUrl = content.res.navUrl;
+                    this.moduleFormValidate.tag = content.res.tag;
+                    this.moduleFormValidate.navFullUrl = content.res.navFullUrl;
                     this.moduleFormValidate.iconUrl = content.res.iconUrl;
                     this.moduleFormValidate.sortNum = content.res.sortNum;
                     this.moduleFormValidate.state = content.res.state === 1;
@@ -432,6 +443,8 @@ export default {
                         sortNum: this.moduleFormValidate.sortNum,
                         remark: this.moduleFormValidate.remark,
                         iconUrl: this.moduleFormValidate.iconUrl,
+                        tag: this.moduleFormValidate.tag,
+                        navFullUrl: this.moduleFormValidate.navFullUrl,
                         navUrl: this.moduleFormValidate.navUrl.replace(/(^\s*)|(\s*$)/g, ''),
                         parentId: this.moduleFormValidate.parentName.length === 0 ? 1 : this.moduleFormValidate.parentName.reverse()[0]
                     };

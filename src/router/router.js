@@ -42,7 +42,7 @@ export const locking = {
     component: () => import('@/views/main-components/lockscreen/components/locking-page.vue')
 };
 export const charts = {
-    path: 'charts-top',
+    path: '/charts-top',
     title: '运转监测',
     name: 'charts-top',
     icon: 'arrow-swap',

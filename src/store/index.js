@@ -17,6 +17,9 @@ const store = new Vuex.Store({
         }
     },
     mutations: {
+        ALL_MODULE_LIST (state, payload) {
+            state.allModuleList = payload;
+        },
         SET_ADD_ROUTER_LIST (state, payload) {
             state.addRouterList = payload;
         },

@@ -65,37 +65,45 @@
         },
         methods: {
             handleChange (path) {
-                let willpush = true;
-                if (this.beforePush !== undefined) {
-                    if (!this.beforePush(path)) {
-                        willpush = false;
+                let allModuleList = this.$store.state.allModuleList;
+                let moduleItem = {};
+                allModuleList.forEach(item => {
+                    if (path === item.navUrl) {
+                        moduleItem = item;
+                    };
+                });
+                // 根据tag判断是内部还是外部项目(内部走router,外部走链接跳转)
+                if (moduleItem.tag === 'mes1' || !moduleItem.tag) {
+                    let willpush = true;
+                    if (this.beforePush !== undefined) {
+                        if (!this.beforePush(path)) willpush = false;
                     }
-                }
-                if (willpush) {
-                    if (path.indexOf('/') !== -1) { // 如果是动态路由
-                        this.$router.push({
-                            name: 'dynamic-router',
-                            params: {
-                                aId: path.substr(path.indexOf('/') + 1),
+                    if (willpush) {
+                        if (path.indexOf('/') !== -1) { // 如果是动态页面
+                            this.$router.push({
+                                name: 'dynamic-router',
+                                params: {
+                                    aId: path.substr(path.indexOf('/') + 1),
+                                    query: {
+                                        activated: true // true刷新缓存
+                                    }
+                                }
+                            });
+                        } else {
+                            this.$router.push({
+                                name: path,
                                 query: {
                                     activated: true // true刷新缓存
                                 }
-                            }
-                        });
-                    } else {
-                        this.$router.push({
-                            name: path,
-                            query: {
-                                activated: true // true刷新缓存
-                            }
-                        });
-                    };
-                }
+                            });
+                        };
+                    }
+                } else {
+                    window.location.href = moduleItem.navFullUrl;
+                };
                 // this.$route.meta.keepAlive = false; // 通过左侧菜单跳转的路由都走不缓存的视图view
                 this.$emit('on-change', path);
             }
-        },
-        created () {
         }
     };
 </script>

@@ -39,7 +39,10 @@
         let addRouterArr = [];
         fetch('module/list').then((res) => {
             content = res.data;
-            if (content.status === 200) moduleAllList = content.res;
+            if (content.status === 200) {
+                moduleAllList = content.res;
+                store.commit('ALL_MODULE_LIST', res.data.res);
+            };
         }).then(() => {
             fetch('module/right/list').then(res => {
                 let content = res.data;
@@ -72,7 +75,7 @@
                         item.children.forEach(chilItem => chilItem.component = routerReference[chilItem.path]);
                         item.path = '';
                     });
-                    store.commit('SET_ADD_ROUTER_LIST', addRouterArr)
+                    store.commit('SET_ADD_ROUTER_LIST', addRouterArr);
                     store.state.app.routers = [...store.state.app.routers, ...addRouterArr];
 
                     let tagsList = [];
@@ -87,7 +90,6 @@
                             }
                         });
                     };
-                    // console.log('数据', tagsList)
                     store.commit('setTagsList', tagsList);
                     router.addRoutes(addRouterArr);
                     if (to.name === 'home_index') {

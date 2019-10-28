@@ -10,6 +10,7 @@ const state = {
     // 是否会乱码
     codeTestChinese: false,
     maniViewHeight: 0,
-    addRouterList: []
+    addRouterList: [],
+    allModuleList: [] // 所有模块列表
 };
 export default state;

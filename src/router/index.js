@@ -38,7 +38,6 @@ router.beforeEach((to, from, next) => {
                 // 获取角色对应的模块
                 getRoleModuleList(to, next);
             };
-            // next();
         }
         iView.LoadingBar.finish();
     } else if (!Cookies.get('token')) {
@@ -61,7 +60,6 @@ router.beforeEach((to, from, next) => {
     } else if (Cookies.get('locking') === '0' && to.name === 'locking') {
         next(false);
     } else {
-        console.log(1111)
 
     }*/
 });

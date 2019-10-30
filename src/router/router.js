@@ -88,6 +88,8 @@ export const otherRouter = {
         { meta: { keepAlive: true }, path:'add-material-apply',title:'新增领料申请',name:'add-material-apply',icon:'ios-book', component: () => import('@/views/cotton-blend/material-apply/add-material-apply.vue')},
         { meta: { keepAlive: true }, path:'edit-material-apply',title:'编辑领料申请',name:'edit-material-apply',icon:'ios-book', component: () => import('@/views/cotton-blend/material-apply/edit-material-apply.vue')},
         { meta: { keepAlive: true }, path:'detail-material-apply',title:'领料申请详情',name:'detail-material-apply',icon:'ios-book', component: () => import('@/views/cotton-blend/material-apply/detail-material-apply.vue')},
+        { path:'tv-process',title:'工序机台',name:'tv-process',icon:'android-map', component: () => import('@/views/tv/process-machine/process-machine.vue')},
+        { path:'pack-analysis',title:'包装报表',name:'pack-analysis',icon:'android-map', component: () => import('@/views/pack/pack-analysis/xw-pack-analysis.vue')},
 
     ]
 };

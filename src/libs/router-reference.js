@@ -2,7 +2,7 @@
 * 路由对照表*/
 const routerReference = {
     //车间看板
-    'process-tv': () => import('@/views/tv/process-machine/process-main.vue'),
+    'tv-main': () => import('@/views/tv/process-machine/process-main.vue'),
     'nine-tv': () => import('@/views/tv/tv-nine/tv.vue'),
     //数据监测
     'charts': () => import('@/views/production-order/charts-indicate/chart.vue'),

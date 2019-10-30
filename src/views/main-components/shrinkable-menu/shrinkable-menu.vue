@@ -26,6 +26,7 @@
     import sidebarMenu from './components/sidebarMenu.vue';
     import sidebarMenuShrink from './components/sidebarMenuShrink.vue';
     import util from '@/libs/util';
+    import Cookies from 'js-cookie';
     export default {
         name: 'shrinkableMenu',
         components: {
@@ -99,6 +100,11 @@
                         };
                     }
                 } else {
+                    if (moduleItem.navFullUrl.indexOf('?') !== -1) {
+                        moduleItem.navFullUrl = moduleItem.navFullUrl + `&token=${Cookies.get('token')}`;
+                    } else {
+                        moduleItem.navFullUrl = moduleItem.navFullUrl + `?token=${Cookies.get('token')}`;
+                    };
                     window.location.href = moduleItem.navFullUrl;
                 };
                 // this.$route.meta.keepAlive = false; // 通过左侧菜单跳转的路由都走不缓存的视图view

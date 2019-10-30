@@ -15,6 +15,13 @@ const RouterConfig = {
 let addRouterArr = [];
 export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
+    // 如果路由携带token
+    if (to.query && to.query.token) {
+        // 路由携带的和cookie的不同, 替换cookie的token
+        if (Cookies.get('token') !== to.query.token) {
+            Cookies.set('token', to.query.token);
+        };
+    };
     addRouterArr = store.state.addRouterList;
     // 已登录
     if (Cookies.get('token')) { // 未登录且前往的页面不是登录页
@@ -27,12 +34,6 @@ router.beforeEach((to, from, next) => {
         } else {
             // 角色对应的模块存在的情况下
             if (addRouterArr && addRouterArr.length !== 0) {
-                // 缓存打开的路由
-                localStorage.setItem('activeRouteName', JSON.stringify({
-                    name: to.name,
-                    query: to.query,
-                    params: to.params
-                }));
                 next();
             } else {
                 // 获取角色对应的模块
@@ -42,6 +43,9 @@ router.beforeEach((to, from, next) => {
         iView.LoadingBar.finish();
     } else if (!Cookies.get('token')) {
         if (to.name === 'login') {
+            router.matcher = new VueRouter({ // 重置路由规则
+                routes: routers
+            }).matcher;
             next();
         } else {
             next({

@@ -95,7 +95,14 @@
                     if (to.name === 'home_index') {
                         next();
                     } else {
-                        next({...JSON.parse(localStorage.getItem('activeRouteName'))});
+                        if (to.name === 'error-404') {
+                            next({
+                                name: to.path.substr(1),
+                                path: to.path.substr(1),
+                                query: to.query,
+                                params: to.params
+                            });
+                        };
                     };
                 }
             });

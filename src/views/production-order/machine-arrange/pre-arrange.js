@@ -268,7 +268,7 @@ export default {
                         return x;
                     });
                     this.curMachineArrangeIds = [];
-                    console.log(this.machineArrangeData);
+                    // console.log(this.machineArrangeData);
                 }
             });
         },

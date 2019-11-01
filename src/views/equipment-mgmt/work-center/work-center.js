@@ -698,7 +698,7 @@ export default {
             this.addMachinesShow = false;
         },
         selectProducts (val) {
-            console.log(val);
+            // console.log(val);
             this.workCenterResourceList[1].data = val.map(x => {
                 x.productId = x.id;
                 return x;
@@ -755,7 +755,7 @@ export default {
         }
     },
     created () {
-        console.log(this.pageSize);
+        // console.log(this.pageSize);
         // 车间
         this.getWorkshopList();
         this.getProcessList();

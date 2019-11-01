@@ -74,7 +74,7 @@ export default {
                 dateTo: getLastMonth(30)
             }
         ];
-        console.log(this.dateList);
+        // console.log(this.dateList);
     },
     watch: {
         dateId (newData, oldData) {

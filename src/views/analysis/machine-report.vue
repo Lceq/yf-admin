@@ -192,7 +192,7 @@ export default {
             this.dateTo = val;
         },
         searchResult () {
-            console.log(this.middleList);
+            // console.log(this.middleList);
             this.machineReportData = [];
             this.machineReportData = this.middleList.filter(x => x.date > this.dateFrom && x.date < this.dateTo && x.workshopId === this.currentWorkshopId);
         },

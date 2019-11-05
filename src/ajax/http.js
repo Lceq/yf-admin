@@ -104,35 +104,19 @@ axios.interceptors.response.use(
 
 // 封装get
 export function fetch (url, data) {
-    return new Promise((resolve, reject) => {
-        axios({
-            url: url,
-            method: 'get',
-            params: data
-        })
-            .then(res => {
-                resolve(res);
-            })
-            .catch(error => {
-                reject(error);
-            });
+    return axios({
+        url: url,
+        method: 'get',
+        params: data
     });
 }
 
 // 封装post
 export function post (url, data) {
-    return new Promise((resolve, reject) => {
-        axios({
-            url: url,
-            data: data,
-            method: 'post'
-        })
-            .then(res => {
-                resolve(res);
-            })
-            .catch(error => {
-                reject(error);
-            });
+    return axios({
+        url: url,
+        data: data,
+        method: 'post'
     });
 }
 

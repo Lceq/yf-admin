@@ -12,7 +12,6 @@ const getServiceUrlByName = async function (serviceName){
     }
     let serviceList = store.state.serviceList;
     if (serviceList.length && findUrl(serviceName, serviceList)) {
-        console.log('缓存url对象', findUrl(serviceName, serviceList))
         return findUrl(serviceName, serviceList);  // 先找本地store仓库有没有该接口对应的完整url地址
     } else {
         try {

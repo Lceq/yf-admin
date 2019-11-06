@@ -372,12 +372,10 @@ export default {
         //点击批量排班
         evBatch(days) {
             this.curTimeJoin=this.CheckedArr.join(",")
-            console.log(this.curTimeJoin)
             this.isOnDuty = days.isOnDuty;
             this.isCompute = days.isCompute;
             this.SchedulingTitle = '排班';
             this.curTime = this.CheckedArr;
-            console.log("点击批量排班",this.curTime)
             this.curWorkShopName = this.workShopList.find(x => x.deptId === this.currentWorkshopId).deptName;
             this.defaultShiftId = this.shiftType[0].id;
             this.haveShiftData = [];
@@ -393,7 +391,7 @@ export default {
                 dateFrom: this.curCalendarDate[0].belongDate,
                 dateTo: this.curCalendarDate[41].belongDate
             };
-            this.$api.schedule.getScheduleList(params).then((res) => {
+            this.$call('schedule.list', params).then((res) => {
                 let content = res.data;
                 if (content.status === 200) {
                     console.log(content)
@@ -1021,10 +1019,7 @@ export default {
         this.getUserWorkshop();
         this.getAbnormityList();
     },
-    mounted() {
-        setTimeout(() => {
-            console.log('数据', this.calendarSixData)
-        }, 6000)
+    mounted () {
         // this.getDepartDataList();
         this.getShiftType();
         this.getPostList();

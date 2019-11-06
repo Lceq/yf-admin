@@ -72,22 +72,31 @@
                     // 拼接component
                     addRouterArr.forEach(item => {
                         item.component = () => import('@/views/Main.vue');
-                        item.children.forEach(chilItem => chilItem.component = routerReference[chilItem.path]);
+                        item.children.forEach(chilItem => {
+                            if (typeof routerReference[chilItem.path] === 'undefined') {
+                                // 抛出异常路由
+                                try {
+                                    throw new Error(`not find router name: ${chilItem.path}`)
+                                } catch (e) {
+                                    console.error(e);
+                                };
+                            } else if (typeof routerReference[chilItem.path] === 'function') {
+                                chilItem.component = routerReference[chilItem.path];
+                            } else if (typeof routerReference[chilItem.path] === 'object') {
+                                chilItem.meta = routerReference[chilItem.path].meta;
+                                chilItem.component = routerReference[chilItem.path].component;
+                            };
+                        });
                         item.path = '';
                     });
                     store.commit('SET_ADD_ROUTER_LIST', addRouterArr);
                     store.state.app.routers = [...store.state.app.routers, ...addRouterArr];
-
                     let tagsList = [];
                     let addRouterList = [];
                     addRouterList = JSON.parse(JSON.stringify(store.state.addRouterList));
                     if (addRouterList && addRouterList.length !== 0) {
                         addRouterList.map((item) => {
-                            if (item.children.length <= 1) {
-                                tagsList.push(item.children[0]);
-                            } else {
-                                tagsList.push(...item.children);
-                            }
+                            item.children.length <= 1 ? tagsList.push(item.children[0]) : tagsList.push(...item.children);
                         });
                     };
                     store.commit('setTagsList', tagsList);

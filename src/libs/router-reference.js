@@ -43,6 +43,7 @@ const routerReference = {
     'scheduleMachine': () => import('@/views/schedule/schedule-machine/schedule-machine.vue'),
     'allocate': () => import('@/views/schedule/allocate/allocate.vue'),
     'shift': () => import('@/views/schedule/shift/shift.vue'),
+    'attendance': () => import('@/views/schedule/attendance-rules.vue'),
     //计件管理
     'piece-quota': () => import('@/views/schedule/piece-quota/piece-quota.vue'),
     'goal-output':  () => import('@/views/schedule/goal-output/list-goal-output.vue'),
@@ -65,7 +66,7 @@ const routerReference = {
     //生产管理
     'production-monitor': () => import('@/views/production-order/monitoring/production-monitor.vue'),
     'erp-order': () => import('@/views/production-order/erp-order/list-erp-order.vue'),
-    'order': () => import('@/views/production-order/order/list-order.vue'),
+    'order': { meta: { keepAlive: true }, component: () => import('@/views/production-order/order/list-order.vue') },
     'manufactureBOM': () => import('@/views/production-order/manufacture/list-manufacture.vue'),
     'pre-arrange': () => import('@/views/production-order/machine-arrange/pre-arrange.vue'),
     'post-arrange': () => import('@/views/production-order/machine-arrange/post-arrange.vue'),
@@ -127,6 +128,7 @@ const routerReference = {
     'qmTwist': () => import('@/views/quality/inspection/qmTwist.vue'),
     'hairiness': () => import('@/views/quality/inspection/hairiness.vue'),
     'renovate': () => import('@/views/quality/renovate/renovate.vue'),
+    'quality-chart': () => import('@/views/quality/chart/chart.vue'),
     //统计分析
     'daily-accounting': () => import('@/views/analysis/daily-accounting.vue'),
     'daily-report': () => import('@/views/analysis/daily-output.vue'),
@@ -137,6 +139,8 @@ const routerReference = {
     'userReport': () => import('@/views/analysis/userReportSheet.vue'),
     'groupReport': () => import('@/views/analysis/shiftGroupReportSheet.vue'),
     'productReport': () => import('@/views/analysis/productReportSheet.vue'),
+    // 计件核算
+    'piecework-wages': () => import('@/views/schedule/piecework/piecework-account.vue'),
     //其他
     // 'user': () => import('@/views/system/staff-mgmt.vue'),
     // 'nine-tv': () => import('@/views/tv/tv-nine/tv.vue'),

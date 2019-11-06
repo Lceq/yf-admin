@@ -494,10 +494,10 @@ export default {
             let specSheetList = new Promise((resolve, reject) => this.getSpecListHttp(resolve, reject)); // 未审核的工艺单
             let noticeList = new Promise((resolve, reject) => this.getNoticeHttp(resolve, reject)); // 未审核的通知单
             let userMessage = new Promise((resolve, reject) => this.getLoginMsgHttp(resolve, reject)); // 获取登录人信息
-            let processMachine = new Promise((resolve, reject) => this.getProcessOpenHttp(resolve, reject)); // 工序下开台的机台
+            // let processMachine = new Promise((resolve, reject) => this.getProcessOpenHttp(resolve, reject)); // 工序下开台的机台
             let shortCutList = new Promise((resolve, reject) => this.getShortCutList(resolve, reject)); // 快捷列表数据
             let unAuditReport = new Promise((resolve, reject) => this.getUnAuditReportHttp(resolve, reject)); // 未审核的报工单列表数据
-            Promise.all([userMessage, processMachine, orderList, specSheetList, noticeList, shortCutList, unAuditReport]).then(res => {
+            Promise.all([userMessage, orderList, specSheetList, noticeList, shortCutList, unAuditReport]).then(res => {
                 this.globalLoadingShow = false;
             });
         }

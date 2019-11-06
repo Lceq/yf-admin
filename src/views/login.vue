@@ -85,9 +85,9 @@
                 loginTitle: process.env.LOGIN_TITLE,
                 loginTitleMin: process.env.LOGIN_TITLE_MIN ? process.env.LOGIN_TITLE_MIN : '',
                 form: {
-                    userName: '',
+                    userName: 'admin',
                     password: '',
-                    companyCode: ''
+                    companyCode: '1008'
                 },
                 rules: {
                     companyCode: [

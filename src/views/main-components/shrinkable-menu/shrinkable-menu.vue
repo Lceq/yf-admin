@@ -100,12 +100,16 @@
                         };
                     }
                 } else {
-                    if (moduleItem.navFullUrl.indexOf('?') !== -1) {
-                        moduleItem.navFullUrl = moduleItem.navFullUrl + `&token=${Cookies.get('token')}`;
-                    } else {
-                        moduleItem.navFullUrl = moduleItem.navFullUrl + `?token=${Cookies.get('token')}`;
-                    };
-                    window.location.href = moduleItem.navFullUrl;
+                    try {
+                        if (moduleItem.navFullUrl.indexOf('?') !== -1) {
+                            moduleItem.navFullUrl = moduleItem.navFullUrl + `&token=${Cookies.get('token')}`;
+                        } else {
+                            moduleItem.navFullUrl = moduleItem.navFullUrl + `?token=${Cookies.get('token')}`;
+                        };
+                        window.location.href = moduleItem.navFullUrl;
+                    } catch (e) {
+                        throw new Error('invalid link');
+                    }
                 };
                 // this.$route.meta.keepAlive = false; // 通过左侧菜单跳转的路由都走不缓存的视图view
                 this.$emit('on-change', path);

@@ -1,4 +1,4 @@
 module.exports = {
     NODE_ENV: '"production"',
-    REQUEST_HOST: '"http://192.168.65.252:8082"'
+    REQUEST_HOST: '"http://36.155.114.131:8088"'
 };

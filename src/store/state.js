@@ -1,5 +1,6 @@
 import Cookies from 'js-cookie';
 const state = {
+    serverFindList: [],
     serviceList: localStorage.serviceList ? JSON.parse(localStorage.serviceList) : [],
     curProcessId: Cookies.get('curProcessId'),
     menuActiveName: localStorage.menu ? JSON.parse(localStorage.menu) : '1-2',

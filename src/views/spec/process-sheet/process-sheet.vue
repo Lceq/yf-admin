@@ -321,7 +321,7 @@
             },
             // 获取左侧选项卡
             getMenuHttp () {
-                return this.$api.specSheet.leftMenuListHttp({}).then(res => {
+                return this.$call('spec.sheet.stateCount').then(res => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((item) => {
                             item.id === 1 ? item.name = '待提交' : false;
@@ -396,7 +396,7 @@
                 this.queryBarMaterialName = clearSpace(this.queryBarMaterialName);
                 this.queryBarOrderFromDate !== '' ? this.queryBarOrderFromDate = formatDate(this.queryBarOrderFromDate) : this.queryBarOrderFromDate = '';
                 this.queryBarOrderToDate !== '' ? this.queryBarOrderToDate = formatDate(this.queryBarOrderToDate) : this.queryBarOrderToDate = '';
-                return this.$api.specSheet.listHttp({
+                return this.$call('spec.sheet.list', {
                     'dateFrom': this.queryBarOrderFromDate.split(' ')[0],
                     'dateTo': this.queryBarOrderToDate.split(' ')[0],
                     'code': this.queryBarSheetValue,

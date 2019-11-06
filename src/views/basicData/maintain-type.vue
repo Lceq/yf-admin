@@ -241,7 +241,7 @@
                 });
             },
             getListHttp () {
-                this.$fetch('maintenance/type/list').then(res => {
+                this.$call('maintenance.type.list').then(res => {
                     if (res.data.status === 200) {
                         this.tableData = res.data.res;
                     };

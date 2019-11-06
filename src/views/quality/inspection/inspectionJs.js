@@ -341,7 +341,7 @@ export default ({
                 machineCodeName: this.machineCodeName.trim(),
                 qmTypeId: this.dataType.id
             };
-            this.$api.inspection.getQmInspectionList(params).then(res => {
+            this.$call('qm.inspection.list', params).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
                     this.searchData = content.res.map(item => {

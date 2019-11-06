@@ -518,7 +518,7 @@
             // 获取列表数据的请求
             getListHttp () {
                 this.queryBarPlanCode = clearSpace(this.queryBarPlanCode);
-                return this.$api.upkeep.planListHttp({
+                return this.$call('maintenance.plan.list', {
                     pageIndex: this.pageIndex,
                     pageSize: this.pageSize,
                     workshopId: this.queryBarWorkshop,

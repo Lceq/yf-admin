@@ -672,7 +672,7 @@
             },
             // 获取组织属性
             getOrgTypeHttp () {
-                this.$fetch(api.enumDeptType()).then((res) => {
+                this.$call('enum.dept.type').then((res) => {
                     if (res.data.status === 200) {
                         this.typeList = res.data.res;
                     };

@@ -394,7 +394,6 @@ export default {
             this.$call('schedule.list', params).then((res) => {
                 let content = res.data;
                 if (content.status === 200) {
-                    console.log(content)
                     _this.curCalendarDate.map(x => {
                         x.shifts = [];
                         return x;

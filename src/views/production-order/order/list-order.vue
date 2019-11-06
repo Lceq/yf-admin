@@ -361,7 +361,7 @@
                 this.getMenuHttp();
             },
             getMenuHttp () {
-                return this.$api.order.leftMenuListHttp({workshopId: this.queryBarWorkshopValue}).then(res => {
+                return this.$call('prd.order.stateCount', {workshopId: this.queryBarWorkshopValue}).then(res => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((item) => {
                             if (item.id === 0) {
@@ -436,7 +436,7 @@
                 this.queryBarIsReport = this.queryBarIsReport || '';
                 this.orderFromDate ? this.orderFromDate = formatDate(this.orderFromDate).split(' ')[0] : this.orderFromDate = '';
                 this.orderToDate ? this.orderToDate = formatDate(this.orderToDate).split(' ')[0] : this.orderToDate = '';
-                return this.$api.order.listHttp({
+                return this.$call('prd.order.list', {
                     dateFrom: this.orderFromDate,
                     dateTo: this.orderToDate,
                     code: this.queryBarOrderCode,

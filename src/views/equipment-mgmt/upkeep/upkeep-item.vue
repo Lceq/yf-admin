@@ -422,7 +422,7 @@
             getListHttp () {
                 !this.queryBarProcess ? this.queryBarProcess = '' : this.queryBarProcess;
                 this.queryBarUpkeepItemName = clearSpace(this.queryBarUpkeepItemName);
-                this.$api.upkeep.upkeepItemListHttp({
+                this.$call('maintenance.item.list', {
                     pageIndex: this.pageIndex,
                     pageSize: this.pageSize,
                     name: this.queryBarUpkeepItemName,

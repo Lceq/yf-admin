@@ -24,7 +24,7 @@ const getServiceUrlByName = async function (serviceName){
         if (serviceUrl) {
             return serviceUrl
         } else {
-            throw Object({message: '找不到服务'})
+            throw Object({message: `找不到服务${serviceUrl}`})
         }
     }
 };
@@ -57,7 +57,7 @@ const getService = async function(serviceName) { // 获取每个接口(如：use
                 // serviceList.push(obj);
                 // return obj;
             } else {
-                throw Object({message: '找不到服务'})
+                throw Object({message: `找不到服务${serviceName}`})
             }
         })
     } catch (e) {

@@ -460,7 +460,7 @@
                 } else if (this.queryBarUserState === null) {
                     userState = null;
                 };
-                return this.$api.parts.listHttp(
+                return this.$call('parts.replace.order.list',
                     {
                         'from': this.queryBarStartTime,
                         'to': this.queryBarOverTime,
@@ -494,7 +494,7 @@
                 });
             },
             getMenuHttp () {
-                this.$api.parts.menuList({workshopId: this.workshopValue}).then(res => {
+                this.$call('parts.replace.order.stateCount', {workshopId: this.workshopValue}).then(res => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((item) => {
                             if (item.id === 1) {

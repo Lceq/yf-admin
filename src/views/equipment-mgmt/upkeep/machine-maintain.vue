@@ -798,7 +798,7 @@
             getListHttp () {
                 this.queryBarUpkeepCode = clearSpace(this.queryBarUpkeepCode);
                 this.queryBarPlanCode = clearSpace(this.queryBarPlanCode);
-                return this.$api.upkeep.machineUpkeepCodeListHttp({
+                return this.$call('maintenance.order.list', {
                     pageIndex: this.pageIndex,
                     pageSize: this.pageSize,
                     workshopId: this.queryBarWorkshop,
@@ -856,7 +856,7 @@
             },
             // 获取保养类型的请求
             getUpkeepTypeHttp () {
-                this.$api.upkeep.upkeepTypeListHttp().then(res => {
+                this.$call('maintenance.type.list').then(res => {
                     if (res.data.status === 200) this.upkeepTypeList = res.data.res;
                 });
             },

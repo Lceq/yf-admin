@@ -681,7 +681,7 @@ export default {
                 machineName: this.repairMachineName.trim()
             };
             this.repairMachineLoading = true;
-            this.$api.repair.getRepairOrderList(params).then(res => {
+            this.$call('repair.order.list', params).then(res => {
                 let content = res.data;
                 this.repairMachineLoading = false;
                 if (content.status === 200) {
@@ -826,7 +826,7 @@ export default {
         },
         // 获取维修状态
         getCompletionState () {
-            this.$api.repair.getCompletionState({workshopId: this.repairMachineWorkshopId}).then((res) => {
+            this.$call('repair.order.stateCount', {workshopId: this.repairMachineWorkshopId}).then((res) => {
                 let content = res.data;
                 if (content.status === 200) {
                     this.orderStateList.map(item => {

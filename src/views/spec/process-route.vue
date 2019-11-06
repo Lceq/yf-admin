@@ -737,7 +737,7 @@
                 });
             },
             getListHttpHttp () {
-                this.$api.path.listHttp().then(res => {
+                this.$call('spec.path.list').then(res => {
                     if (res.data.status === 200) {
                         this.tableData = translateState(res.data.res);
                         this.pushSwitch = true;

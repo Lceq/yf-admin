@@ -471,7 +471,7 @@ export default ({
                 dataType: 1,
                 processId: this.formProcessParams.processId
             };
-            this.$api.specParams.getSpecParamsList(params).then(res => {
+            this.$call('spec.param.list', params).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
                     this.curProcessParams = content.res;
@@ -500,7 +500,7 @@ export default ({
                 pageSize: this.processParamsPageSize
             };
             this.processParamsLoading = true;
-            this.$api.specParams.getSpecParamsList(params).then(res => {
+            this.$call('spec.param.list', params).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
                     this.processParamsTotal = content.count;

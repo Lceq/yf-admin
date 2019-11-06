@@ -159,7 +159,7 @@ export default ({
                 pageIndex: this.scheduleMachinePageIndex
             };
             this.scheduleMachineLoading = true;
-            this.$api.scheduleGroup.getScheduleGroupList(params).then(res => {
+            this.$call('schedule.group.list', params).then(res => {
                 let content = res.data;
                 this.scheduleMachineLoading = false;
                 if (content.status === 200) {

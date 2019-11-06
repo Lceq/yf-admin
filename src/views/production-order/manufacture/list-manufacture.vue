@@ -325,7 +325,7 @@
                 this.getListHttp();
             },
             getMenuHttp () {
-                return this.$api.manufacture.leftMenuListHttp({
+                return this.$call('prd.bom.stateCount', {
                     workshopId: this.queryBarWorkshopValue
                 }).then(res => {
                     if (res.data.status === 200) {
@@ -403,7 +403,7 @@
                 this.queryBarProductValue = clearSpace(this.queryBarProductValue) || '';
                 this.billFromDate ? this.billFromDate = formatDate(this.billFromDate).split(' ')[0] : this.billFromDate = '';
                 this.billToDate ? this.billToDate = formatDate(this.billToDate).split(' ')[0] : this.billToDate = '';
-                return this.$api.manufacture.listHttp({
+                return this.$call('prd.bom.list', {
                     dateFrom: this.billFromDate,
                     dateTo: this.billToDate,
                     prdOrderCode: this.queryBarOrderCodeValue,

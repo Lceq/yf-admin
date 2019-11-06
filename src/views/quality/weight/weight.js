@@ -835,7 +835,7 @@ export default ({
                 productCodeName: this.productCodeName.trim(),
                 machineCodeName: this.machineCodeName.trim()
             };
-            this.$api.weight.getQmWeightList(params).then(res => {
+            this.$call('qm.weight.list', params).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
                     this.weightTotal = content.count;

@@ -626,7 +626,7 @@
             },
             // 获取左侧菜单
             getMenuHttp () {
-                return this.$api.notice.leftMenuListHttp({
+                return this.$call('prd.notice.stateCount', {
                     workshopId: this.queryBarWorkshopValue
                 }).then(res => {
                     if (res.data.status === 200) {

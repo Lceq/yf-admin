@@ -111,6 +111,8 @@
                                 query: to.query,
                                 params: to.params
                             });
+                        } else {
+                            next();
                         };
                     };
                 }

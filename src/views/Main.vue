@@ -184,7 +184,9 @@
                 if (name === 'ownSpace') {
                     util.openNewPage(this, 'ownspace_index');
                     this.$router.push({
-                        name: 'ownspace_index'
+                        name: 'login',
+                        query: {},
+                        params: {}
                     });
                 } else if (name === 'loginout') {
                     // 退出登录

@@ -1007,7 +1007,8 @@
         },
         methods: {
             getGroupEvent (e) {
-                console.log(e)
+                this.addEmpForCus.groupId = e.value;
+                this.addEmpForCus.groupName = e.label;
             },
             // 数据权限的设置----------开始
             // 获取数据权限
@@ -1478,6 +1479,8 @@
                     this.addEmpForCus.postName = '';
                     this.addEmpForCus.tel = '';
                     this.addEmpForCus.idCard = '';
+                    this.addEmpForCus.groupId = null;
+                    this.addEmpForCus.groupName = '';
                     this.$refs['addEmpForCus'].resetFields();
                 };
             },
@@ -1511,8 +1514,10 @@
                     'birthday': formatDate(this.birthData),
                     'postId': this.addEmpForCus.postId,
                     'postName': this.addEmpForCus.postName,
-                    'idCard': this.addEmpForCus.idCard
-                };
+                    'idCard': this.addEmpForCus.idCard,
+                    'groupId': this.addEmpForCus.groupId,
+                    'groupName': this.addEmpForCus.groupName,
+            };
                 this.$post(api.empSave(), params).then((res) => {
                     if (res.data.status === 200) {
                         this.showPostSelect = false;
@@ -2272,6 +2277,13 @@
                     this.quitPageHeights = quitPageHeightDom.offsetHeight + 40;
                     this.quitTableHeight = compClientHeight(tableDom.offsetTop + 240 + this.quitPageHeights);
                 };
+            },
+            getGroupList () {
+                this.$call('group.list').then(res => {
+                    if (res.data.status === 200) {
+                        this.groupList = res.data.res;
+                    };
+                });
             }
         },
         mounted () {
@@ -2299,6 +2311,7 @@
             this.getPostHttp();
             // 获取部门信息的请求
             this.getDeptList();
+            this.getGroupList();
         }
     };
 </script>

@@ -203,10 +203,10 @@
                 });
             },
             calculationTableHeight () {
-                this.tableHeight = document.documentElement.clientHeight - 250;
+                this.tableHeight = document.documentElement.clientHeight - 200;
                 window.onresize = () => {
-                    this.tableHeight = document.documentElement.clientHeight - 250;
-                    this.tableHeight = document.documentElement.clientHeight - 250;
+                    this.tableHeight = document.documentElement.clientHeight - 200;
+                    this.tableHeight = document.documentElement.clientHeight - 200;
                 };
             }
         },

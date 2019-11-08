@@ -29,6 +29,7 @@ const routerReference = {
     'post': () => import('@/views/basicData/post/post.vue'),
     'org': () => import('@/views/system/organization-structure.vue'),
     'OA-user': () => import('@/views/system/user/oa-user.vue'),
+    'group-manage': () => import('@/views/system/group-manage/index.vue'),
     //物理管理
     'number': () => import('@/views/product/number/number.vue'),
     'erp-archives': () => import('@/views/product/erp-product/erp-product-archives.vue'),

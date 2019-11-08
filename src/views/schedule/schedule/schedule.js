@@ -65,6 +65,7 @@ export default {
                                 },
                                 on: {
                                     'on-change': (data) => {
+                                        console.log('选择', data)
                                         // debugger
                                         _this.shiftGroupTableData[params.index].values = data;
                                     }
@@ -362,7 +363,6 @@ export default {
             this.CheckedArr = this.calendarChecked
             this.curTimeJoin = this.CheckedArr.join(",")
             this.curTime = this.CheckedArr
-            console.log("选择批量排班：",this.curTime)
             if(this.calendarChecked.length!=0){
                 this.isDisabled=false
             }else{
@@ -446,10 +446,10 @@ export default {
         // 根据车间判断车间班组信息
         getShiftGroup() {
             const _this = this;
-            this.$api.dept.getDeptGroup({parentId: this.currentWorkshopId}).then((res) => {
+            this.$call('group.list', {isEnable: true}).then((res) => {
                 let content = res.data;
                 if (content.status === 200) {
-                    _this.shiftGroup = (content.res || []).map(item => {
+                    _this.shiftGroup = res.data.res.map(item => {
                         return {
                             groupId: item.id,
                             groupName: item.name
@@ -605,7 +605,7 @@ export default {
                 belongDates: this.curTime
             };
             this.SchedulingLoading = true;
-            this.$api.schedule.getScheduleSave(params).then((res) => {
+            this.$call('schedule.save', params).then((res) => {
                 let content = res.data;
                 this.SchedulingLoading = false;
                 if (content.status === 200) {
@@ -656,7 +656,7 @@ export default {
         // },
         getUserByGroup() {
             this.shiftGroupUserLoading = true;
-            this.$api.scheduleUser.getScheduleUserList({scheduleGroupId: this.curTimeGroupId}).then((res) => {
+            this.$call('schedule.user.listByScheduleGroupId', {scheduleGroupId: this.curTimeGroupId}).then((res) => {
                 let content = res.data;
                 if (content.status === 200) {
                     this.shiftGroupUserLoading = false;

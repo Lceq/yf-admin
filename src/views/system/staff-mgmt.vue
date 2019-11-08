@@ -72,284 +72,283 @@
                 </Tabs>
             </Col>
         </Row>
-        <Row>
-            <Col>
-                <Modal
-                        v-model="saveModalState"
-                        :title="saveModalTitle"
-                        :mask-closable="false"
-                        @on-visible-change="saveModalStateVisibleChangeEvent"
-                        :width="800"
-                >
-                    <Form ref="addEmpForCus" :rules="addEmpRuleCus" :model="addEmpForCus" :label-width="90" :show-message="false">
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="姓名：" prop="name" class="formItemMargin">
-                                    <Input type="text" value="" v-model="addEmpForCus.name" placeholder="请输入员工姓名"/>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="登录名：" prop="loginName" class="formItemMargin">
-                                    <Input type="text" v-model="addEmpForCus.loginName" placeholder="请输入登录名"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="集团编号：" prop="code" class="formItemMargin">
-                                    <Input type="text" v-model="addEmpForCus.code" placeholder="请输入集团编号" />
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="内部编号：" prop="internalCode" class="formItemMargin">
-                                    <Input type="text" v-model="addEmpForCus.internalCode" placeholder="请输入内部编号" />
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="身份证号：" class="formItemMargin">
-                                    <Input type="text" v-model="addEmpForCus.idCard" placeholder="请输入身份证号" />
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="直接上级：" class="formItemMargin">
-                                    <Select
-                                            v-model="addEmpForCus.leaderId"
-                                            @on-change="getInWorkSelectSuper"
-                                            filterable
-                                            :label-in-value="true"
-                                            remote
-                                            placeholder="请输入"
-                                            :clearable="true"
-                                            :loading="searchSwitch"
-                                            :remote-method="remoteLeaderMethod"
-                                    >
-                                        <Option v-for="item in staffSuperList" :value="item.id" :key="item.id">{{ item.label }}</Option>
-                                    </Select>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="性别：" prop="gender" class="formItemMargin">
-                                    <Select v-model="addEmpForCus.gender">
-                                        <Option v-for="item in genderList" :value="item.value" :key="item.value">{{ item.label }}</Option>
-                                    </Select>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="出生日期：" prop="emploayeeDateOfBirth" class="formItemMargin">
-                                    <DatePicker class="widthPercentage" type="date" placeholder="请选择日期" @on-change="getAddEmpBirth" confirm :value="birthData" ></DatePicker>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="手机号：" prop="mobile" class="formItemMargin">
-                                    <Input number type="text" v-model="addEmpForCus.mobile" placeholder="请输入手机号码" />
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="办公电话：" class="formItemMargin">
-                                    <Input type="text" v-model="addEmpForCus.tel" placeholder="请输入办公电话" />
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="所属部门：" prop="empSubDep" class="formItemMargin">
-                                    <Cascader
-                                            :data="addSubDeptData"
-                                            v-model="addEmpForCus.empSubDep"
-                                            filterable
-                                            change-on-select
-                                            @on-change="getSubDepartment"
-                                    >
-                                    </Cascader>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="办公邮箱：" class="formItemMargin">
-                                    <Input type="email" v-model="addEmpForCus.email" placeholder="请输入办公邮箱" @on-blur="emailInputBlurEvent"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="12">
-                                <FormItem label="岗位工种：" prop="postId" class="formItemMargin">
-                                    <Select
-                                            v-model="addEmpForCus.postId"
-                                            @on-change="getInServicePostEvent"
-                                            :filterable="true"
-                                            :label-in-value="true"
-                                            :clearable="true"
-                                            v-if="showPostSelect"
-                                    >
-                                        <OptionGroup v-for="(items,index) in classContain" :key="index" :label="items.typeName">
-                                            <Option v-for="item in items.data" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                                        </OptionGroup>
-                                    </Select>
-                                </FormItem>
-                            </Col>
-                            <Col span="12">
-                                <FormItem label="排序：" prop="employeeSort" class="formItemMargin">
-                                    <InputNumber :max="100" :min="1" v-model="addEmpForCus.employeeSortData"></InputNumber>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="24">
-                                <FormItem label="描述：" class="formItemMargin">
-                                    <Input v-model="addEmpForCus.remark" type="textarea" :rows="4" placeholder="请输入..." :maxlength="512" :autosize="{minRows:2,maxRows:10}"></Input>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <div v-show="showOther">
-                            <other-message
-                                    :createName="addEmpForCus.createName"
-                                    :createTime="addEmpForCus.createTime"
-                                    :updateName="addEmpForCus.updateName"
-                                    :updateTime="addEmpForCus.updateTime"
-                            ></other-message>
-                        </div>
-                    </Form>
-                    <div slot="footer" class="modal-footer-bar">
-                        <!--<span class="editFormErrorStyle">{{onJobValidatorMessage}}</span>-->
-                        <div>
-                            <Button :loading="buttonLoading" type="success" @click="saveModalConfirmEvent">确认</Button>
-                            <Button class="cancelButton" @click="saveModalCancelEvent">取消</Button>
-                        </div>
-                    </div>
-                </Modal>
-            </Col>
-        </Row>
-        <Row>
-            <tips-modal
-                    :v-model="publicModalState"
-                    :tipMsg="publicModalMsg"
-                    :loading="publicConfirmButtonLoading"
-                    @cancel="publicCancelEvent"
-                    @confirm="publicConfirmEvent"
+        <Modal
+                v-model="saveModalState"
+                :title="saveModalTitle"
+                :mask-closable="false"
+                @on-visible-change="saveModalStateVisibleChangeEvent"
+                :width="800"
+        >
+            <Form ref="addEmpForCus" :rules="addEmpRuleCus" :model="addEmpForCus" :label-width="90" :show-message="false">
+                <Row>
+                    <Col span="12">
+                        <FormItem label="姓名：" prop="name" class="formItemMargin">
+                            <Input type="text" value="" v-model="addEmpForCus.name" placeholder="请输入员工姓名"/>
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="登录名：" prop="loginName" class="formItemMargin">
+                            <Input type="text" v-model="addEmpForCus.loginName" placeholder="请输入登录名"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="12">
+                        <FormItem label="集团编号：" prop="code" class="formItemMargin">
+                            <Input type="text" v-model="addEmpForCus.code" placeholder="请输入集团编号" />
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="内部编号：" prop="internalCode" class="formItemMargin">
+                            <Input type="text" v-model="addEmpForCus.internalCode" placeholder="请输入内部编号" />
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="身份证号：" class="formItemMargin">
+                            <Input type="text" v-model="addEmpForCus.idCard" placeholder="请输入身份证号" />
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="直接上级：" class="formItemMargin">
+                            <Select
+                                    v-model="addEmpForCus.leaderId"
+                                    @on-change="getInWorkSelectSuper"
+                                    filterable
+                                    :label-in-value="true"
+                                    remote
+                                    placeholder="请输入"
+                                    :clearable="true"
+                                    :loading="searchSwitch"
+                                    :remote-method="remoteLeaderMethod"
+                            >
+                                <Option v-for="item in staffSuperList" :value="item.id" :key="item.id">{{ item.label }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="12">
+                        <FormItem label="性别：" prop="gender" class="formItemMargin">
+                            <Select v-model="addEmpForCus.gender">
+                                <Option v-for="item in genderList" :value="item.value" :key="item.value">{{ item.label }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="出生日期：" prop="emploayeeDateOfBirth" class="formItemMargin">
+                            <DatePicker class="widthPercentage" type="date" placeholder="请选择日期" @on-change="getAddEmpBirth" confirm :value="birthData" ></DatePicker>
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="手机号：" prop="mobile" class="formItemMargin">
+                            <Input number type="text" v-model="addEmpForCus.mobile" placeholder="请输入手机号码" />
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="办公电话：" class="formItemMargin">
+                            <Input type="text" v-model="addEmpForCus.tel" placeholder="请输入办公电话" />
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="12">
+                        <FormItem label="所属部门：" prop="empSubDep" class="formItemMargin">
+                            <Cascader
+                                    :data="addSubDeptData"
+                                    v-model="addEmpForCus.empSubDep"
+                                    filterable
+                                    change-on-select
+                                    @on-change="getSubDepartment"
+                            >
+                            </Cascader>
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="办公邮箱：" class="formItemMargin">
+                            <Input type="email" v-model="addEmpForCus.email" placeholder="请输入办公邮箱" @on-blur="emailInputBlurEvent"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="12">
+                        <FormItem label="岗位工种：" prop="postId" class="formItemMargin">
+                            <Select
+                                    v-model="addEmpForCus.postId"
+                                    @on-change="getInServicePostEvent"
+                                    :filterable="true"
+                                    :label-in-value="true"
+                                    :clearable="true"
+                                    v-if="showPostSelect"
+                            >
+                                <OptionGroup v-for="(items,index) in classContain" :key="index" :label="items.typeName">
+                                    <Option v-for="item in items.data" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                                </OptionGroup>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="12">
+                        <FormItem label="排序：" prop="employeeSort" class="formItemMargin">
+                            <InputNumber :max="100" :min="1" v-model="addEmpForCus.employeeSortData"></InputNumber>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="12">
+                        <FormItem label="班组：" class="formItemMargin">
+                            <Select
+                                    v-model="addEmpForCus.groupId"
+                                    @on-change="getGroupEvent"
+                                    :filterable="true"
+                                    :label-in-value="true"
+                                    :clearable="true"
+                            >
+                                <Option v-for="item in groupList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="24">
+                        <FormItem label="描述：" class="formItemMargin">
+                            <Input v-model="addEmpForCus.remark" type="textarea" :rows="4" placeholder="请输入..." :maxlength="512" :autosize="{minRows:2,maxRows:10}"></Input>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <div v-show="showOther">
+                    <other-message
+                            :createName="addEmpForCus.createName"
+                            :createTime="addEmpForCus.createTime"
+                            :updateName="addEmpForCus.updateName"
+                            :updateTime="addEmpForCus.updateTime"
+                    ></other-message>
+                </div>
+            </Form>
+            <div slot="footer" class="modal-footer-bar">
+                <!--<span class="editFormErrorStyle">{{onJobValidatorMessage}}</span>-->
+                <div>
+                    <Button :loading="buttonLoading" type="success" @click="saveModalConfirmEvent">确认</Button>
+                    <Button class="cancelButton" @click="saveModalCancelEvent">取消</Button>
+                </div>
+            </div>
+        </Modal>
+        <tips-modal
+                :v-model="publicModalState"
+                :tipMsg="publicModalMsg"
+                :loading="publicConfirmButtonLoading"
+                @cancel="publicCancelEvent"
+                @confirm="publicConfirmEvent"
+        >
+        </tips-modal>
+        <user-detail
+                :detailModalState="detailModalState"
+                :detailResponseData="detailResponseData"
+                @detailModalStateChangeEvent="detailModalStateChangeEvent"
+                @closeUserDetailModalEvent="closeUserDetailModalEvent"
+        ></user-detail>
+        <Modal
+                v-model="setPasswordModal"
+                title="设置密码"
+                :mask-closable="false"
+                @on-visible-change="getSetPasswordChange"
+        >
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90" :show-message="false">
+                <Row>
+                    <Col>
+                        <FormItem label="密码：" prop="passwordIpt" class="formItemMargin">
+                            <Input type="password" v-model="formValidate.passwordIpt"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <FormItem label="确认密码：" prop="againPasswordIpt" class="formItemMargin">
+                            <Input type="password" v-model="formValidate.againPasswordIpt"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+            </Form>
+            <div slot="footer" class="modalFooterStyle">
+                <span class="editFormErrorStyle">{{errorMsg}}</span>
+                <div>
+                    <Button :loading="passwordConfirmLoading" type="success" @click="setPasswordConfirm">确认</Button>
+                    <Button class="cancelButton" @click="setPasswordCancel">取消</Button>
+                </div>
+            </div>
+        </Modal>
+        <Modal
+                v-model="modalRole"
+                :width="800"
+                title="角色">
+            <div>
+                <Table height="600" size="small" border @on-selection-change="SelectionRoleData" :columns="columnsRole" :data="roleData"></Table>
+            </div>
+            <modal-button
+                    slot="footer"
+                    :loading="roleLoading"
+                    @cancel="cancelUserRole"
+                    @submit="confirmUserRole"
             >
-            </tips-modal>
-        </Row>
-        <Row>
-            <Col>
-                <user-detail
-                        :detailModalState="detailModalState"
-                        :detailResponseData="detailResponseData"
-                        @detailModalStateChangeEvent="detailModalStateChangeEvent"
-                        @closeUserDetailModalEvent="closeUserDetailModalEvent"
-                ></user-detail>
-            </Col>
-        </Row>
-        <Row>
-            <Col>
-                <Modal
-                        v-model="setPasswordModal"
-                        title="设置密码"
-                        :mask-closable="false"
-                        @on-visible-change="getSetPasswordChange"
-                >
-                    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="90" :show-message="false">
-                        <Row>
-                            <Col>
-                                <FormItem label="密码：" prop="passwordIpt" class="formItemMargin">
-                                    <Input type="password" v-model="formValidate.passwordIpt"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <FormItem label="确认密码：" prop="againPasswordIpt" class="formItemMargin">
-                                    <Input type="password" v-model="formValidate.againPasswordIpt"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                    </Form>
-                    <div slot="footer" class="modalFooterStyle">
-                        <span class="editFormErrorStyle">{{errorMsg}}</span>
-                        <div>
-                            <Button :loading="passwordConfirmLoading" type="success" @click="setPasswordConfirm">确认</Button>
-                            <Button class="cancelButton" @click="setPasswordCancel">取消</Button>
-                        </div>
-                    </div>
-                </Modal>
-                <Modal
-                        v-model="modalRole"
-                        :width="800"
-                        title="角色">
-                    <div>
-                        <Table height="600" size="small" border @on-selection-change="SelectionRoleData" :columns="columnsRole" :data="roleData"></Table>
-                    </div>
-                    <modal-button
-                            slot="footer"
-                            :loading="roleLoading"
-                            @cancel="cancelUserRole"
-                            @submit="confirmUserRole"
-                    >
-                    </modal-button>
-                </Modal>
-                <Modal
-                        v-model="modalModule"
-                        :width="800"
-                        title="模块">
-                    <div class="moduleAssembly">
-                        <Tree @on-check-change="selectionModuleData" :data="newModuleList" show-checkbox></Tree>
-                    </div>
-                    <modal-button
-                            slot="footer"
-                            :loading="moduleLoading"
-                            @cancel="cancelUserModule"
-                            @submit="confirmUserModule"
-                    >
-                    </modal-button>
-                </Modal>
-                <Modal
-                        v-model="powerModule"
-                        title="权限设置"
-                        :width="800">
-                    <div>
-                        <Table :loading="tableRoleAssemblyLoading" height="600" :columns="roleAssemblyColumns" size="small" :data="roleAssemblyData"></Table>
-                    </div>
-                    <modal-button
-                            slot="footer"
-                            :loading="powerLoading"
-                            @cancel="cancelUserAssembly"
-                            @submit="confirmUserAssembly"
-                    >
-                    </modal-button>
-                </Modal>
-                <modal
-                    :isShow="dataPromiseShow"
-                    :loading="dataPromiseLoading"
-                    :width="800"
-                    @cancel="dataPromiseCancel"
-                    @submit="dataPromiseSubmit"
-                    :title="dataPromiseUserName + '数据权限'"
-                >
-                    <div slot="content">
-                        <Tabs v-model="defaultName" :animated="false">
-                            <TabPane label="车间数据授权" name="workshop">
-                                <!--<Button class="marginBottom" type="success" @click="setDefaultWorkshop">设为默认车间</Button>-->
-                                <Table :height="400" border size="small" :columns="workshopDataPromiseColumns" :data="workshopDataPromiseData"></Table>
-                            </TabPane>
-                            <TabPane label="班组数据授权" name="shiftGroup">
-                                <!--<Button class="marginBottom" type="success" @click="setShiftGroup">设为默认班组</Button>-->
-                                <Table :height="400" border size="small" :columns="shiftGroupDataPromiseColumns" :data="shiftGroupDataPromiseData"></Table>
-                            </TabPane>
-                        </Tabs>
-                    </div>
-                </modal>
-            </Col>
-        </Row>
-        <Row>
-            <quit-tips
-                    :v-model="quitTipsStatus"
-                    :tipMsg="quitTipsMsg"
-                    :loading="quitTipsLoading"
-                    @cancel="quitTipsCancel"
-                    @confirm="quitTipsConfirm"
+            </modal-button>
+        </Modal>
+        <Modal
+                v-model="modalModule"
+                :width="800"
+                title="模块">
+            <div class="moduleAssembly">
+                <Tree @on-check-change="selectionModuleData" :data="newModuleList" show-checkbox></Tree>
+            </div>
+            <modal-button
+                    slot="footer"
+                    :loading="moduleLoading"
+                    @cancel="cancelUserModule"
+                    @submit="confirmUserModule"
             >
-            </quit-tips>
-        </Row>
+            </modal-button>
+        </Modal>
+        <Modal
+                v-model="powerModule"
+                title="权限设置"
+                :width="800">
+            <div>
+                <Table :loading="tableRoleAssemblyLoading" height="600" :columns="roleAssemblyColumns" size="small" :data="roleAssemblyData"></Table>
+            </div>
+            <modal-button
+                    slot="footer"
+                    :loading="powerLoading"
+                    @cancel="cancelUserAssembly"
+                    @submit="confirmUserAssembly"
+            >
+            </modal-button>
+        </Modal>
+        <modal
+                :isShow="dataPromiseShow"
+                :loading="dataPromiseLoading"
+                :width="800"
+                @cancel="dataPromiseCancel"
+                @submit="dataPromiseSubmit"
+                :title="dataPromiseUserName + '数据权限'"
+        >
+            <div slot="content">
+                <Tabs v-model="defaultName" :animated="false">
+                    <TabPane label="车间数据授权" name="workshop">
+                        <!--<Button class="marginBottom" type="success" @click="setDefaultWorkshop">设为默认车间</Button>-->
+                        <Table :height="400" border size="small" :columns="workshopDataPromiseColumns" :data="workshopDataPromiseData"></Table>
+                    </TabPane>
+                    <TabPane label="班组数据授权" name="shiftGroup">
+                        <!--<Button class="marginBottom" type="success" @click="setShiftGroup">设为默认班组</Button>-->
+                        <Table :height="400" border size="small" :columns="shiftGroupDataPromiseColumns" :data="shiftGroupDataPromiseData"></Table>
+                    </TabPane>
+                </Tabs>
+            </div>
+        </modal>
+        <quit-tips
+                :v-model="quitTipsStatus"
+                :tipMsg="quitTipsMsg"
+                :loading="quitTipsLoading"
+                @cancel="quitTipsCancel"
+                @confirm="quitTipsConfirm"
+        >
+        </quit-tips>
     </Card>
 </template>
 <script>
@@ -595,14 +594,8 @@
                 value1: [],
                 addSubDeptData: [],
                 genderList: [
-                    {
-                        value: 1,
-                        label: '男'
-                    },
-                    {
-                        value: 0,
-                        label: '女'
-                    }
+                    {value: 1, label: '男'},
+                    {value: 0, label: '女'}
                 ],
                 inServiceDeleteBtn: false,
                 setUserOperation: false,
@@ -661,96 +654,15 @@
                 quitTreeData: [],
                 searchData: '',
                 quitEmpTableHeader: [
-                    {
-                        type: 'selection',
-                        width: 80,
-                        align: 'center',
-                        fixed: 'left'
-                    },
-                    {
-                        title: '集团编号',
-                        sortable: true,
-                        key: 'code',
-                        minWidth: 130,
-                        fixed: 'left',
-                        align: 'left'
-                    },
-                    {
-                        title: '内部编号',
-                        sortable: true,
-                        key: 'internalCode',
-                        minWidth: 130,
-                        fixed: 'left',
-                        align: 'left'
-                    },
-                    {
-                        title: '名称',
-                        key: 'name',
-                        sortable: true,
-                        align: 'left',
-                        minWidth: 110,
-                        fixed: 'left'
-                    },
-                    {
-                        title: '性别',
-                        sortable: true,
-                        key: 'gender',
-                        align: 'left',
-                        minWidth: 110
-                    },
-                    {
-                        title: '工作手机',
-                        sortable: true,
-                        key: 'mobile',
-                        align: 'left',
-                        minWidth: 130
-                    },
-                    {
-                        title: '直接上级',
-                        sortable: true,
-                        key: 'leaderName',
-                        align: 'left',
-                        minWidth: 110
-                    },
-                    {
-                        title: '岗位工种',
-                        key: 'postName',
-                        sortable: true,
-                        align: 'left',
-                        minWidth: 110
-                    },
-                    {
-                        title: '所属部门',
-                        sortable: true,
-                        key: 'deptName',
-                        align: 'left',
-                        minWidth: 110
-                    },
-                    /* {
-                        title: '操作',
-                        key: 'operation',
-                        width: 80,
-                        fixed: 'right',
-                        minWidth: 130,
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', [
-                                h('Button', {
-                                    props: {
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '5px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.quitEmpDeleteEvent(params.row.id);
-                                        }
-                                    }
-                                }, '删除')
-                            ]);
-                        }
-                    } */
+                    {type: 'selection', width: 80, align: 'center', fixed: 'left'},
+                    {title: '集团编号', sortable: true, key: 'code', minWidth: 130, fixed: 'left', align: 'left'},
+                    {title: '内部编号', sortable: true, key: 'internalCode', minWidth: 130, fixed: 'left', align: 'left'},
+                    {title: '名称', key: 'name', sortable: true, align: 'left', minWidth: 110, fixed: 'left'},
+                    {title: '性别', sortable: true, key: 'gender', align: 'left', minWidth: 110},
+                    {title: '工作手机', sortable: true, key: 'mobile', align: 'left', minWidth: 130},
+                    {title: '直接上级', sortable: true, key: 'leaderName', align: 'left', minWidth: 110},
+                    {title: '岗位工种', key: 'postName', sortable: true, align: 'left', minWidth: 110},
+                    {title: '所属部门', sortable: true, key: 'deptName', align: 'left', minWidth: 110},
                 ],
                 quitEmpTableData: [
                     {
@@ -764,35 +676,10 @@
                     }
                 ],
                 inServiceTableHeaders: [
-                    {
-                        type: 'selection',
-                        width: 80,
-                        fixed: 'left',
-                        align: 'center'
-                    },
-                    {
-                        title: '集团编号',
-                        key: 'code',
-                        sortable: true,
-                        align: 'left',
-                        fixed: 'left',
-                        minWidth: 130
-                    },
-                    {
-                        title: '内部编号',
-                        sortable: true,
-                        key: 'internalCode',
-                        minWidth: 130,
-                        fixed: 'left',
-                        align: 'left'
-                    },
-                    {
-                        title: '姓名',
-                        key: 'name',
-                        align: 'left',
-                        sortable: true,
-                        fixed: 'left',
-                        minWidth: 110,
+                    {type: 'selection', width: 80, fixed: 'left', align: 'center'},
+                    {title: '集团编号', key: 'code', sortable: true, align: 'left', fixed: 'left', minWidth: 130},
+                    {title: '内部编号', sortable: true, key: 'internalCode', minWidth: 130, fixed: 'left', align: 'left'},
+                    {title: '姓名', key: 'name', align: 'left', sortable: true, fixed: 'left', minWidth: 110,
                         render: (h, params) => {
                             return h('span', {
                                 domProps: {
@@ -810,68 +697,15 @@
                             });
                         }
                     },
-                    {
-                        title: '性别',
-                        key: 'gender',
-                        align: 'left',
-                        sortable: true,
-                        minWidth: 80
-                    },
-                    {
-                        title: 'loginToken',
-                        key: 'loginToken',
-                        align: 'left',
-                        sortable: true,
-                        minWidth: 100
-                    },
-                    {
-                        title: '工作手机',
-                        key: 'mobile',
-                        align: 'left',
-                        sortable: true,
-                        minWidth: 114
-                    },
-                    {
-                        title: '直接上级',
-                        key: 'leaderName',
-                        align: 'left',
-                        sortable: true,
-                        minWidth: 110
-                    },
-                    {
-                        title: '岗位工种',
-                        key: 'postName',
-                        align: 'left',
-                        sortable: true,
-                        minWidth: 110
-                    },
-                    {
-                        title: '所属部门',
-                        key: 'deptName',
-                        align: 'left',
-                        sortable: true,
-                        minWidth: 110
-                    },
-                    {
-                        title: '是否在职',
-                        key: 'onJob',
-                        align: 'center',
-                        sortable: true,
-                        minWidth: 110
-                    },
-                    {
-                        title: '是否操作用户',
-                        key: 'state',
-                        minWidth: 130,
-                        align: 'center',
-                        sortable: true
-                    },
-                    {
-                        title: '分配',
-                        align: 'center',
-                        sortable: true,
-                        fixed: 'right',
-                        minWidth: 220,
+                    {title: '性别', key: 'gender', align: 'left', sortable: true, minWidth: 80},
+                    {title: 'loginToken', key: 'loginToken', align: 'left', sortable: true, minWidth: 100},
+                    {title: '工作手机', key: 'mobile', align: 'left', sortable: true, minWidth: 114},
+                    {title: '直接上级', key: 'leaderName', align: 'left', sortable: true, minWidth: 110},
+                    {title: '岗位工种', key: 'postName', align: 'left', sortable: true, minWidth: 110},
+                    {title: '所属部门', key: 'deptName', align: 'left', sortable: true, minWidth: 110},
+                    {title: '是否在职', key: 'onJob', align: 'center', sortable: true, minWidth: 110},
+                    {title: '是否操作用户', key: 'state', minWidth: 130, align: 'center', sortable: true},
+                    {title: '分配', align: 'center', sortable: true, fixed: 'right', minWidth: 220,
                         render: (h, params) => {
                             const _this = this;
                             return h('Div', [
@@ -1028,16 +862,8 @@
                             });
                         }
                     },
-                    {
-                        title: '模块名称',
-                        _expanded: true,
-                        width: 200,
-                        key: 'moduleName'
-                    },
-                    {
-                        title: '权限项',
-                        key: 'rightItem'
-                    }
+                    {title: '模块名称', _expanded: true, width: 200, key: 'moduleName'},
+                    {title: '权限项', key: 'rightItem'}
                 ],
                 roleAssemblyData: [],
                 RoleModuleColumns: [
@@ -1090,10 +916,7 @@
                 dataPromiseLoading: false,
                 dataPromiseUserName: '',
                 workshopDataPromiseColumns: [
-                    {
-                        title: '车间',
-                        key: 'deptName'
-                    },
+                    {title: '车间', key: 'deptName'},
                     {
                         title: '查看',
                         align: 'center',
@@ -1136,15 +959,8 @@
                 ],
                 workshopDataPromiseData: [],
                 shiftGroupDataPromiseColumns: [
-
-                    {
-                        title: '班组',
-                        key: 'deptName'
-                    },
-                    {
-                        title: '所属车间',
-                        key: 'parentName'
-                    },
+                    {title: '班组', key: 'deptName'},
+                    {title: '所属车间', key: 'parentName'},
                     {
                         title: '查看',
                         align: 'center',
@@ -1190,6 +1006,10 @@
             };
         },
         methods: {
+            getGroupEvent (e) {
+                this.addEmpForCus.groupId = e.value;
+                this.addEmpForCus.groupName = e.label;
+            },
             // 数据权限的设置----------开始
             // 获取数据权限
             getDataPermission () {
@@ -1659,6 +1479,8 @@
                     this.addEmpForCus.postName = '';
                     this.addEmpForCus.tel = '';
                     this.addEmpForCus.idCard = '';
+                    this.addEmpForCus.groupId = null;
+                    this.addEmpForCus.groupName = '';
                     this.$refs['addEmpForCus'].resetFields();
                 };
             },
@@ -1692,8 +1514,10 @@
                     'birthday': formatDate(this.birthData),
                     'postId': this.addEmpForCus.postId,
                     'postName': this.addEmpForCus.postName,
-                    'idCard': this.addEmpForCus.idCard
-                };
+                    'idCard': this.addEmpForCus.idCard,
+                    'groupId': this.addEmpForCus.groupId,
+                    'groupName': this.addEmpForCus.groupName,
+            };
                 this.$post(api.empSave(), params).then((res) => {
                     if (res.data.status === 200) {
                         this.showPostSelect = false;
@@ -2453,6 +2277,13 @@
                     this.quitPageHeights = quitPageHeightDom.offsetHeight + 40;
                     this.quitTableHeight = compClientHeight(tableDom.offsetTop + 240 + this.quitPageHeights);
                 };
+            },
+            getGroupList () {
+                this.$call('group.list').then(res => {
+                    if (res.data.status === 200) {
+                        this.groupList = res.data.res;
+                    };
+                });
             }
         },
         mounted () {
@@ -2480,6 +2311,7 @@
             this.getPostHttp();
             // 获取部门信息的请求
             this.getDeptList();
+            this.getGroupList();
         }
     };
 </script>

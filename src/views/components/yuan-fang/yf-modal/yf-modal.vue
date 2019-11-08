@@ -19,7 +19,7 @@
                         v-show="showConfirmBtn"
                         :loading="confirmLoading"
                         @click="confirmEvent"
-                        type="primary"
+                        type="success"
                 >确认</Button>
                 <Button
                         :disabled="disableConfirmSubmitBtn"
@@ -33,7 +33,7 @@
                         v-show="showCancelBtn"
                         :loading="cancelLoading"
                         @click="cancelEvent"
-                        type="error"
+                        style="background:#BCBCBC;color: #ffffff"
                 >取消</Button>
             </div>
         </Modal>

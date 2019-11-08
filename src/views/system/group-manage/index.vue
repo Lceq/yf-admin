@@ -151,7 +151,7 @@
                     } else {
                         this.confirmButtonLoading = false;
                     };
-                })
+                });
             },
             onVisibleEvent (e) {
                 this.modalState = e;
@@ -159,6 +159,7 @@
                     this.modalTitle = '';
                     this.saveModalConfirmLoading = false;
                     this.formValidate.isEnable = false;
+                    this.$delete(this.formValidate, 'id');
                     this.$refs['formValidate'].resetFields();
                 };
             },

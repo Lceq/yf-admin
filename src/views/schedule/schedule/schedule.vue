@@ -387,6 +387,7 @@
     }
 
     .shiftClass {
+        margin-top: 10px;
     }
 
     .iconStyle {

@@ -15,6 +15,7 @@ const routerReference = {
     'process-warning': () => import('@/views/basicData/process-warning/process-warning.vue'),
     'color': () => import('@/views/basicData/color/color.vue'),
     'meas': () => import('@/views/basicData/unit/unit.vue'),
+    'rule': () => import('@/views/system/code-rule.vue'),
     //系统管理
     'notification': () => import('@/views/system/notification/list-notification.vue'),
     'scada-config': () => import('@/views/system/scada-config/index.vue'),
@@ -24,6 +25,7 @@ const routerReference = {
     'assembly': () => import('@/views/system/assembly/assembly.vue'),
     'para': () => import('@/views/system/para/para.vue'),
     'service': () => import('@/views/system/service/service.vue'),
+    'list-role': () => import('@/views/system/role/list-role.vue'),
     //人事管理
     'user': () => import('@/views/system/staff-mgmt.vue'),
     'post': () => import('@/views/basicData/post/post.vue'),

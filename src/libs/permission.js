@@ -2,6 +2,7 @@
     import routerReference from './router-reference';
     import {router} from '../router';
     import store from '@/store';
+    import {proxy} from '../ajax/http';
 
     const getTrees = (list, parentId) => {
         let items = {};
@@ -37,14 +38,14 @@
         let content = [];
         let moduleAllList = [];
         let addRouterArr = [];
-        fetch('module/list').then((res) => {
+        proxy.call('module.list').then((res) => {
             content = res.data;
             if (content.status === 200) {
                 moduleAllList = content.res;
                 store.commit('ALL_MODULE_LIST', res.data.res);
             };
         }).then(() => {
-            fetch('module/right/list').then(res => {
+            proxy.call('module.right.list').then(res => {
                 let content = res.data;
                 if (content.status === 200) {
                     let data = content.res;
@@ -65,26 +66,30 @@
                             navUrl: moInfo.navUrl,
                             parentId: moInfo.parentId,
                             sortNum: parseInt(moInfo.sortNum),
-                            children: []
+                            children: [],
+                            tag: moInfo.tag
                         };
                     });
                     addRouterArr = JSON.parse(JSON.stringify(getTrees(lst, pId)));
                     // 拼接component
                     addRouterArr.forEach(item => {
                         item.component = () => import('@/views/Main.vue');
-                        item.children.forEach(chilItem => {
-                            if (typeof routerReference[chilItem.path] === 'undefined') {
-                                // 抛出异常路由
-                                try {
-                                    throw new Error(`not find router name: ${chilItem.path}`)
-                                } catch (e) {
-                                    console.error(e);
+                        item.children.forEach(childItem => {
+                            // 模块为当前开发环境时
+                            if (childItem.tag === 'mes1') {
+                                if (typeof routerReference[childItem.path] === 'undefined') {
+                                    // 抛出异常路由
+                                    try {
+                                        throw new Error(`not find router name: ${childItem.path}`)
+                                    } catch (e) {
+                                        console.error(e);
+                                    };
+                                } else if (typeof routerReference[childItem.path] === 'function') {
+                                    childItem.component = routerReference[childItem.path];
+                                } else if (typeof routerReference[childItem.path] === 'object') {
+                                    childItem.meta = routerReference[childItem.path].meta;
+                                    childItem.component = routerReference[childItem.path].component;
                                 };
-                            } else if (typeof routerReference[chilItem.path] === 'function') {
-                                chilItem.component = routerReference[chilItem.path];
-                            } else if (typeof routerReference[chilItem.path] === 'object') {
-                                chilItem.meta = routerReference[chilItem.path].meta;
-                                chilItem.component = routerReference[chilItem.path].component;
                             };
                         });
                         item.path = '';

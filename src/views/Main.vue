@@ -278,11 +278,13 @@
             }
         },
         mounted () {
-            window.addEventListener('resize', () => {
+            let Height = document.getElementsByClassName('single-page-con')[0].offsetHeight;
+            this.$store.dispatch({type: 'calManiViewHeight', payload: Height});
+            addEventListener('resize', () => {
                 let Height = document.getElementsByClassName('single-page-con')[0].offsetHeight;
                 this.$store.dispatch({type: 'calManiViewHeight', payload: Height});
-                this.$store.commit('UPDATE_DOCUMENT_HEIGHT', Height);
             });
+            this.$store.commit('UPDATE_DOCUMENT_HEIGHT', Height);
             this.init();
         },
         created () {

@@ -115,6 +115,7 @@
                         this.confirmButtonLoading = false;
                         this.tipsModalState = false;
                         this.deleteId = null;
+                        this.getAllRoleList();
                     } else {
                         this.confirmButtonLoading = false;
                     };
@@ -131,6 +132,7 @@
             },
             onSaveModalVisibleChange (e) {
                 this.saveModalState = e;
+                this.editRoleId = null;
             },
             addEvent () {
                 this.saveModalTitle = '新增';

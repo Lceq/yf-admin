@@ -65,7 +65,7 @@ export default {
                                 },
                                 on: {
                                     'on-change': (data) => {
-                                        console.log('选择', data)
+                                        // console.log('选择', data)
                                         // debugger
                                         _this.shiftGroupTableData[params.index].values = data;
                                     }
@@ -466,7 +466,7 @@ export default {
             this.isCompute = dayData.isCompute;
             this.SchedulingTitle = '排班';
             this.curTime = new Array(dayData.belongDate);
-            console.log("设置日历班制",this.curTime)
+            // console.log("设置日历班制",this.curTime)
             this.curWorkShopName = this.workShopList.find(x => x.deptId === this.currentWorkshopId).deptName;
             this.defaultShiftId = this.shiftType[0].id;
             this.haveShiftData = [];
@@ -488,7 +488,7 @@ export default {
             }
             this.curTime =  new Array(dayData.belongDate);
             this.curTimeJoin = dayData.belongDate;
-            console.log("点击班制 这里有数据的情况下",this.curTime)
+            // console.log("点击班制 这里有数据的情况下",this.curTime)
             this.curWorkShopName = this.workShopList.find(x => x.deptId === this.currentWorkshopId).deptName;
             this.SchedulingTitle = '排班';
             this.defaultShiftId = dayData.shiftTypeId;

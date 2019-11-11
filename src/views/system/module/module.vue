@@ -409,7 +409,7 @@ export default {
             this.moduleShow = true;
         },
         getDetailModule () {
-            this.$fetch('module/detail/' + this.editModuleId).then((res) => {
+            this.$call('module.detail', {id: this.editModuleId}).then((res) => {
                 let content = res.data;
                 if (content.status === 200) {
                     this.moduleTitle = '编辑模块';
@@ -500,11 +500,11 @@ export default {
         },
         moduleWarnConfirm () {
             this.moduleWarnLoading = true;
-            this.$post('module/delete/' + this.deleteModuleId).then((res) => {
+            this.$call('module.delete', [this.deleteModuleId]).then((res) => {
                 this.moduleWarnLoading = false;
                 let content = res.data;
                 if (content.status === 200) {
-                    this.$Message.success('移除成功');
+                    this.$Message.success('删除成功');
                     this.treeSwitch = true;
                     this.getModuleDataList();
                     this.moduleWarnShow = false;

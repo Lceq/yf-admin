@@ -400,6 +400,8 @@ export default {
             this.moduleFormValidate.id = null;
             this.moduleFormValidate.code = '';
             this.moduleFormValidate.name = '';
+            this.moduleFormValidate.tag = '';
+            this.moduleFormValidate.navFullUrl = '';
             this.moduleFormValidate.navUrl = '';
             this.moduleFormValidate.iconUrl = 'ios-keypad-outline';
             this.moduleFormValidate.sortNum = 0;

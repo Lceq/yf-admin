@@ -1026,31 +1026,6 @@
                         _this.dataPromiseShow = true;
                     }
                 });
-
-                /*this.$call('user.data.list', {userId: id}).then(res => {
-                    if (res.data.status === 200) {
-                        // 匹配勾选的车间数据授权
-                        this.workshopDataPromiseData.forEach(allItem => {
-                            res.data.res.forEach(checkItem => {
-                                if (allItem.deptId === checkItem.deptId) {
-                                    allItem.isWatch = true;
-                                    allItem.isDefault = checkItem.isDefault;
-                                };
-                            });
-                        });
-
-                        // 匹配勾选的班组数据授权
-                        this.shiftGroupDataPromiseData.forEach(allItem => {
-                            res.data.res.forEach(checkItem => {
-                                if (allItem.deptId === checkItem.deptId) {
-                                    allItem.isWatch = true;
-                                    allItem.isDefault = checkItem.isDefault;
-                                };
-                            });
-                        });
-                        _this.dataPromiseShow = true;
-                    }
-                });*/
             },
             // 数据权限确定
             dataPromiseSubmit () {

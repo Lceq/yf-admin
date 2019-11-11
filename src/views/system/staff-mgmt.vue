@@ -473,6 +473,7 @@
                 };
             };
             return {
+                groupList: [],
                 globalLoadingShow: false,
                 detailResponseData: {},
                 quitItems: [],
@@ -503,19 +504,9 @@
                 powerLoading: false,
                 currentUserId: '',
                 columnsRole: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        align: 'center'
-                    },
-                    {
-                        title: '角色编号',
-                        key: 'roleCode'
-                    },
-                    {
-                        title: '角色名称',
-                        key: 'roleName'
-                    }
+                    {type: 'selection', width: 60, align: 'center'},
+                    {title: '角色编号', key: 'roleCode'},
+                    {title: '角色名称', key: 'roleName'}
                 ],
                 roleData: [],
                 moduleList: [],
@@ -568,12 +559,8 @@
                     againPasswordIpt: ''
                 },
                 ruleValidate: {
-                    passwordIpt: [
-                        { required: true, validator: validatePass, trigger: 'blur' }
-                    ],
-                    againPasswordIpt: [
-                        { required: true, validator: validatePassCheck, trigger: 'blur' }
-                    ]
+                    passwordIpt: [{ required: true, validator: validatePass, trigger: 'blur' }],
+                    againPasswordIpt: [{ required: true, validator: validatePassCheck, trigger: 'blur' }]
                 },
                 setPasswordModal: false,
                 showOther: false,
@@ -720,7 +707,7 @@
                                         click: (e) => {
                                             _this.currentUserId = params.row.id;
                                             _this.defaultName = 'workshop';
-                                            _this.getDataPermission();
+                                            _this.getDataPermission(params.row.id);
                                         }
                                     }
                                 }, '数据'),
@@ -960,7 +947,6 @@
                 workshopDataPromiseData: [],
                 shiftGroupDataPromiseColumns: [
                     {title: '班组', key: 'deptName'},
-                    {title: '所属车间', key: 'parentName'},
                     {
                         title: '查看',
                         align: 'center',
@@ -1012,7 +998,7 @@
             },
             // 数据权限的设置----------开始
             // 获取数据权限
-            getDataPermission () {
+            getDataPermission (id) {
                 const _this = this;
                 this.workshopDataPromiseData.map(x => {
                     x.isWatch = false;
@@ -1024,7 +1010,7 @@
                     x.isDefault = false;
                     return x;
                 });
-                this.$post('user/data/list', {userId: this.currentUserId}).then(res => {
+                this.$call('user.data.list', {userId: this.currentUserId}).then(res => {
                     let content = res.data;
                     if (content.status === 200) {
                         for (let i of content.res) {
@@ -1040,6 +1026,31 @@
                         _this.dataPromiseShow = true;
                     }
                 });
+
+                /*this.$call('user.data.list', {userId: id}).then(res => {
+                    if (res.data.status === 200) {
+                        // 匹配勾选的车间数据授权
+                        this.workshopDataPromiseData.forEach(allItem => {
+                            res.data.res.forEach(checkItem => {
+                                if (allItem.deptId === checkItem.deptId) {
+                                    allItem.isWatch = true;
+                                    allItem.isDefault = checkItem.isDefault;
+                                };
+                            });
+                        });
+
+                        // 匹配勾选的班组数据授权
+                        this.shiftGroupDataPromiseData.forEach(allItem => {
+                            res.data.res.forEach(checkItem => {
+                                if (allItem.deptId === checkItem.deptId) {
+                                    allItem.isWatch = true;
+                                    allItem.isDefault = checkItem.isDefault;
+                                };
+                            });
+                        });
+                        _this.dataPromiseShow = true;
+                    }
+                });*/
             },
             // 数据权限确定
             dataPromiseSubmit () {
@@ -1064,7 +1075,7 @@
                     userId: this.currentUserId,
                     userData: dataParams
                 };
-                this.$post('user/data/save', saveParams).then(res => {
+                this.$call('user.data.save', saveParams).then(res => {
                     let content = res.data;
                     if (content.status === 200) {
                         this.dataPromiseShow = false;
@@ -1081,7 +1092,7 @@
             // 获取所有车间
             getWorkshopList () {
                 const _this = this;
-                this.$fetch('dept/workshops').then(res => {
+                this.$call('dept.workshops').then(res => {
                     let content = res.data;
                     if (content.status === 200) {
                         _this.workshopDataPromiseData = content.res.map(item => {
@@ -1100,7 +1111,7 @@
             // 获取所有班组
             getShiftGroupList () {
                 const _this = this;
-                this.$fetch('dept/groups').then(res => {
+                this.$call('group.list').then(res => {
                     let content = res.data;
                     if (content.status === 200) {
                         _this.shiftGroupDataPromiseData = content.res.map(item => {
@@ -1108,8 +1119,8 @@
                                 deptId: item.id,
                                 deptName: item.name,
                                 dataType: 2,
-                                parentId: item.parentId,
-                                parentName: this.deptDataList.find(x => x.id === item.parentId).name,
+                                // parentId: item.parentId,
+                                // parentName: this.deptDataList.find(x => x.id === item.parentId).name,
                                 isWatch: false,
                                 isDefault: false
                             };

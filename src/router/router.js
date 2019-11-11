@@ -141,7 +141,6 @@ export const appRouter = [];
         component: Main,
         children: [
             { path: 'company', title: '公司管理', name: 'company', icon: 'compose', component: () => import('@/views/system/company-mgmt.vue') },
-            { path:'role',icon: 'android-contact',title:'角色管理',name:'role',component:() => import('@/views/system/role/role.vue')},
             { path:'module',icon: 'ios-photos',title:'模块管理',name:'module', component:() => import('@/views/system/module/module.vue')},
             { path:'assembly',icon: 'person',title:'权限项管理',name:'assembly',component:() => import('@/views/system/assembly/assembly.vue')},
             { path:'rule',icon: 'ionic',title:'编码规则',name:'rule',component:() => import('@/views/system/code-rule.vue')},

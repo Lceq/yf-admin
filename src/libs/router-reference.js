@@ -20,7 +20,6 @@ const routerReference = {
     'notification': () => import('@/views/system/notification/list-notification.vue'),
     'scada-config': () => import('@/views/system/scada-config/index.vue'),
     'company': () => import('@/views/system/company-mgmt.vue'),
-    'role': () => import('@/views/system/role/role.vue'),
     'module': () => import('@/views/system/module/module.vue'),
     'assembly': () => import('@/views/system/assembly/assembly.vue'),
     'para': () => import('@/views/system/para/para.vue'),

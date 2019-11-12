@@ -744,7 +744,7 @@ export default {
             // }
             this.$api.user.getUserList({
                 onJob: true,
-                deptId: this.curDepartId,
+                groupId: this.curDepartId,
                 // pageIndex: this.userPageIndex,
                 // pageSize: this.userPageSize,
                 name: this.searchName
@@ -904,7 +904,7 @@ export default {
         // 确认
         adjustPostSubmit() {
             this.adjustPostLoading = true;
-            this.$api.scheduleUser.getScheduleUserPostUpdate({
+            this.$call('schedule.user.post.update', {
                 scheduleUserId: this.scheduleUserId,
                 postIds: this.postIds
             }).then(res => {
@@ -986,9 +986,7 @@ export default {
                             typeCode: this.abnormityList.find(y => y.id === this.deleteValidate.abnormityId).code
                         };
                     });
-                    this.$api.scheduleUser.getScheduleUserRemove(
-                        params
-                    ).then((res) => {
+                    this.$call('schedule.user.remove', params).then((res) => {
                         let content = res.data;
                         this.deleteLoading = false;
                         if (content.status === 200) {

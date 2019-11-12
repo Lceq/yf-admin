@@ -119,26 +119,19 @@ export default ({
     methods: {
         // 获取车间
         getUserWorkshop () {
-            this.$api.dept.getUserWorkshop().then(res => {
-                this.workshopList = res.workshopList;
-                this.curWorkshopId = res.curWorkshopId;
-                // 获取该天班组
-                this.getShiftGroup();
+            return this.$call('user.data.workshops2').then(res => {
+                if (res.data.status === 200) {
+                    this.workshopList = res.data.res.userData;
+                    this.curWorkshopId = res.data.res.defaultDeptId;
+                };
             });
         },
-        // 改变车间
-        changeWorkshop () {
-            // 获取该天班组
-            this.getShiftGroup();
-        },
         // 根据车间判断车间班组信息
-        getShiftGroup () {
+        getGroupList () {
             const _this = this;
-            this.$api.dept.getUserGroups({parentId: this.curWorkshopId}).then((res) => {
-                _this.shiftGroupList = res.shiftGroupList ? res.shiftGroupList : null;
-                _this.curShiftGroup = res.curShiftGroupId ? res.curShiftGroupId : null;
-                // 获取人员数据
-                this.getWorkshopUser();
+            return this.$call('user.data.groups').then((res) => {
+                _this.shiftGroupList = res.data.res.userData;
+                _this.curShiftGroup = res.data.res.defaultDeptId;
             });
         },
         // 获取岗位
@@ -204,12 +197,13 @@ export default ({
         }
     },
     created () {
-        //
-        this.getUserWorkshop();
-        // 获取岗位
-        this.getPostList();
-        // 获取工序
-        this.getProcessList();
+        (async () => {
+            await this.getGroupList(); // 获取班组
+            await this.getUserWorkshop(); // 获取车间
+            await this.getProcessList(); // 获取工序
+            await this.getPostList(); // 获取岗位
+            await this.getWorkshopUser(); // 获取人员数据
+        })();
     },
     mounted () {
         this.$nextTick(() => {

@@ -3,7 +3,7 @@
        <Card>
            <Row class="endFlex" id="selectedHeight">
                <Col>
-                   <Select @on-change="changeWorkshop" class="textLeft formEachStyle" v-model="curWorkshopId" placeholder="请选择车间...">
+                   <Select class="textLeft formEachStyle" v-model="curWorkshopId" placeholder="请选择车间...">
                        <Option v-for="item in workshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
                    </Select>
                    <Select class="textLeft formEachStyle" clearable v-model="curShiftGroup" placeholder="请选择班组...">

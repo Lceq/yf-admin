@@ -10,6 +10,15 @@
                 <Col>
                     <DatePicker type="date" placeholder="请选择开始时间" class="searchHurdles queryBarMarginRight" v-model="orderFromDate"></DatePicker>
                     <DatePicker type="date" placeholder="请选择结束时间" class="searchHurdles queryBarMarginRight" v-model="orderToDate"></DatePicker>
+                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarWorkshopValue" placeholder="请选择车间" class="searchHurdles queryBarMarginRight">
+                        <Option v-for="item in queryBarWorkshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
+                    </Select>
+                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarProcessId" class="searchHurdles queryBarMarginRight" placeholder="请选择工序">
+                        <Option v-for="item in queryBarProcessList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                    </Select>
+                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarGroupId" class="searchHurdles queryBarMarginRight" placeholder="请选择班组">
+                        <Option v-for="item in queryBarGroupList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                    </Select>
                     <Input type="text" v-model.trim="queryBarName" placeholder="请输入人员编号或名称" class="searchHurdles" @on-enter="queryBarNameEnterEvent"/>
                     <Button icon="ios-search" type="primary" @click="queryBarSearchButtonClickEvent" class="queryButtonStyle">搜索</Button>
                 </Col>
@@ -36,6 +45,13 @@
         components: { tipsModal, leftMenu },
         data () {
             return {
+                queryBarGroupList: [],
+                defaultWorkshopId: null,
+                queryBarGroupId: null,
+                queryBarWorkshopValue: null,
+                queryBarProcessId: null,
+                queryBarWorkshopList: [],
+                queryBarProcessList: [],
                 tableHeader: [],
                 menuArr: [
                     {id: 1, name: '人员产量查询'},
@@ -76,6 +92,27 @@
             };
         },
         methods: {
+            getWorkshopHttp () {
+                return this.$call('user.data.workshops2').then(res => {
+                    if (res.data.status === 200) {
+                        let responseData = res.data.res;
+                        this.queryBarWorkshopValue = responseData.defaultDeptId;
+                        this.defaultWorkshopId = responseData.defaultDeptId;
+                        this.queryBarWorkshopList = responseData.userData;
+                    }
+                });
+            },
+            getProcessHttp () {
+                return this.$call('process.list', {
+                    auditState: 3,
+                    state: 1
+                }).then(res => {
+                    if (res.data.status === 200) {
+                        let responseData = res.data.res;
+                        this.queryBarProcessList = responseData;
+                    }
+                });
+            },
             // 获取每页的条数
             pageChangeEvent (e) {
                 this.pageIndex = 1;
@@ -98,6 +135,9 @@
                 this.pageIndex = 1;
                 this.pageTotal = 1;
                 this.activeMenuAuditSate = obj.id;
+                this.queryBarProcessId = null;
+                this.queryBarGroupId = null;
+                this.queryBarWorkshopValue = JSON.parse(JSON.stringify(this.defaultWorkshopId));
                 this.orderFromDate = toDay();
                 this.orderToDate = '';
                 this.queryBarName = JSON.parse(JSON.stringify(this.userName));
@@ -123,8 +163,11 @@
                     dateFrom: this.orderFromDate,
                     dateTo: this.orderToDate,
                     userName: this.queryBarName,
-                    pageIndex: this.pageIndex,
-                    pageSize: this.pageSize
+                    // pageIndex: this.pageIndex,
+                    // pageSize: this.pageSize
+                    processId: this.queryBarProcessId,
+                    workshopId: this.queryBarWorkshopValue,
+                    groupId: this.queryBarGroupId,
                 }).then((res) => {
                     if (res.data.status === 200) {
                         this.tableData = res.data.res;
@@ -147,10 +190,18 @@
                     };
                 });
             },
+            getGroupListHttp () {
+                this.$call('group.list').then(res => {
+                    if (res.data.status === 200) this.queryBarGroupList = res.data.res;
+                });
+            },
             // 获取依赖数据
             async getDependentDataHttp () {
                 this.globalLoadingShow = true;
                 await this.getUserInfo();
+                await this.getGroupListHttp();
+                await this.getProcessHttp();
+                await this.getWorkshopHttp();
                 await this.getListHttp();
             }
         },

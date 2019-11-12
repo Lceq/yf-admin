@@ -30,34 +30,34 @@ export default ({
                     align: 'center',
                     render: (h, params) => {
                         return h('div', [
-                                h('Button', {
-                                    props: {
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '10px'
-                                    },
-                                    on: {
-                                        click: () => {
-                                            this.curGroupData = {
-                                                id: params.row.id + '-' + Math.random(),
-                                                curDate: params.row.belongDate,
-                                                curWorkShopName: params.row.workshopName,
-                                                curShiftName: params.row.shiftName,
-                                                curGroupName: params.row.groupName
-                                            };
-                                        }
+                            h('Button', {
+                                props: {
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '10px'
+                                },
+                                on: {
+                                    click: () => {
+                                        this.curGroupData = {
+                                            id: params.row.id + '-' + Math.random(),
+                                            curDate: params.row.belongDate,
+                                            curWorkShopName: params.row.workshopName,
+                                            curShiftName: params.row.shiftName,
+                                            curGroupName: params.row.groupName
+                                        };
                                     }
-                                }, '机台分配'),
-                                h('Button', {
-                                    props: {
-                                        size: 'small'
-                                    },
-                                    style: {
-                                        marginRight: '10px'
-                                    }
-                                }, '人员替岗')
-                            ]);
+                                }
+                            }, '机台分配'),
+                            h('Button', {
+                                props: {
+                                    size: 'small'
+                                },
+                                style: {
+                                    marginRight: '10px'
+                                }
+                            }, '人员替岗')
+                        ]);
                     }
                 },
                 {
@@ -192,9 +192,9 @@ export default ({
         // 根据车间判断车间班组信息
         getShiftGroup() {
             const _this = this;
-            this.$api.dept.getUserGroups({parentId: this.curWorkShopId}).then((res) => {
-                _this.shiftGroup = res.shiftGroupList ? res.shiftGroupList : [];
-                _this.curShiftGroup = res.curShiftGroupId ? res.curShiftGroupId : null;
+            this.$call('user.data.groups').then((res) => {
+                _this.curShiftGroup = res.data.res.defaultDeptId;
+                _this.shiftGroup = res.data.res.userData;
                 _this.getScheduleGroupList();
             });
         }

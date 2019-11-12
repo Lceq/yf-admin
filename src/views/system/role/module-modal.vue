@@ -11,6 +11,7 @@
             </div>
             <div slot="footer">
                 <modal-footer
+                        :buttonLoading="buttonLoading"
                         @saveModalConfirmEvent="saveModalConfirmEvent"
                         @saveModalCancelEvent="saveModalCancelEvent"
                 ></modal-footer>
@@ -21,7 +22,7 @@
 <script>
     import modalFooter from '../../components/modal-footer';
     import modalContentLoading from '../../components/modal-content-loading';
-    import { noticeTips } from '../../../libs/common';
+    import { noticeTips, emptyTips } from '../../../libs/common';
     export default {
         name: 'module-modal',
         components: { modalFooter, modalContentLoading },
@@ -41,7 +42,8 @@
                 spinShow: false,
                 showModal: false,
                 treeData: [],
-                checkArr: []
+                checkArr: [],
+                buttonLoading: false
             };
         },
         methods: {
@@ -49,14 +51,27 @@
                 this.checkArr = e;
             },
             saveRequest () {
-                this.$call('role.module.save', this.checkArr.map(item => item.id)).then(res => {
+                this.buttonLoading = true;
+                this.$call('role.module.save', {
+                    roleId: this.roleId,
+                    moduleIds: this.checkArr.map(item => item.id)
+                }).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'saveTips');
+                        this.checkArr = [];
+                        this.buttonLoading = false;
+                        this.showModal = false;
+                    } else {
+                        this.buttonLoading = false;
                     };
                 });
             },
             saveModalConfirmEvent () {
-                this.showModal = false;
+                if (this.checkArr && this.checkArr.length !== 0) {
+                    this.saveRequest();
+                } else {
+                    emptyTips(this, '请选择操作对象!');
+                };
             },
             saveModalCancelEvent () {
                 this.showModal = false;

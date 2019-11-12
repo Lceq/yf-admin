@@ -46,6 +46,7 @@ const routerReference = {
     'allocate': () => import('@/views/schedule/allocate/allocate.vue'),
     'shift': () => import('@/views/schedule/shift/shift.vue'),
     'attendance': () => import('@/views/schedule/attendance-rules.vue'),
+    'user-output-schedule': () => import('@/views/schedule/user-output-schedule/user-output-schedule.vue'),
     //计件管理
     'piece-quota': () => import('@/views/schedule/piece-quota/piece-quota.vue'),
     'goal-output':  () => import('@/views/schedule/goal-output/list-goal-output.vue'),

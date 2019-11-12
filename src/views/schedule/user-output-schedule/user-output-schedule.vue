@@ -1,0 +1,143 @@
+<template>
+    <left-menu
+            :stateList="menuArr"
+            :curTabStateId="activeMenuAuditSate"
+            @on-select="getClickMenuEvent"
+    >
+        <div slot="content">
+            <global-loading v-show="globalLoadingShow"></global-loading>
+            <Row type="flex" justify="end" align="middle">
+                <Col>
+                    <DatePicker type="date" placeholder="请选择开始时间" class="searchHurdles queryBarMarginRight" v-model="orderFromDate"></DatePicker>
+                    <DatePicker type="date" placeholder="请选择结束时间" class="searchHurdles queryBarMarginRight" v-model="orderToDate"></DatePicker>
+                    <Input type="text" v-model.trim="queryBarName" placeholder="请输入人员编号或名称" class="searchHurdles" @on-enter="queryBarNameEnterEvent"/>
+                    <Button icon="ios-search" type="primary" @click="queryBarSearchButtonClickEvent" class="queryButtonStyle">搜索</Button>
+                </Col>
+            </Row>
+            <Row class="table-bar margin-top-10">
+                <Col span="24">
+                    <Table :height="tableHeight" size="small" :loading="tableLoading" border ref="selection" :columns="tableHeader" :data="tableData"></Table>
+                </Col>
+            </Row>
+        </div>
+    </left-menu>
+</template>
+<script>
+    import { toDay, formatDate } from '../../../libs/common';
+    import tipsModal from '../../public/deleteWarning';
+    import leftMenu from '../../layout/layout';
+    export default {
+        name: 'user-output-schedule',
+        components: { tipsModal, leftMenu },
+        data () {
+            return {
+                tableHeader: [],
+                menuArr: [
+                    {id: 1, name: '人员产量查询'},
+                    {id: 2, name: '人员排班查询'}
+                ],
+                activeMenuAuditSate: 1,
+                globalLoadingShow: false,
+                tableLoading: false,
+                userTableHeader: [
+                    {key: 'belongDate', title: '日期', minWidth: 100, sortable: true},
+                    {key: 'groupName', title: '班组', minWidth: 100, sortable: true},
+                    {key: 'shiftName', title: '班次', minWidth: 100, sortable: true},
+                    {key: 'userName', title: '人员', minWidth: 100, sortable: true},
+                    {key: 'userCode', title: '人员编号', minWidth: 100, sortable: true},
+                    {key: 'postName', title: '岗位', minWidth: 100, sortable: true}
+                ],
+                scheduleTableHeader: [
+                    {title: '日期', key: 'belongDate', minWidth: 120, align: 'left', sortable: true},
+                    {title: '班组', key: 'groupName', minWidth: 120, align: 'left', sortable: true},
+                    {title: '人员', key: 'userName', minWidth: 120, align: 'left', sortable: true},
+                    {title: '机台', key: 'machineName', minWidth: 120, align: 'left', sortable: true},
+                    {title: '岗位', key: 'postName', minWidth: 120, align: 'left', sortable: true},
+                    {title: '工序', key: 'processName', minWidth: 120, align: 'center', sortable: true},
+                    {title: '品种', key: 'productName', minWidth: 120, align: 'left', sortable: true},
+                    {title: '当前米数', key: 'output', minWidth: 120, align: 'right', sortable: true},
+                    {title: '当前斤数', key: 'kgOutput', minWidth: 120, align: 'right', sortable: true}
+                ],
+                tableData: [],
+                orderFromDate: toDay(),
+                orderToDate: '',
+                queryBarName: '',
+                tableHeight: 0,
+                listApi: 'statistic.user.output'
+            };
+        },
+        methods: {
+            // 搜索按钮的点击事件
+            queryBarSearchButtonClickEvent () {
+                this.pageIndex = 1;
+                this.pageTotal = 1;
+                this.getListHttp();
+            },
+            // 菜单的点击事件
+            getClickMenuEvent (obj) {
+                this.activeMenuAuditSate = obj.id;
+                this.orderFromDate = toDay();
+                this.orderToDate = '';
+                this.queryBarName = JSON.parse(JSON.stringify(this.userName));
+                if (obj.name === '人员产量查询') {
+                    this.tableHeader = JSON.parse(JSON.stringify(this.userTableHeader));
+                    this.listApi = 'statistic.user.output';
+                } else {
+                    this.tableHeader = JSON.parse(JSON.stringify(this.scheduleTableHeader));
+                    this.listApi = 'schedule.user.list';
+                };
+                this.getListHttp();
+            },
+            // 获取查询栏的订单编号
+            queryBarNameEnterEvent () {
+                this.getListHttp();
+            },
+            // 查询栏的请求
+            getListHttp () {
+                this.tableLoading = true;
+                this.orderFromDate ? this.orderFromDate = formatDate(this.orderFromDate).split(' ')[0] : this.orderFromDate = '';
+                this.orderToDate ? this.orderToDate = formatDate(this.orderToDate).split(' ')[0] : this.orderToDate = '';
+                return this.$call(this.listApi, {
+                    dateFrom: this.orderFromDate,
+                    dateTo: this.orderToDate,
+                    userName: this.queryBarName
+                }).then((res) => {
+                    if (res.data.status === 200) {
+                        this.tableData = res.data.res;
+                        this.globalLoadingShow = false;
+                        this.tableLoading = false;
+                    };
+                });
+            },
+            // 计算table高度
+            calculationTableHeight () {
+                this.tableHeight = this.$store.state.maniViewHeight - 120;
+                window.onresize = () => this.tableHeight = this.$store.state.maniViewHeight - 120;
+            },
+            getUserInfo () {
+                this.$call('user.info').then(res => {
+                    if (res.data.status === 200) {
+                        this.queryBarName = res.data.res.name;
+                        this.userName = res.data.res.name;
+                    };
+                });
+            },
+            // 获取依赖数据
+            async getDependentDataHttp () {
+                this.globalLoadingShow = true;
+                await this.getUserInfo();
+                await this.getListHttp();
+            }
+        },
+        created () {
+            this.tableHeader = JSON.parse(JSON.stringify(this.userTableHeader));
+            this.tableLoading = true;
+            this.toCreated = true;
+            this.getDependentDataHttp();
+        },
+        mounted () {
+            this.$nextTick(() => { this.calculationTableHeight(); });
+        }
+    };
+</script>
+

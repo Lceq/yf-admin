@@ -295,7 +295,7 @@
                 :width="800"
                 title="模块">
             <div class="moduleAssembly">
-                <Tree @on-check-change="selectionModuleData" :data="newModuleList" show-checkbox></Tree>
+                <Tree @on-check-change="selectionModuleData" :data="newModuleList" show-checkbox multiple></Tree>
             </div>
             <modal-button
                     slot="footer"
@@ -2029,6 +2029,7 @@
             // 获取用户对应的模块列表
             getUserModuleList () {
                 const _this = this;
+                // 所有模块列表
                 this.$call('module.list').then(res => {
                     let content = res.data;
                     if (content.status === 200) {
@@ -2036,24 +2037,34 @@
                         for (var d of data) {
                             d.title = d.name;
                             d.checked = false;
-                            d.disabled = false;
+                            // d.disabled = false;
                         }
                         data.map(item => {
                             if (data.map(x => x.parentId).includes(item.id)) {
-                                item.disabled = true;
+                                // item.disabled = true;
                             }
                             return item;
                         });
                         _this.moduleData = [];
                         _this.moduleData = data;
                         if (_this.curRoles.length !== 0) {
+                            // 角色模块列表
                             this.$call('role.module.list', _this.curRoles).then((res) => {
                                 let con = res.data;
                                 if (con.status === 200) {
                                     for (let z of con.res) {
-                                        data.find(x => x.id === z) ? data.find(x => x.id === z).checked = true : false;
-                                        data.find(x => x.id === z) ? data.find(x => x.id === z).disabled = true : false;
+                                        try {
+                                            data.find(x => x.id === z).checked = true;
+                                        } catch (e) {
+                                            //
+                                        };
+                                        try {
+                                            data.find(x => x.id === z).disabled = true;
+                                        } catch (e) {
+                                            //
+                                        };
                                     }
+                                    // 人员模块列表
                                     this.$call('user.module.list', {
                                         userId: _this.currentUserId
                                     }).then((res) => {
@@ -2072,6 +2083,7 @@
                                 }
                             });
                         } else {
+                            // 人员模块列表
                             this.$call('user.module.list', {
                                 userId: _this.currentUserId
                             }).then((res) => {
@@ -2121,7 +2133,9 @@
             // 获取对应的角色列表
             getUserRoleList () {
                 const _this = this;
-                this.$fetch('user/role/list?userid=' + this.currentUserId).then((res) => {
+                this.$call('user.role.list', {
+                    userId: this.currentUserId
+                }).then((res) => {
                     let content = res.data;
                     if (content.status === 200) {
                         _this.roleData.map(item => {

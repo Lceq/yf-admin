@@ -2029,7 +2029,7 @@
             // 获取用户对应的模块列表
             getUserModuleList () {
                 const _this = this;
-                this.$fetch('module/list').then(res => {
+                this.$call('module.list').then(res => {
                     let content = res.data;
                     if (content.status === 200) {
                         let data = content.res;
@@ -2047,14 +2047,16 @@
                         _this.moduleData = [];
                         _this.moduleData = data;
                         if (_this.curRoles.length !== 0) {
-                            this.$post('role/module/list', _this.curRoles).then((res) => {
+                            this.$call('role.module.list', _this.curRoles).then((res) => {
                                 let con = res.data;
                                 if (con.status === 200) {
                                     for (let z of con.res) {
-                                        data.find(x => x.id === z).checked = true;
-                                        data.find(x => x.id === z).disabled = true;
+                                        data.find(x => x.id === z) ? data.find(x => x.id === z).checked = true : false;
+                                        data.find(x => x.id === z) ? data.find(x => x.id === z).disabled = true : false;
                                     }
-                                    this.$fetch('user/module/list?userid=' + _this.currentUserId).then((res) => {
+                                    this.$call('user.module.list', {
+                                        userId: _this.currentUserId
+                                    }).then((res) => {
                                         let content = res.data;
                                         if (content.status === 200) {
                                             for (let z of content.res) {
@@ -2070,10 +2072,11 @@
                                 }
                             });
                         } else {
-                            this.$fetch('user/module/list?userid=' + _this.currentUserId).then((res) => {
+                            this.$call('user.module.list', {
+                                userId: _this.currentUserId
+                            }).then((res) => {
                                 let content = res.data;
                                 if (content.status === 200) {
-                                    // debugger
                                     for (let z of content.res) {
                                         if (data.map(x => x.id).includes(z)) {
                                             data.find(x => x.id === z).checked = true;

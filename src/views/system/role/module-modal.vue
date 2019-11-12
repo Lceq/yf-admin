@@ -74,9 +74,7 @@
                         });
                     };
                 }).then(() => {
-                    this.$call('role.module.list', {
-                        roleId: id
-                    }).then((res) => {
+                    this.$call('role.module.list', [id]).then((res) => {
                         this.roleList = res.data.res;
                         this.allModuleList.forEach(moduleItem => {
                             this.roleList.forEach(roleItem => {

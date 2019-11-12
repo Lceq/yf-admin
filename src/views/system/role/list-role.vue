@@ -132,7 +132,7 @@
             },
             onSaveModalVisibleChange (e) {
                 this.saveModalState = e;
-                this.editRoleId = null;
+                if (!e) this.editRoleId = null;
             },
             addEvent () {
                 this.saveModalTitle = '新增';
@@ -145,6 +145,7 @@
             },
             onModuleVisibleChange (e) {
                 this.moduleState = e;
+                if (!e) this.roleId = null;
             },
             moduleButtonEvent (id) {
                 this.moduleState = true;

@@ -14,16 +14,21 @@
                     <Button icon="ios-search" type="primary" @click="queryBarSearchButtonClickEvent" class="queryButtonStyle">搜索</Button>
                 </Col>
             </Row>
-            <Row class="table-bar margin-top-10">
+            <Row class="table-bar margin-top-10 margin-bottom-10">
                 <Col span="24">
                     <Table :height="tableHeight" size="small" :loading="tableLoading" border ref="selection" :columns="tableHeader" :data="tableData"></Table>
                 </Col>
             </Row>
+            <!--<Row>
+                <Col class="pageStyle">
+                    <Page :total="pageTotal" show-elevator :page-size-opts="pageOpts" :show-total="true" :page-size="pageSize" @on-change="getPageEvent" :show-sizer="true" @on-page-size-change="pageChangeEvent"></Page>
+                </Col>
+            </Row>-->
         </div>
     </left-menu>
 </template>
 <script>
-    import { toDay, formatDate } from '../../../libs/common';
+    import { toDay, formatDate, setPage } from '../../../libs/common';
     import tipsModal from '../../public/deleteWarning';
     import leftMenu from '../../layout/layout';
     export default {
@@ -40,14 +45,6 @@
                 globalLoadingShow: false,
                 tableLoading: false,
                 userTableHeader: [
-                    {key: 'belongDate', title: '日期', minWidth: 100, sortable: true},
-                    {key: 'groupName', title: '班组', minWidth: 100, sortable: true},
-                    {key: 'shiftName', title: '班次', minWidth: 100, sortable: true},
-                    {key: 'userName', title: '人员', minWidth: 100, sortable: true},
-                    {key: 'userCode', title: '人员编号', minWidth: 100, sortable: true},
-                    {key: 'postName', title: '岗位', minWidth: 100, sortable: true}
-                ],
-                scheduleTableHeader: [
                     {title: '日期', key: 'belongDate', minWidth: 120, align: 'left', sortable: true},
                     {title: '班组', key: 'groupName', minWidth: 120, align: 'left', sortable: true},
                     {title: '人员', key: 'userName', minWidth: 120, align: 'left', sortable: true},
@@ -58,15 +55,38 @@
                     {title: '当前米数', key: 'output', minWidth: 120, align: 'right', sortable: true},
                     {title: '当前斤数', key: 'kgOutput', minWidth: 120, align: 'right', sortable: true}
                 ],
+                scheduleTableHeader: [
+                    {key: 'belongDate', title: '日期', minWidth: 100, sortable: true},
+                    {key: 'groupName', title: '班组', minWidth: 100, sortable: true},
+                    {key: 'shiftName', title: '班次', minWidth: 100, sortable: true},
+                    {key: 'userName', title: '人员', minWidth: 100, sortable: true},
+                    {key: 'userCode', title: '人员编号', minWidth: 100, sortable: true},
+                    {key: 'postName', title: '岗位', minWidth: 100, sortable: true}
+                ],
                 tableData: [],
                 orderFromDate: toDay(),
                 orderToDate: '',
                 queryBarName: '',
                 tableHeight: 0,
-                listApi: 'statistic.user.output'
+                listApi: 'statistic.user.output',
+                pageSize: setPage.pageSize,
+                pageOpts: setPage.pageOpts,
+                pageIndex: 1,
+                pageTotal: 0
             };
         },
         methods: {
+            // 获取每页的条数
+            pageChangeEvent (e) {
+                this.pageIndex = 1;
+                this.pageSize = e;
+                this.getListHttp();
+            },
+            // 获取页码
+            getPageEvent (e) {
+                this.pageIndex = e;
+                this.getListHttp();
+            },
             // 搜索按钮的点击事件
             queryBarSearchButtonClickEvent () {
                 this.pageIndex = 1;
@@ -75,6 +95,8 @@
             },
             // 菜单的点击事件
             getClickMenuEvent (obj) {
+                this.pageIndex = 1;
+                this.pageTotal = 1;
                 this.activeMenuAuditSate = obj.id;
                 this.orderFromDate = toDay();
                 this.orderToDate = '';
@@ -100,19 +122,22 @@
                 return this.$call(this.listApi, {
                     dateFrom: this.orderFromDate,
                     dateTo: this.orderToDate,
-                    userName: this.queryBarName
+                    userName: this.queryBarName,
+                    pageIndex: this.pageIndex,
+                    pageSize: this.pageSize
                 }).then((res) => {
                     if (res.data.status === 200) {
                         this.tableData = res.data.res;
                         this.globalLoadingShow = false;
                         this.tableLoading = false;
+                        this.pageTotal = res.data.count;
                     };
                 });
             },
             // 计算table高度
             calculationTableHeight () {
-                this.tableHeight = this.$store.state.maniViewHeight - 120;
-                window.onresize = () => this.tableHeight = this.$store.state.maniViewHeight - 120;
+                this.tableHeight = this.$store.state.maniViewHeight - 140;
+                window.onresize = () => this.tableHeight = this.$store.state.maniViewHeight - 140;
             },
             getUserInfo () {
                 this.$call('user.info').then(res => {

@@ -49,14 +49,14 @@ export default ({
                                     }
                                 }
                             }, '机台分配'),
-                            h('Button', {
+                           /* h('Button', {
                                 props: {
                                     size: 'small'
                                 },
                                 style: {
                                     marginRight: '10px'
                                 }
-                            }, '人员替岗')
+                            }, '人员替岗')*/
                         ]);
                     }
                 },

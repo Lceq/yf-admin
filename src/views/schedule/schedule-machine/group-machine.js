@@ -114,7 +114,7 @@ export default ({
             };
             this.showGroupMachine = true;
             this.groupMachineTableLoading = true;
-            this.$api.scheduleUser.getScheduleUserListMachine(params).then(res => {
+            this.$call('schedule.user.list.machine', params).then(res => {
                 let content = res.data;
                 this.groupMachineTableLoading = false;
                 if (content.status === 200) {
@@ -143,7 +143,7 @@ export default ({
                     return item;
                 });
                 if (content.status === 200) {
-                    this.$api.scheduleUser.getScheduleUserList2({
+                    this.$call('schedule.user.machine.list2', {
                         scheduleUserId: val.suid,
                         postId: val.postId
                     }).then(res => {
@@ -158,7 +158,7 @@ export default ({
                             }
                         }
                         if (content.status === 200) {
-                            this.$api.scheduleUser.getScheduleUserList3({
+                            this.$call('schedule.user.machine.list3', {
                                 scheduleUserId: val.suid,
                                 processId: val.processId
                             }).then(res => {

@@ -268,6 +268,8 @@ export default {
         selectMachinesCancel () {
             this.showMachines = false;
             this.userMachineList = [];
+            this.startMachineCode = '';
+            this.endMachineCode = '';
             this.$emit('cancel');
         },
         selectCancelMachine (val, row) {

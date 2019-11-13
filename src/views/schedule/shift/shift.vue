@@ -42,9 +42,9 @@
                                                 <Option v-for="item in shiftData" :value="item.typeId" :key="item.typeId">{{item.typeName}}</Option>
                                             </Select>
                                         </FormItem>
-                                        <FormItem label="班组名称：" class="formItemMargin" prop="name">
+                                        <FormItem label="班次名称：" class="formItemMargin" prop="name">
                                             <p v-if="!isCouldSave" class="modal-readonly">{{ newFormValidate.name }}</p>
-                                            <Input v-else v-model="newFormValidate.name" placeholder="请输入班组名称"></Input>
+                                            <Input v-else v-model="newFormValidate.name" placeholder="请输入班次名称"></Input>
                                         </FormItem>
 
                                         <FormItem class="formItemMargin" prop="beginHour" label="开始时间：">

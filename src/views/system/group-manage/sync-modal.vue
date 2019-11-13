@@ -21,7 +21,7 @@
                 </Row>
                 <Table border ref="selection" :columns="tableHeader" :data="tableData" @on-current-change="onSelectEvent" :loading="tableLoading" size="small" :height="650" highlight-row></Table>
                 <div class="flex-right margin-top-10">
-                    <Page :total="pageTotal" @on-change="onPageIndexEvent" size="small" show-total />
+                    <Page :total="pageTotal" @on-change="onPageIndexEvent" size="small" :page-size="pageSize" show-total />
                 </div>
             </div>
         </yf-Modal>
@@ -80,6 +80,7 @@
                 this.showModal = e;
                 if (!e) {
                     this.selectObj = {};
+                    this.queryBarName = '';
                 };
                 this.$emit('on-visible-change', e);
             },

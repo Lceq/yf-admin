@@ -5,7 +5,7 @@ export default ({
     components: {
         groupMachine
     },
-    data() {
+    data () {
         return {
             dateFrom: curDate(),
             dateTo: '',
@@ -17,7 +17,6 @@ export default ({
             shiftList: [],
             workshopList: [],
             shiftGroup: [],
-            // table
             tableHeight: '',
             curGroupData: null,
             scheduleMachineLoading: false,
@@ -48,15 +47,7 @@ export default ({
                                         };
                                     }
                                 }
-                            }, '机台分配'),
-                           /* h('Button', {
-                                props: {
-                                    size: 'small'
-                                },
-                                style: {
-                                    marginRight: '10px'
-                                }
-                            }, '人员替岗')*/
+                            }, '机台分配')
                         ]);
                     }
                 },
@@ -104,33 +95,33 @@ export default ({
         };
     },
     methods: {
-        changeWorkShop(val) {
+        changeWorkShop (val) {
             this.getShiftGroup();
         },
         //
-        searchScheduleMachineList() {
+        searchScheduleMachineList () {
             this.scheduleMachinePageIndex = 1;
             setTimeout(() => {
                 this.scheduleMachineTotal = 0;
             });
             this.getScheduleGroupList();
         },
-        changeFromTime(val) {
+        changeFromTime (val) {
             this.dateFrom = val;
         },
-        changeToTime(val) {
+        changeToTime (val) {
             this.dateTo = val;
         },
-        changePageIndex(val) {
+        changePageIndex (val) {
             this.scheduleMachinePageIndex = val;
             this.getScheduleGroupList();
         },
-        changePageSize(val) {
+        changePageSize (val) {
             this.scheduleMachinePageSize = val;
             this.getScheduleGroupList();
         },
         //
-        changeShiftType(val) {
+        changeShiftType (val) {
             if (!val) {
                 this.curShift = '';
                 this.shiftList = [];
@@ -139,7 +130,7 @@ export default ({
             this.getShift(val);
         },
         // 获取车间
-        getWorkshopList() {
+        getWorkshopList () {
             this.$api.dept.getUserWorkshop().then(res => {
                 this.curWorkShopId = res.curWorkshopId;
                 this.workshopList = res.workshopList;
@@ -147,7 +138,7 @@ export default ({
             });
         },
         // 获取车间的班组数据
-        getScheduleGroupList() {
+        getScheduleGroupList () {
             let params = {
                 dateFrom: this.dateFrom,
                 dateTo: this.dateTo,
@@ -172,7 +163,7 @@ export default ({
             });
         },
         // 班制
-        getShiftType() {
+        getShiftType () {
             this.$api.dictionary.getShiftType().then(res => {
                 let content = res.data;
                 if (content.status === 200) {
@@ -181,7 +172,7 @@ export default ({
             });
         },
         // 班次
-        getShift(val) {
+        getShift (val) {
             this.$api.shift.getShiftList({typeId: val}).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
@@ -190,7 +181,7 @@ export default ({
             });
         },
         // 根据车间判断车间班组信息
-        getShiftGroup() {
+        getShiftGroup () {
             const _this = this;
             this.$call('user.data.groups').then((res) => {
                 _this.curShiftGroup = res.data.res.defaultDeptId;
@@ -199,7 +190,7 @@ export default ({
             });
         }
     },
-    created() {
+    created () {
         this.$store.dispatch({
             type: 'showLoading'
         });
@@ -207,7 +198,7 @@ export default ({
         this.getShiftType();
         // this.getShiftGroup();
     },
-    mounted() {
+    mounted () {
         this.$nextTick(() => {
             let H = document.getElementById('selectedHeight').clientHeight;
             this.tableHeight = document.documentElement.clientHeight - H - 200;

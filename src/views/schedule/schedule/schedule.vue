@@ -137,7 +137,7 @@
                 <Row class="marginBottom">
                     <Col>
                         <div class="userForm">
-                            <span>部门：</span>
+                            <span>班组：</span>
                             <!--<Cascader class="marginRight userFormInput" :change-on-select="true" :data="departDataList" @on-change="changeDepart" v-model="curDepart"></Cascader>-->
                             <Select class="workshop" v-model="curDepartId" @on-change="changeDepartSelect">
                                 <Option class="workshop-list" v-for="item in shiftGroup" :value="item.groupId"

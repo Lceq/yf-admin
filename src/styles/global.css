@@ -379,6 +379,11 @@
     margin-bottom: 10px;
     vertical-align: middle;
 }
+.date-interval {
+    width:auto;
+    line-height: 32px;
+    display: inline-block
+}
 .formSpanStyle{
     line-height: 32px;
     display: inline-block;

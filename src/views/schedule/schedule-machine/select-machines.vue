@@ -37,10 +37,14 @@
                         </Select>
                         <Button @click="submitBetweenMachine" type="primary">确认机台</Button>
                     </div>
-                    <div class="marginBottom textRight">
+                    <div class="marginBottom">
                         <div class="formMachine" ><Input v-model="machineCode" @on-change="changeMachineCodeNameProcess" clearable placeholder="请输入设备编码" /></div>
                         <div class="formMachine" ><Input v-model="machineName" @on-change="changeMachineCodeNameProcess" clearable placeholder="请输入设备名称" /></div>
-                        <div class="formMachine" ><Input v-model="machineProcess" @on-change="changeMachineCodeNameProcess" clearable placeholder="请输入工序" /></div>
+                        <div class="formMachine" >
+                            <Select v-model="machineProcess" placeholder="请选择工序" @on-change="getSelectProcessEvent" clearable>
+                                <Option v-for="item in processList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                            </Select>
+                        </div>
                     </div>
                 </div>
                 <Table border ref="selection" size="small" @on-select-cancel="selectCancelMachine" @on-selection-change="selectAllMachine" :row-class-name="rowClassName" :columns="userMachineColumns" :loading="userMachineLoading" :data="userMachineList" height="500"></Table>
@@ -51,11 +55,10 @@
 
 <script>
 import modal from '../../public/modal';
+import { getProcessListRequest } from '@api/common';
 export default {
     name: 'select-machines',
-    components: {
-        modal
-    },
+    components: { modal },
     props: {
         userMachineData: {
             type: Array,
@@ -66,10 +69,12 @@ export default {
         },
         saveSuccess: {
             type: Number
-        }
+        },
+        processId: [Number, String]
     },
     data () {
         return {
+            processList: [],
             showMachines: false,
             selectMachineLoading: false,
             startMachineCodeLoading: false,
@@ -81,28 +86,12 @@ export default {
             endMachineData: [],
             machineCode: '',
             machineName: '',
-            machineProcess: '',
+            machineProcess: null,
             userMachineColumns: [
-                {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
-                {
-                    title: '设备编码',
-                    key: 'code',
-                    sortable: true
-                },
-                {
-                    title: '设备名称',
-                    key: 'name',
-                    sortable: true
-                },
-                {
-                    title: '所属工序',
-                    key: 'processName',
-                    sortable: true
-                },
+                {type: 'selection', width: 60, align: 'center'},
+                {title: '设备编码', key: 'code', sortable: true},
+                {title: '设备名称', key: 'name', sortable: true},
+                {title: '所属工序', key: 'processName', sortable: true},
                 {
                     title: '开始锭号',
                     key: 'startSpinNumber',
@@ -114,10 +103,10 @@ export default {
                                 props: {
                                     value: params.row.startSpinNumber,
                                     min: 1,
-                                    max: params.row.spinCount,
-                                    width: '100%'
+                                    max: params.row.spinCount
                                 },
                                 style: {
+                                    width: '100%'
                                 },
                                 on: {
                                     'on-change': (val) => {
@@ -142,10 +131,10 @@ export default {
                                 props: {
                                     value: params.row.endSpinNumber,
                                     min: 1,
-                                    max: params.row.spinCount,
-                                    width: '100%'
+                                    max: params.row.spinCount
                                 },
                                 style: {
+                                    width: '100%'
                                 },
                                 on: {
                                     'on-change': (val) => {
@@ -160,17 +149,16 @@ export default {
                         }
                     }
                 },
-                {
-                    title: '锭数',
-                    key: 'openSpinCount',
-                    sortable: true
-                }
+                {title: '锭数', key: 'openSpinCount', sortable: true}
             ],
             userMachineList: [],
             isSwitch: false
         };
     },
     methods: {
+        getSelectProcessEvent (e) {
+            this.changeMachineCodeNameProcess();
+        },
         remoteMethodStartMachine (query) {
             const _this = this;
             if (query !== '') {
@@ -236,25 +224,40 @@ export default {
         changeMachineCodeNameProcess () {
             let machineCode = new RegExp(this.machineCode.trim(), 'i');
             let machineName = new RegExp(this.machineName.trim(), 'i');
-            let machineProcess = new RegExp(this.machineProcess.trim(), 'i');
             let SelectC = [];
             let SelectN = [];
             let SelectP = [];
-            for (let i of this.AllMachineData) {
-                if (machineCode.test(i.code)) {
-                    SelectC.push(i);
+            // 设备编号存在时
+            if (machineCode) {
+                for (let i of this.AllMachineData) {
+                    if (machineCode.test(i.code)) SelectC.push(i);
                 }
-            }
-            for (let i of SelectC) {
-                if (machineName.test(i.name)) {
-                    SelectN.push(i);
+            } else {
+                SelectC = [...this.AllMachineData];
+            };
+
+            // 设备名称存在时
+            if (machineName) {
+                for (let i of SelectC) {
+                    if (machineName.test(i.name)) {
+                        SelectN.push(i);
+                    }
                 }
-            }
-            for (let i of SelectN) {
-                if (machineProcess.test(i.processName)) {
-                    SelectP.push(i);
+            } else {
+                SelectN = [...SelectC];
+            };
+
+            // 设备工序存在时
+            if (this.machineProcess) {
+                for (let i of SelectN) {
+                    if (this.machineProcess === i.processId) {
+                        SelectP.push(i);
+                    }
                 }
-            }
+            } else {
+                SelectP = [...SelectN];
+            };
+
             this.userMachineList = SelectP;
         },
         selectMachinesSubmit () {
@@ -297,12 +300,21 @@ export default {
             if (this.userMachineData.length !== 0) {
                 _this.AllMachineData = _this.userMachineData;
                 _this.userMachineList = _this.userMachineData;
+                this.changeMachineCodeNameProcess();
                 _this.userMachineLoading = false;
             } else {
                 setTimeout(() => {
                     _this.JudgeUserMachineList();
                 }, 100);
             }
+        },
+        getProcessList () {
+            getProcessListRequest().then(res => {
+                if (res.data.status === 200) {
+                    this.processList = res.data.res;
+                    this.JudgeUserMachineList();
+                };
+            });
         }
     },
     watch: {
@@ -316,8 +328,13 @@ export default {
             this.userMachineLoading = true;
             this.machineCode = '';
             this.machineName = '';
-            this.machineProcess = '';
-            this.JudgeUserMachineList();
+            this.machineProcess = null;
+            this.getProcessList();
+        },
+        processId (newVal) {
+            if (newVal) {
+                this.machineProcess = newVal;
+            };
         }
     }
 };

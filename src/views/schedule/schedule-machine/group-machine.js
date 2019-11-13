@@ -57,33 +57,10 @@ export default ({
                         ]);
                     }
                 },
-                {
-                    title: '机台',
-                    sortable: true,
-                    minWidth: 180,
-                    key: 'machines'
-                },
-                {
-                    title: '员工姓名',
-                    width: 90,
-                    sortable: true,
-                    align: 'center',
-                    key: 'userName'
-                },
-                {
-                    title: '当班岗位',
-                    width: 90,
-                    align: 'center',
-                    sortable: true,
-                    key: 'postName'
-                },
-                {
-                    title: '所属工序',
-                    width: 90,
-                    sortable: true,
-                    align: 'center',
-                    key: 'processName'
-                }
+                {title: '机台', sortable: true, minWidth: 180, key: 'machines'},
+                {title: '员工姓名', width: 90, sortable: true, align: 'center', key: 'userName'},
+                {title: '当班岗位', width: 90, align: 'center', sortable: true, key: 'postName'},
+                {title: '所属工序', width: 90, sortable: true, align: 'center', key: 'processName'}
             ],
             groupMachineData: [],
             userMachineData: [],
@@ -92,7 +69,8 @@ export default ({
             curDate: '',
             curWorkShopName: '',
             curShiftName: '',
-            curGroupName: ''
+            curGroupName: '',
+            selectProcessId: null
         };
     },
     watch: {
@@ -126,9 +104,10 @@ export default ({
             });
         },
         getMachineList (val) {
+            this.selectProcessId = val.processId;
             let params = {
                 workshopId: this.curWorkShopId,
-                processId: val.processId,
+                // processId: val.processId,
                 typeId: 26
             };
             this.isShowSelectMachine = Math.random();
@@ -160,7 +139,7 @@ export default ({
                         if (content.status === 200) {
                             this.$call('schedule.user.machine.list3', {
                                 scheduleUserId: val.suid,
-                                processId: val.processId
+                                // processId: val.processId
                             }).then(res => {
                                 let content = res.data;
                                 if (content.status === 200) {
@@ -182,6 +161,7 @@ export default ({
             this.showGroupMachine = false;
         },
         cancelUserMachine () {
+            this.selectProcessId = null;
             this.userMachineData = [];
         },
         submitUserMachine (val) {

@@ -21,6 +21,7 @@
             </div>
         </modal>
         <select-machines
+                :process-id="selectProcessId"
                 :userMachineData="userMachineData"
                 :isShowSelectMachine="isShowSelectMachine"
                 :saveSuccess="saveSuccess"

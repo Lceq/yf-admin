@@ -4,7 +4,7 @@
             <Row class="endFlex" id="selectedHeight">
                 <Col>
                     <DatePicker class="formEachStyle" @on-change="changeFromTime" :clearable="false" :value="dateFrom" type="date" placeholder="请选择时间..."></DatePicker>
-                    <span class="formWidth">-</span>
+                    <span class="formEachStyle date-interval">-</span>
                     <DatePicker class="formEachStyle" @on-change="changeToTime" :value="dateTo" type="date" placeholder="请选择时间..."></DatePicker>
                     <Select class="textLeft formEachStyle" @on-change="changeWorkShop" v-model="curWorkShopId" placeholder="请选择车间...">
                         <Option v-for="(item, index) in workshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>

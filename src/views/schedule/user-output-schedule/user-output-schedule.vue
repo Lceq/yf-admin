@@ -8,15 +8,15 @@
             <global-loading v-show="globalLoadingShow"></global-loading>
             <Row type="flex" justify="end" align="middle">
                 <Col>
-                    <DatePicker type="date" placeholder="请选择开始时间" class="searchHurdles queryBarMarginRight" v-model="orderFromDate"></DatePicker>
-                    <DatePicker type="date" placeholder="请选择结束时间" class="searchHurdles queryBarMarginRight" v-model="orderToDate"></DatePicker>
-                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarWorkshopValue" placeholder="请选择车间" class="searchHurdles queryBarMarginRight">
+                    <DatePicker type="date" placeholder="请选择开始时间" class="searchHurdles" v-model="orderFromDate"></DatePicker>
+                    <DatePicker type="date" placeholder="请选择结束时间" class="searchHurdles" v-model="orderToDate"></DatePicker>
+                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarWorkshopValue" placeholder="请选择车间" class="searchHurdles">
                         <Option v-for="item in queryBarWorkshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
                     </Select>
-                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarProcessId" class="searchHurdles queryBarMarginRight" placeholder="请选择工序">
+                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarProcessId" class="searchHurdles" placeholder="请选择工序">
                         <Option v-for="item in queryBarProcessList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
-                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarGroupId" class="searchHurdles queryBarMarginRight" placeholder="请选择班组">
+                    <Select v-show="activeMenuAuditSate === 1" clearable v-model="queryBarGroupId" class="searchHurdles" placeholder="请选择班组">
                         <Option v-for="item in queryBarGroupList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                     </Select>
                     <Input type="text" v-model.trim="queryBarName" placeholder="请输入人员编号或名称" class="searchHurdles" @on-enter="queryBarNameEnterEvent"/>

@@ -15,7 +15,7 @@
                         <Button type="success" @click="onConfirmEvent">确认选择</Button>
                     </Col>
                     <Col>
-                        <Input v-model.trim="queryBarDeptName" placeholder="请输入部门名称" class="modal-input-length queryBarMarginRight"></Input>
+                        <Input v-model.trim="queryBarName" placeholder="请输入班组名称" class="modal-input-length queryBarMarginRight"></Input>
                         <Button icon="md-search" type="primary" @click="onSearchEvent">搜索</Button>
                     </Col>
                 </Row>
@@ -28,7 +28,6 @@
     </div>
 </template>
 <script>
-    import { hrDeptListRequest } from '@api/basic/dept';
     import modalContentLoading from '@components/modal-content-loading.vue';
     import { setPage, noticeTips } from '../../../libs/common';
     export default {
@@ -47,12 +46,12 @@
                 pageSize: setPage.pageSize,
                 showModal: false,
                 tableHeader: [
-                    {title: '部门名称', key: 'name', sortable: true},
-                    {title: '上级部门', key: 'parentName', sortable: true},
+                    {title: '班组编号', key: 'code', sortable: true},
+                    {title: '班组名称', key: 'name', sortable: true},
                     {title: '时间', key: 'createTime', sortable: true}
                 ],
                 tableData: [],
-                queryBarDeptName: '',
+                queryBarName: '',
                 spinShow: false,
                 selectObj: {}
             };
@@ -86,9 +85,9 @@
             },
             getHrDeptListData () {
                 this.tableLoading = true;
-                hrDeptListRequest({
+                this.$api.user.hrGroupList({
                     isSync: false,
-                    deptName: this.queryBarDeptName,
+                    groupName: this.queryBarName,
                     pageIndex: this.pageIndex,
                     pageSize: this.pageSize
                 }).then(res => {

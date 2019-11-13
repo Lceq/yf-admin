@@ -4,11 +4,11 @@
         <Row type="flex" justify="space-between">
             <Col>
                 <Button icon="md-add" type="primary" @click="addEvent">新增</Button>
-                <Button icon="ios-trash" type="error" :disabled="selectArr.length ===0"  @click="deleteEvent">删除</Button>
+                <Button icon="ios-trash" type="error" :disabled="selectArr.length ===0" @click="deleteEvent">删除</Button>
+                <Button type="success" @click="syncOrgEvent" class="add-dept-margin">同步</Button>
             </Col>
         </Row>
-        <Table class="margin-top-10"　ref="tableCsv" @on-selection-change="getSelectEvent" :height="tableHeight" border :columns="columns" :data="tableData" size="small"></Table>
-
+        <Table class="margin-top-10" 　ref="tableCsv" @on-selection-change="getSelectEvent" :height="tableHeight" border :columns="columns" :data="tableData" size="small"></Table>
         <yf-modal
                 :modal-state="modalState"
                 :title="modalTitle"
@@ -19,9 +19,10 @@
         >
             <div slot="content">
                 <modal-content-loading :spinShow="showModalContentLoading"></modal-content-loading>
-                <Form :show-message="false" ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="80">
+                <Form :show-message="false" ref="formValidate" :model="formValidate" :rules="ruleValidate"
+                      :label-width="80">
                     <FormItem label="班组编号" prop="code" class="margin-bottom-10">
-                        <Input v-model="formValidate.code" placeholder="请输入班组编号" ></Input>
+                        <Input v-model="formValidate.code" placeholder="请输入班组编号"></Input>
                     </FormItem>
                     <FormItem label="班组名称" prop="name" class="margin-bottom-10">
                         <Input v-model="formValidate.name" placeholder="请输入班组名称"></Input>
@@ -33,25 +34,33 @@
             </div>
         </yf-modal>
         <tip-modal
-            :tips-modal-state="tipsModalState"
-            :confirm-button-loading="confirmButtonLoading"
-            :tips-modal-message="tipsModalMessage"
-            @cancel-event="tipsModalCancelEvent"
-            @confirm-event="tipsModalConfirmEvent"
+                :tips-modal-state="tipsModalState"
+                :confirm-button-loading="confirmButtonLoading"
+                :tips-modal-message="tipsModalMessage"
+                @cancel-event="tipsModalCancelEvent"
+                @confirm-event="tipsModalConfirmEvent"
         >
         </tip-modal>
+        <sync-modal
+                :modal-state="syncModalState"
+                @on-visible-change="onSyncModalVisibleChangeEvent"
+                @on-confirm="onSyncModalConfirmEvent"
+        ></sync-modal>
     </Card>
 </template>
 <script>
-    import { toDay, formatDate, mathJsAdd } from '../../../libs/common';
-    import { noticeTips, emptyTips } from '../../../libs/common';
+    import {toDay, formatDate, mathJsAdd} from '../../../libs/common';
+    import {noticeTips, emptyTips} from '../../../libs/common';
     import tipModal from '../../components/tips-modal';
     import modalContentLoading from '../../components/modal-content-loading';
+    import syncModal from './sync-modal';
+
     export default {
         name: 'group-mange',
-        components: {tipModal, modalContentLoading},
+        components: {tipModal, modalContentLoading, syncModal},
         data () {
             return {
+                syncModalState: false,
                 showModalContentLoading: false,
                 saveModalConfirmLoading: false,
                 selectArr: [],
@@ -114,12 +123,26 @@
             };
         },
         methods: {
-            //选择
+            onSyncModalConfirmEvent (e) {
+                this.syncModalState = false;
+                this.formValidate.hrDeptId = e.id;
+                this.formValidate.code = e.code;
+                this.formValidate.name = e.name;
+                this.modalTitle = '新增';
+                this.modalState = true;
+            },
+            onSyncModalVisibleChangeEvent (e) {
+                this.syncModalState = e;
+            },
+            syncOrgEvent () {
+                this.syncModalState = true;
+            },
+            // 选择
             getSelectEvent (arr) {
-                this.disabled = true
+                this.disabled = true;
                 this.selectArr = arr.map(item => item.id);
             },
-            //修改
+            // 修改
             editEvent (id) {
                 this.showModalContentLoading = true;
                 this.modalTitle = '编辑班组';
@@ -131,7 +154,7 @@
                     };
                 });
             },
-            //删除
+            // 删除
             deleteEvent () {
                 if (this.selectArr && this.selectArr.length !== 0) {
                     this.tipsModalState = true;
@@ -151,7 +174,7 @@
                         this.tipsModalState = false;
                         this.confirmButtonLoading = false;
                         this.selectArr = [];
-                        noticeTips(this,'deleteTips');
+                        noticeTips(this, 'deleteTips');
                     } else {
                         this.confirmButtonLoading = false;
                     };
@@ -170,7 +193,7 @@
             onCancelEvent () {
                 this.modalState = false;
             },
-            //确认时间
+            // 确认时间
             onConfirmEvent () {
                 this.$refs['formValidate'].validate((valid) => {
                     if (valid) {
@@ -180,23 +203,24 @@
                     } else {
                         this.$Message.warning('请填写完整!');
                     }
-                })
+                });
             },
             saveRequest () {
                 this.$call('group.save', {...this.formValidate}).then(res => {
                     if (res.data.status === 200) {
-                        noticeTips(this,'saveTips');
+                        noticeTips(this, 'saveTips');
                         this.modalState = false;
                         this.saveModalConfirmLoading = false;
                         this.getListRequest();
                     } else {
                         this.saveModalConfirmLoading = false;
                     };
-                })
+                });
             },
             addEvent () {
                 this.modalTitle = '新增班组';
                 delete this.formValidate.id;
+                delete this.formValidate.hrDeptId;
                 this.modalState = true;
             },
             getListRequest () {
@@ -205,7 +229,9 @@
                         let responseData = res.data.res;
                         this.tableData = responseData;
                         this.showGlobalLoading = false;
-                        this.$nextTick(() => { this.calculationTableHeight(); });
+                        this.$nextTick(() => {
+                            this.calculationTableHeight();
+                        });
                     };
                 });
             },
@@ -222,7 +248,9 @@
             this.getListRequest();
         },
         mounted () {
-            this.$nextTick(() => { this.calculationTableHeight(); });
+            this.$nextTick(() => {
+                this.calculationTableHeight();
+            });
         }
     };
 </script>

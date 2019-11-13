@@ -14,6 +14,9 @@ export default {
     },
     listHttp (params) {
         return post('user/search', params);
+    },
+    hrGroupList (params) {
+        return proxy.call('hr.group.list', params);
     }
 };
 const userSearchRequest = function (params) {

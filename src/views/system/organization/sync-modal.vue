@@ -48,8 +48,8 @@
                 showModal: false,
                 tableHeader: [
                     {title: '部门名称', key: 'name', sortable: true},
-                    {title: '负责人', key: 'leaderName', sortable: true},
-                    {title: '组织属性', key: 'typeId', sortable: true}
+                    {title: '上级部门', key: 'parentName', sortable: true},
+                    {title: '时间', key: 'createTime', sortable: true}
                 ],
                 tableData: [],
                 queryBarDeptName: '',

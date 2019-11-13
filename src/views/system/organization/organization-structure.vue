@@ -270,6 +270,7 @@
             },
             onSyncModalConfirmEvent (e) {
                 this.syncModalState = false;
+                this.formValidate.hrDeptId = e.id;
                 this.formValidate.shortName = e.shortName;
                 this.formValidate.name = e.name;
                 this.formValidate.typeId = e.typeId;
@@ -375,6 +376,7 @@
                 this.showOther = false;
                 this.formValidate.sortNum = 1;
                 this.formValidate.leaderId = '';
+                this.formValidate.hrDeptId = null;
                 this.saveModalTitle = '新增组织';
                 this.formValidate.parentId = this.treeObj[0].id;
                 if (this.treeObj.length === 0) {
@@ -499,6 +501,7 @@
                 };
                 let params = {
                     'id': this.editId,
+                    'hrDeptId': this.formValidate.hrDeptId,
                     'name': this.formValidate.name,
                     'code': this.formValidate.shortName,
                     'shortName': this.formValidate.shortName,

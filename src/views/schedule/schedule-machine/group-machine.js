@@ -189,7 +189,7 @@ export default ({
                 machines: data
             };
             // this.groupMachineTableLoading = true;
-            this.$api.scheduleUser.getScheduleUserMachineSave(params).then(res => {
+            this.$call('schedule.user.machine.save', params).then(res => {
                 let content = res.data;
                 this.saveSuccess = Math.random();
                 if (content.status === 200) {

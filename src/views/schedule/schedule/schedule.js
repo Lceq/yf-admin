@@ -1,13 +1,14 @@
 import modal from '../../public/modal';
 import deleteWarning from '../../public/deleteWarning';
 import xwValidate from '@/libs/xwValidate';
-let getDays=''
+
+let getDays = '';
 export default {
     components: {
         modal,
         deleteWarning
     },
-    data() {
+    data () {
         return {
             addUserDisabled: false,
             removeUserDisabled: false,
@@ -223,17 +224,17 @@ export default {
             },
             //日期多选
             calendarChecked: [],
-            checkLen:0,
+            checkLen: 0,
             checks: false,
-            isDisabled:true,
+            isDisabled: true,
             // days:'',
-            CheckedArr:'',
-            checkedDay:false
+            CheckedArr: '',
+            checkedDay: false
         };
     },
     methods: {
         // 获取当前的时间
-        getCurrentTime() {
+        getCurrentTime () {
             const date = new Date();
             this.calendarDate.year = date.getFullYear(); // 今天哪一年
             this.calendarDate.month = date.getMonth() + 1;// 今天几月份
@@ -244,7 +245,7 @@ export default {
             this.getLastNextMonth();
         },
         // 获取上个月下个月的时间
-        getLastNextMonth() {
+        getLastNextMonth () {
             // 获取上个月的时间
             if (parseInt(this.calendarDate.month === 1)) {
                 this.calendarDate.lastYear = new Date(this.calendarDate.year - 1, 12, 0).getFullYear();
@@ -270,7 +271,7 @@ export default {
             this.getIndexDay();
         },
         // 获取当前月上下42天的日历数据
-        getIndexDay() {
+        getIndexDay () {
             this.calendarDate.monthStart = new Date(this.calendarDate.year, this.calendarDate.month - 1, 1).getDay();// 这个月第一天礼拜几
             // 获取当前年月、上个月、下个月
             this.currentYear = this.calendarDate.year;
@@ -313,7 +314,7 @@ export default {
             this.getScheduleList();
         },
         // 点击上一月
-        clickLastMonth() {
+        clickLastMonth () {
             this.calendarSixData = [];
             this.curCalendarDate = [];
             this.calendarDate.year = this.calendarDate.lastYear;
@@ -323,7 +324,7 @@ export default {
             // this.getScheduleList();
         },
         // 点击下一月
-        clickNextMonth() {
+        clickNextMonth () {
             this.calendarSixData = [];
             this.curCalendarDate = [];
             this.calendarDate.year = this.calendarDate.nextYear;
@@ -334,7 +335,7 @@ export default {
             // this.getScheduleList();
         },
         // 双击事件
-        setShiftType(dateDay) {
+        setShiftType (dateDay) {
             if (dateDay.shifts.length === 0) {
                 this.shiftTypeSet(dateDay);
             } else {
@@ -342,36 +343,36 @@ export default {
             }
         },
         //选择批量排班
-        evCalendarChecked($event, dayData) {
-            this.days=dayData;
-            this.checkedDay=dayData.isCheck
+        evCalendarChecked ($event, dayData) {
+            this.days = dayData;
+            this.checkedDay = dayData.isCheck;
             if (this.checkedDay == true) {
-                this.calendarChecked.push(dayData.belongDate)
-                let setArr = new Set(this.calendarChecked)
-                this.calendarChecked = Array.from(setArr)
+                this.calendarChecked.push(dayData.belongDate);
+                let setArr = new Set(this.calendarChecked);
+                this.calendarChecked = Array.from(setArr);
             } else {
-                for(let i = 0; i < this.calendarChecked.length; i++) {
-                    if(this.calendarChecked[i] == dayData.belongDate) {
+                for (let i = 0; i < this.calendarChecked.length; i++) {
+                    if (this.calendarChecked[i] == dayData.belongDate) {
                         this.calendarChecked.splice(i, 1);
                         break;
                     }
                 }
                 // this.calendarChecked.pop(dayData.belongDate)
-                let setArr = new Set(this.calendarChecked)
-                this.calendarChecked = Array.from(setArr)
+                let setArr = new Set(this.calendarChecked);
+                this.calendarChecked = Array.from(setArr);
             }
-            this.CheckedArr = this.calendarChecked
-            this.curTimeJoin = this.CheckedArr.join(",")
-            this.curTime = this.CheckedArr
-            if(this.calendarChecked.length!=0){
-                this.isDisabled=false
-            }else{
-                this.isDisabled=true
+            this.CheckedArr = this.calendarChecked;
+            this.curTimeJoin = this.CheckedArr.join(',');
+            this.curTime = this.CheckedArr;
+            if (this.calendarChecked.length != 0) {
+                this.isDisabled = false;
+            } else {
+                this.isDisabled = true;
             }
         },
         //点击批量排班
-        evBatch(days) {
-            this.curTimeJoin=this.CheckedArr.join(",")
+        evBatch (days) {
+            this.curTimeJoin = this.CheckedArr.join(',');
             this.isOnDuty = days.isOnDuty;
             this.isCompute = days.isCompute;
             this.SchedulingTitle = '排班';
@@ -380,10 +381,10 @@ export default {
             this.defaultShiftId = this.shiftType[0].id;
             this.haveShiftData = [];
             this.getShift();
-            this.SchedulingModalShow = true
+            this.SchedulingModalShow = true;
         },
         // 获取排班信息
-        getScheduleList() {
+        getScheduleList () {
             const _this = this;
             let params = {};
             params = {
@@ -426,7 +427,7 @@ export default {
             });
         },
         // 获取班制列表
-        getShiftType() {
+        getShiftType () {
             const _this = this;
             this.$api.dictionary.getShiftType().then(res => {
                 let content = res.data;
@@ -436,7 +437,7 @@ export default {
             });
         },
         // 改变车间
-        ChangeWorkshop(val) {
+        ChangeWorkshop (val) {
             this.currentWorkshopId = val;
             this.calendarSixData = [];
             this.curCalendarDate = [];
@@ -444,7 +445,7 @@ export default {
             this.getShiftGroup();
         },
         // 根据车间判断车间班组信息
-        getShiftGroup() {
+        getShiftGroup () {
             const _this = this;
             this.$call('group.list', {isEnable: true}).then((res) => {
                 let content = res.data;
@@ -459,9 +460,9 @@ export default {
             });
         },
         // 设置日历班制
-        shiftTypeSet(dayData) {
+        shiftTypeSet (dayData) {
             // debugger
-            this.curTimeJoin=dayData.belongDate
+            this.curTimeJoin = dayData.belongDate;
             this.isOnDuty = dayData.isOnDuty;
             this.isCompute = dayData.isCompute;
             this.SchedulingTitle = '排班';
@@ -473,8 +474,8 @@ export default {
             this.getShift();
         },
         // 点击班制 这里有数据的情况下
-        changeShiftType(dayData) {
-            this.calendarChecked.length=0;
+        changeShiftType (dayData) {
+            this.calendarChecked.length = 0;
             this.isCompute = dayData.isCompute;
             this.isOnDuty = dayData.isOnDuty;
             if (this.isCompute) {
@@ -486,7 +487,7 @@ export default {
                 });
                 return false;
             }
-            this.curTime =  new Array(dayData.belongDate);
+            this.curTime = new Array(dayData.belongDate);
             this.curTimeJoin = dayData.belongDate;
             // console.log("点击班制 这里有数据的情况下",this.curTime)
             this.curWorkShopName = this.workShopList.find(x => x.deptId === this.currentWorkshopId).deptName;
@@ -495,11 +496,11 @@ export default {
             this.haveShiftData = dayData.shifts;
             this.getShift();
         },
-        ChangeShiftTypeRadio(val) {
+        ChangeShiftTypeRadio (val) {
             this.defaultShiftId = val;
             this.getShift();
         },
-        getShift() {
+        getShift () {
             const _this = this;
             this.$api.shift.getShiftList({typeId: this.defaultShiftId, auditState: 3}).then((res) => {
                 let content = res.data;
@@ -535,7 +536,7 @@ export default {
             });
         },
         // 判断样式
-        calendarJudge(dayData) {
+        calendarJudge (dayData) {
             // 判断取消的情况，如果班组数组里面没有对象，也为没有设置
             const isSet = dayData.shifts.length === 0 ? false : this.JudgeShiftGroup(dayData.shifts);
             const isMonth = parseInt(dayData.belongDate.split('-')[1]);
@@ -556,7 +557,7 @@ export default {
             return {isSet, shiftType, isToday, isMonth};
         },
         // 删除数组的情况，没有班组，即为未设置
-        JudgeShiftGroup(shifts) {
+        JudgeShiftGroup (shifts) {
             let result = false;
             for (let s of shifts) {
                 if (s.groups.length !== 0) {
@@ -566,13 +567,13 @@ export default {
             return result;
         },
         // 取消排班
-        SchedulingCancel() {
+        SchedulingCancel () {
             // this.curTime=[];
             this.SchedulingModalShow = false;
             this.SchedulingLoading = false;
         },
         // 确认排班
-        SchedulingSubmit() {
+        SchedulingSubmit () {
             if (this.isOnDuty) {
                 this.$Modal.warning({
                     title: '提示',
@@ -612,16 +613,16 @@ export default {
                     this.getScheduleList();
                     this.$Message.success('保存成功');
                     this.SchedulingModalShow = false;
-                    this.checkLen=this.calendarChecked.length;
-                    this.calendarChecked.length=0;
-                    this.curTime=[];
-                    this.isDisabled=true;
+                    this.checkLen = this.calendarChecked.length;
+                    this.calendarChecked.length = 0;
+                    this.curTime = [];
+                    this.isDisabled = true;
                 }
             });
         },
         // 班组的数据
         // 点击班组
-        getGroupUser(dayData, param, time) {
+        getGroupUser (dayData, param, time) {
             this.removeUserDisabled = true;
             if (dayData.isCompute) {
                 this.addUserDisabled = true;
@@ -654,7 +655,7 @@ export default {
         //         this.getDefaultDepart(result, this.departList.find(x => x.id === z).parentId);
         //     }
         // },
-        getUserByGroup() {
+        getUserByGroup () {
             this.shiftGroupUserLoading = true;
             this.$call('schedule.user.listByScheduleGroupId', {scheduleGroupId: this.curTimeGroupId}).then((res) => {
                 let content = res.data;
@@ -671,11 +672,11 @@ export default {
             });
         },
         // 取消添加班组
-        shiftGroupCancel() {
+        shiftGroupCancel () {
             this.shiftGroupModalShow = false;
         },
         // 添加当班人员
-        addCurShiftGroupUser() {
+        addCurShiftGroupUser () {
             // this.userPageIndex = 1;
             // this.userPageSize = 10;
             // this.userTotal = 0;
@@ -684,7 +685,7 @@ export default {
             this.getCurDepartUser();
         },
         // 选择人员
-        selectUser(val) {
+        selectUser (val) {
             // debugger
             // for (let v of val) {
             //     if (!this.selectUserList.map(x => x.id).includes(v.id)) {
@@ -692,11 +693,11 @@ export default {
             //     }
             // }
         },
-        cancelSelectUser(val, row) {
+        cancelSelectUser (val, row) {
             // debugger
             this.selectUserList.splice(this.selectUserList.indexOf(this.selectUserList.find(x => x.id === row.id)), 1);
         },
-        selectAllUser(val) {
+        selectAllUser (val) {
             // debugger
             if (val.length === this.userData.filter(x => x._disabled === false).length) {
                 for (let v of val.filter(x => x._disabled === false)) {
@@ -734,7 +735,7 @@ export default {
         //     this.userPageSize = val;
         //     this.getCurDepartUser();
         // },
-        getCurDepartUser() {
+        getCurDepartUser () {
             const _this = this;
             // let selectedDepart = '';
             // for (let d of this.curDepart) {
@@ -819,7 +820,7 @@ export default {
         //     }
         //     return this.departDataList = result;
         // },
-        changeDepartSelect() {
+        changeDepartSelect () {
             this.getCurDepartUser();
         },
         // // 改变部门
@@ -831,12 +832,12 @@ export default {
         //     this.getCurDepartUser();
         // },
         // 取消添加用户
-        userCancel() {
+        userCancel () {
             this.userModalShow = false;
             this.userLoading = false;
         },
         // 确认添加用户
-        userSubmit() {
+        userSubmit () {
             let params = [];
             params = this.selectUserList.map(item => {
                 return {
@@ -847,7 +848,7 @@ export default {
                 };
             });
             this.userLoading = true;
-            this.$api.scheduleUser.getScheduleUserAdd({
+            this.$call('schedule.user.add', {
                 scheduleGroupId: this.curTimeGroupId,
                 users: params
             }).then((res) => {
@@ -861,13 +862,13 @@ export default {
             });
         },
         // 点击查询
-        searchUserResult(searchName) {
+        searchUserResult (searchName) {
             this.searchName = searchName;
             this.getCurDepartUser();
         },
         // 岗位调整
         // 获取所有的岗位
-        getPostList() {
+        getPostList () {
             const _this = this;
             this.$api.post.getPostList().then((res) => {
                 let content = res.data;
@@ -893,16 +894,16 @@ export default {
             });
         },
         // 选择岗位
-        adjustPost(val) {
+        adjustPost (val) {
             this.adjustPostId = val;
         },
         // 取消
-        adjustPostCancel() {
+        adjustPostCancel () {
             this.adjustPostShow = false;
             this.adjustPostLoading = false;
         },
         // 确认
-        adjustPostSubmit() {
+        adjustPostSubmit () {
             this.adjustPostLoading = true;
             this.$call('schedule.user.post.update', {
                 scheduleUserId: this.scheduleUserId,
@@ -919,13 +920,13 @@ export default {
         },
         // 移除
         // 移除当班人员
-        removeCurShiftGroupUser() {
+        removeCurShiftGroupUser () {
             this.deleteValidate.abnormityId = '';
             this.deleteWarningMessage = '确认移除？';
             this.deleteShow = true;
         },
         // 选择移除用户
-        selectRemoveGroupUser(val) {
+        selectRemoveGroupUser (val) {
             this.selectedRemoveUser = val;
             if (this.addUserDisabled) {
                 this.removeUserDisabled = true;
@@ -936,12 +937,12 @@ export default {
             }
         },
         // 取消移除
-        deleteWarningCancel() {
+        deleteWarningCancel () {
             this.deleteWarningShow = false;
             this.deleteWarningLoading = false;
         },
         // 确认移除
-        deleteWarningSubmit() {
+        deleteWarningSubmit () {
             this.deleteWarningLoading = true;
             // this.$post('schedule/user/remove?sgid=' + encodeURIComponent(this.curTimeGroupId), this.selectedRemoveUser.map(x => x.userId)).then((res) => {
             this.$api.scheduleUser.getScheduleUserRemove(
@@ -956,7 +957,7 @@ export default {
                 }
             });
         },
-        getUserWorkshop() {
+        getUserWorkshop () {
             this.$api.dept.getUserWorkshop().then(res => {
                 this.workShopList = res.workshopList;
                 this.currentWorkshopId = res.curWorkshopId;
@@ -964,12 +965,12 @@ export default {
                 this.getShiftGroup();
             });
         },
-        deleteCancel() {
+        deleteCancel () {
             this.deleteValidate.abnormityId = '';
             this.deleteShow = false;
             this.deleteLoading = false;
         },
-        deleteSubmit() {
+        deleteSubmit () {
             this.$refs['deleteValidate'].validate((valid) => {
                 if (valid) {
                     this.deleteLoading = true;
@@ -1000,7 +1001,7 @@ export default {
                 }
             });
         },
-        getAbnormityList() {
+        getAbnormityList () {
             this.$call('dict.list', {parentCode: 'user_abnormity'}).then(res => {
                 if (res.data.status === 200) {
                     this.abnormityList = res.data.res;
@@ -1008,7 +1009,7 @@ export default {
             });
         }
     },
-    created() {
+    created () {
         this.$store.dispatch({
             type: 'showLoading'
         });

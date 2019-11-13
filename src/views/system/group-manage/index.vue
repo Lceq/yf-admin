@@ -125,7 +125,7 @@
         methods: {
             onSyncModalConfirmEvent (e) {
                 this.syncModalState = false;
-                this.formValidate.hrDeptId = e.id;
+                this.formValidate.hrGroupId = e.id;
                 this.formValidate.code = e.code;
                 this.formValidate.name = e.name;
                 this.modalTitle = '新增';
@@ -220,7 +220,7 @@
             addEvent () {
                 this.modalTitle = '新增班组';
                 delete this.formValidate.id;
-                delete this.formValidate.hrDeptId;
+                delete this.formValidate.hrGroupId;
                 this.modalState = true;
             },
             getListRequest () {

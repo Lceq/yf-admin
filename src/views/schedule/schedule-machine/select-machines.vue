@@ -262,6 +262,8 @@ export default {
         },
         selectMachinesSubmit () {
             this.selectMachineLoading = true;
+            this.startMachineCode = '';
+            this.endMachineCode = '';
             this.$emit('cancel');
             this.$emit('submit', this.AllMachineData);
         },

@@ -88,7 +88,7 @@ module.exports = {
             'vue': 'vue/dist/vue.esm.js',
             '@': resolve('../src'),
             '@api': resolve('../src/api'),
-            '@components': resolve('../src/view/components'),
+            '@components': resolve('../src/views/components'),
             'smooth-dnd': smoothDnDlib,
         }
     }

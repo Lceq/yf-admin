@@ -1,4 +1,4 @@
-import { fetch, post } from '../../ajax/http';
+import {fetch, post, proxy} from '../../ajax/http';
 export default({
     // 获取存货类型
     getTubeColor () {
@@ -34,3 +34,9 @@ export default({
         return post('dict/category/list/tube/color', params);
     }
 });
+const dictListRequest = function (params) {
+    return proxy.call('dict.list', params);
+};
+export {
+    dictListRequest
+};

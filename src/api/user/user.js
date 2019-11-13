@@ -1,4 +1,4 @@
-import { post, fetch } from '../../ajax/http';
+import {post, fetch, proxy} from '../../ajax/http';
 // 人员信息
 export default {
     getUserList (params) {
@@ -15,4 +15,10 @@ export default {
     listHttp (params) {
         return post('user/search', params);
     }
+};
+const userSearchRequest = function (params) {
+    return proxy.call('user.search', params);
+};
+export {
+    userSearchRequest
 };

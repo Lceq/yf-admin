@@ -1,4 +1,4 @@
-import { fetch, post } from '../../ajax/http';
+import { fetch, post, proxy } from '../../ajax/http';
 
 export default {
     // 获取当前用户车间
@@ -56,4 +56,31 @@ export default {
     listHttp () {
         return fetch('dept/workshops');
     }
+};
+
+/* 最新api定义规则(以request结尾) */
+
+const hrDeptListRequest = function (params) {
+    return proxy.call('hr.dept.list', params);
+};
+const deptSaveRequest = function (params) {
+    return proxy.call('dept.save', params);
+};
+const deptListRequest = function (params) {
+    return proxy.call('dept.list', params);
+};
+const deptDetailRequest = function (params) {
+    return proxy.call('dept.detail', params);
+};
+const deptEnableRequest = function (params) {
+    return proxy.call('dept.enable', params);
+};
+const deptDisableRequest = function (params) {
+    return proxy.call('dept.disable', params);
+};
+const deptDeleteRequest = function (params) {
+    return proxy.call('dept.delete', params);
+};
+export {
+    hrDeptListRequest, deptSaveRequest, deptListRequest, deptDetailRequest, deptEnableRequest, deptDisableRequest, deptDeleteRequest
 };

@@ -28,7 +28,7 @@ const routerReference = {
     //人事管理
     'user': () => import('@/views/system/staff-mgmt.vue'),
     'post': () => import('@/views/basicData/post/post.vue'),
-    'org': () => import('@/views/system/organization-structure.vue'),
+    'org': () => import('@/views/system/organization/organization-structure.vue'),
     'OA-user': () => import('@/views/system/user/oa-user.vue'),
     'group-manage': () => import('@/views/system/group-manage/index.vue'),
     //物理管理

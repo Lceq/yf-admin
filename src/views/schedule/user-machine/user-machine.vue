@@ -28,8 +28,9 @@
                </Col>
            </Row>
            <select-machines
-               :showMachineData="showMachinesList"
-               @on-submit="submitMachines"
+                   :process-id="selectProcessId"
+                   :showMachineData="showMachinesList"
+                   @on-submit="submitMachines"
            >
            </select-machines>
        </Card>

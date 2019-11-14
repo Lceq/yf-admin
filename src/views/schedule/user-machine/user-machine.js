@@ -8,6 +8,7 @@ export default ({
     },
     data () {
         return {
+            selectProcessId: null,
             userMachinePageOpts: page().pageOpts,
             userMachinePageSize: page().pageSize,
             curDate: curDate(),
@@ -48,6 +49,7 @@ export default ({
                                 },
                                 on: {
                                     click: () => {
+                                        _this.selectProcessId = params.row.processId;
                                         _this.showMachinesList = {
                                             userId: params.row.id,
                                             workshopId: _this.curWorkshopId,

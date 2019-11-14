@@ -36,10 +36,15 @@
                     </Select>
                     <Button @click="submitBetweenMachine" type="primary">确认机台</Button>
                 </div>
-                <div class="marginBottom textRight">
+                <div class="marginBottom">
                     <div class="formMachine" ><Input v-model="machineCode" @on-change="changeMachineCodeNameProcess" clearable placeholder="请输入设备编码" /></div>
                     <div class="formMachine" ><Input v-model="machineName" @on-change="changeMachineCodeNameProcess" clearable placeholder="请输入设备名称" /></div>
-                    <div class="formMachine" ><Input v-model="machineProcess" @on-change="changeMachineCodeNameProcess" clearable placeholder="请输入工序" /></div>
+<!--                    <div class="formMachine" ><Input v-model="machineProcess" @on-change="changeMachineCodeNameProcess" clearable placeholder="请输入工序" /></div>-->
+                    <div class="formMachine" >
+                        <Select v-model="machineProcess" placeholder="请选择工序" @on-change="changeMachineCodeNameProcess" clearable>
+                            <Option v-for="item in processList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                        </Select>
+                    </div>
                 </div>
             </div>
             <Table border ref="selection" size="small" @on-select-cancel="selectCancelMachine" @on-selection-change="selectAllMachine" :row-class-name="rowClassName" :columns="userMachineColumns" :data="userMachineData" height="500"></Table>
@@ -48,6 +53,7 @@
 </template>
 <script>
 import modal from '../public/modal';
+import { getProcessListRequest } from '@api/common';
 export default {
     name: 'select-machines',
     components: {
@@ -56,10 +62,14 @@ export default {
     props: {
         showMachineData: {
             type: Object
+        },
+        processId: {
+            type: [Number, String]
         }
     },
     data () {
         return {
+            processList: [],
             startMachineCode: '',
             endMachineCode: '',
             startMachineCodeLoading: false,
@@ -161,7 +171,6 @@ export default {
         };
     },
     methods: {
-        //
         remoteMethodStartMachine (query) {
             const _this = this;
             if (query !== '') {
@@ -225,7 +234,7 @@ export default {
             }
         },
         //
-        changeMachineCodeNameProcess () {
+        /*changeMachineCodeNameProcess () {
             let machineCode = new RegExp(this.machineCode.trim(), 'i');
             let machineName = new RegExp(this.machineName.trim(), 'i');
             let machineProcess = new RegExp(this.machineProcess.trim(), 'i');
@@ -253,7 +262,47 @@ export default {
                 }
             }
             this.userMachineData = SelectP;
+        },*/
+        changeMachineCodeNameProcess () {
+            let machineCode = new RegExp(this.machineCode.trim(), 'i');
+            let machineName = new RegExp(this.machineName.trim(), 'i');
+            let SelectC = [];
+            let SelectN = [];
+            let SelectP = [];
+            // 设备编号存在时
+            if (machineCode) {
+                for (let i of this.AllMachineData) {
+                    if (machineCode.test(i.code)) SelectC.push(i);
+                }
+            } else {
+                SelectC = [...this.AllMachineData];
+            };
+
+            // 设备名称存在时
+            if (machineName) {
+                for (let i of SelectC) {
+                    if (machineName.test(i.name)) {
+                        SelectN.push(i);
+                    }
+                }
+            } else {
+                SelectN = [...SelectC];
+            };
+
+            // 设备工序存在时
+            if (this.machineProcess) {
+                for (let i of SelectN) {
+                    if (this.machineProcess === i.processId) {
+                        SelectP.push(i);
+                    }
+                }
+            } else {
+                SelectP = [...SelectN];
+            };
+
+            this.userMachineData = SelectP;
         },
+
         selectCancelMachine (val, row) {
             this.AllMachineData.find(x => x.id === row.id)._checked = false;
         },
@@ -316,7 +365,7 @@ export default {
                 state: 1,
                 typeId: 26,
                 workshopId: val.workshopId,
-                processId: val.processId
+                // processId: val.processId
             };
             this.$api.machine.getMachineList(params).then(res => {
                 let content = res.data;
@@ -343,7 +392,9 @@ export default {
                                 }
                             }
                             _this.AllSelectedMachineData = machineList.filter(x => x._checked === true);
-                            _this.$api.userMachine.getUserMachineList3({processId: val.processId}).then(res => {
+                            _this.$api.userMachine.getUserMachineList3({
+                                // processId: val.processId
+                            }).then(res => {
                                 let content = res.data;
                                 if (content.status === 200) {
                                     for (let c of content.res) {
@@ -354,6 +405,7 @@ export default {
                                     _this.userMachineData = machineList;
                                     _this.AllMachineData = _this.userMachineData;
                                     _this.showMachines = true;
+                                    this.changeMachineCodeNameProcess();
                                 }
                             });
                         }
@@ -366,14 +418,21 @@ export default {
         showMachineData (val) {
             const _this = this;
             if (val) {
-                _this.userId = val.userId;
-                _this.$refs.setStartQuery.clearSingleSelect();
-                _this.$refs.setEndQuery.clearSingleSelect();
-                _this.machineCode = '';
-                _this.machineName = '';
-                _this.machineProcess = '';
-                _this.getWorkshopMachine(val);
+                getProcessListRequest().then(res => {
+                    if (res.data.status === 200) {
+                        _this.processList = res.data.res;
+                        _this.userId = val.userId;
+                        _this.$refs.setStartQuery.clearSingleSelect();
+                        _this.$refs.setEndQuery.clearSingleSelect();
+                        _this.machineCode = '';
+                        _this.machineName = '';
+                        _this.getWorkshopMachine(val);
+                    };
+                });
             }
+        },
+        processId (newVal) {
+            this.machineProcess = newVal;
         }
     },
     mounted () {

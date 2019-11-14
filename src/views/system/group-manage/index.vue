@@ -147,7 +147,7 @@
                 this.showModalContentLoading = true;
                 this.modalTitle = '编辑班组';
                 this.modalState = true;
-                this.$call('group.detail', {id}).then(res => {
+                this.$api.user.groupDetailRequest({id}).then(res => {
                     if (res.data.status === 200) {
                         this.formValidate = res.data.res;
                         this.showModalContentLoading = false;
@@ -168,7 +168,7 @@
             },
             tipsModalConfirmEvent () {
                 this.confirmButtonLoading = true;
-                this.$call('group.delete', this.selectArr).then(res => {
+                this.$api.user.groupDeleteRequest(this.selectArr).then(res => {
                     if (res.data.status === 200) {
                         this.getListRequest();
                         this.tipsModalState = false;
@@ -206,7 +206,7 @@
                 });
             },
             saveRequest () {
-                this.$call('group.save', {...this.formValidate}).then(res => {
+                this.$api.user.groupSaveRequest({...this.formValidate}).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'saveTips');
                         this.modalState = false;
@@ -224,7 +224,7 @@
                 this.modalState = true;
             },
             getListRequest () {
-                return this.$call('group.list', {}).then(res => {
+                return this.$api.user.groupListRequest({}).then(res => {
                     if (res.data.status === 200) {
                         let responseData = res.data.res;
                         this.tableData = responseData;

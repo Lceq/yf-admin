@@ -5,12 +5,14 @@ import deleteWarning from '../../public/deleteWarning';
 import publicJs from '../../../libs/common';
 import {page} from '../../../libs/tools';
 import xwValidate from '@/libs/xwValidate';
+import syncModal from './sync-modal';
 
 export default ({
     components: {
         modal,
         otherMessage,
-        deleteWarning
+        deleteWarning,
+        syncModal
     },
     // computed: {
     //     ...mapState({
@@ -20,6 +22,9 @@ export default ({
     // },
     data () {
         return {
+            syncModalState: false,
+            showModalContentLoading: false,
+            saveModalConfirmLoading: false,
             postPageOpts: page().pageOpts,
             postPageSize: page().pageSize,
             postTypeList: [
@@ -39,18 +44,8 @@ export default ({
             curAuditStateId: '',
             postCode: '',
             postColumns: [
-                {
-                    type: 'selection',
-                    width: 60,
-                    align: 'center'
-                },
-                {
-                    title: '岗位编码',
-                    key: 'code',
-                    align: 'left',
-                    sortable: true,
-                    minWidth: 110
-                },
+                {type: 'selection', width: 60, align: 'center'},
+                {title: '岗位编码', key: 'code', align: 'left', sortable: true, minWidth: 110},
                 {
                     title: '岗位名称',
                     key: 'name',
@@ -77,55 +72,13 @@ export default ({
                         ]);
                     }
                 },
-                {
-                    title: '岗位分类',
-                    key: 'typeName',
-                    align: 'left',
-                    sortable: true,
-                    minWidth: 110
-                },
-                {
-                    title: '所属工序',
-                    key: 'processName',
-                    align: 'center',
-                    sortable: true,
-                    minWidth: 110
-                },
-                {
-                    title: '是否开台',
-                    key: 'isWatcher',
-                    align: 'center',
-                    sortable: true,
-                    minWidth: 110
-                },
-                {
-                    title: '是否计件',
-                    key: 'isPiece',
-                    align: 'center',
-                    sortable: true,
-                    minWidth: 110
-                },
-                {
-                    title: '是否常日班',
-                    key: 'isRegularDaily',
-                    align: 'center',
-                    sortable: true,
-                    minWidth: 110
-                },
-                {
-                    title: '数据状态',
-                    key: 'auditStateMean',
-                    align: 'center',
-                    sortable: true,
-                    minWidth: 110
-                },
-                {
-                    title: '排序',
-                    key: 'sortNum',
-                    align: 'center',
-                    sortable: true,
-                    minWidth: 110
-                }
+                {title: '岗位分类', key: 'typeName', align: 'left', sortable: true, minWidth: 110},
+                {title: '所属工序', key: 'processName', align: 'center', sortable: true, minWidth: 110},
+                {title: '是否开台', key: 'isWatcher', align: 'center', sortable: true, minWidth: 110},
+                {title: '是否计件', key: 'isPiece', align: 'center', sortable: true, minWidth: 110},
+                {title: '是否常日班', key: 'isRegularDaily', align: 'center', sortable: true, minWidth: 110},
+                {title: '数据状态', key: 'auditStateMean', align: 'center', sortable: true, minWidth: 110},
+                {title: '排序', key: 'sortNum', align: 'center', sortable: true, minWidth: 110}
             ],
             postData: [],
             postShow: false,
@@ -145,12 +98,8 @@ export default ({
                 sortNum: null
             },
             ruleValidate: {
-                code: [
-                    {required: true, validator: xwValidate.code, trigger: 'blur'}
-                ],
-                name: [
-                    {required: true, validator: xwValidate.input, trigger: 'blur'}
-                ]
+                code: [{required: true, validator: xwValidate.code, trigger: 'blur'}],
+                name: [{required: true, validator: xwValidate.input, trigger: 'blur'}]
             },
             colorValue: '#ffffff',
             postTotal: 0,
@@ -170,6 +119,25 @@ export default ({
         };
     },
     methods: {
+        onSyncModalConfirmEvent (e) {
+            this.syncModalState = false;
+            this.formValidate.hrPostId = e.id;
+            this.formValidate.code = e.code;
+            this.formValidate.name = e.name;
+            // this.formValidate.type = e.typeCode;
+            this.formValidate.processId = e.processId;
+            this.formValidate.processName = e.processName;
+            this.formValidate.processCode = e.processCode;
+            this.formValidate.property = e.isWatcher ? '1' : '2';
+            this.postTitle = '新增岗位';
+            this.postShow = true;
+        },
+        onSyncModalVisibleChangeEvent (e) {
+            this.syncModalState = e;
+        },
+        syncOrgEvent () {
+            this.syncModalState = true;
+        },
         addNewPost () {
             this.curPostId = null;
             this.isEdit = false;
@@ -188,6 +156,7 @@ export default ({
             this.formValidate.processId = '';
             this.formValidate.isRegularDaily = '1';
             this.formValidate.sortNum = null;
+            this.formValidate.hrPostId = null;
             this.createTime = '';
             this.createName = '';
             this.updateName = '';
@@ -270,7 +239,8 @@ export default ({
                         isRepair: !!this.formValidate.property.find(x => x === '2'),
                         processId: this.formValidate.processId,
                         processName: this.formValidate.processId ? this.processList.find(x => x.id === this.formValidate.processId).name : '',
-                        isRegularDaily: this.formValidate.isRegularDaily === '1'
+                        isRegularDaily: this.formValidate.isRegularDaily === '1',
+                        hrPostId: this.formValidate.hrPostId
                     };
                     this.postLoading = true;
                     this.$api.post.getPostSave(params).then(res => {

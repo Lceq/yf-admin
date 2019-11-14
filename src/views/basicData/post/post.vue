@@ -15,6 +15,7 @@
                         </DropdownMenu>
                     </Dropdown>
                     <Button :disabled="auditDisabled"  class="marginBottom marginButtonLeft" type="error" icon="ios-trash" @click="deletePost">删除</Button>
+                    <Button type="success" @click="syncOrgEvent" class="marginBottom marginButtonLeft">同步</Button>
                 </Col>
                 <Col>
                     <Select class="formWidth textLeft marginBottom" placeholder="请选择岗位分类" clearable v-model="curPostType">
@@ -145,6 +146,11 @@
                 @cancel="deleteWarnCancel"
                 @confirm="deleteWarnConfirm"
         ></delete-warning>
+        <sync-modal
+                :modal-state="syncModalState"
+                @on-visible-change="onSyncModalVisibleChangeEvent"
+                @on-confirm="onSyncModalConfirmEvent"
+        ></sync-modal>
     </div>
 </template>
 

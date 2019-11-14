@@ -17,6 +17,19 @@ export default {
     },
     hrGroupList (params) {
         return proxy.call('hr.group.list', params);
+    },
+    // 班组管理-删除
+    groupDeleteRequest (params) {
+        return proxy.call('group.delete', params);
+    },
+    groupSaveRequest (params) {
+        return proxy.call('group.save', params);
+    },
+    groupListRequest (params) {
+        return proxy.call('group.list', params);
+    },
+    groupDetailRequest (params) {
+        return proxy.call('group.detail', params);
     }
 };
 const userSearchRequest = function (params) {

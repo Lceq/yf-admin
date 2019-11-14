@@ -1,4 +1,4 @@
-import { post } from '../../ajax/http';
+import {post, proxy} from '../../ajax/http';
 
 export default {
     // 获取岗位列表
@@ -48,5 +48,9 @@ export default {
     },
     getPostDelete (params) {
         return post(('post/delete'), params);
+    },
+    // hr岗位同步list接口
+    hrPostList (params) {
+        return proxy.call('hr.post.list', params);
     }
 };

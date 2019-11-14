@@ -1,6 +1,5 @@
 <template>
     <div>
-        <modal-content-loading :spinShow="saveUserModalLoading"></modal-content-loading>
         <Modal
                 v-model="showModal"
                 title="同步员工"
@@ -8,6 +7,7 @@
                 :width="800"
                 @on-visible-change="visibleChangeEvent"
         >
+            <modal-content-loading :spinShow="saveUserModalLoading"></modal-content-loading>
             <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="100" :show-message="false">
                 <Row>
                     <Col span="12">
@@ -20,8 +20,6 @@
                             <Input v-model="formValidate.loginName" placeholder="请输入登录名"/>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row>
                     <Col span="12">
                         <FormItem class="formItemMargin" label="集团编号：" prop="code">
                             <Input v-model="formValidate.code" placeholder="请输入集团编号"/>
@@ -32,8 +30,6 @@
                             <Input v-model="formValidate.internalCode" placeholder="请输入内部编号"/>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row>
                     <Col span="12">
                         <FormItem class="formItemMargin" label="身份证号：" prop="corpId">
                             <Input v-model="formValidate.idCard" placeholder="请输入身份证号"/>
@@ -46,8 +42,6 @@
                             </Select>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row>
                     <Col span="12">
                         <FormItem class="formItemMargin" label="性别：" prop="gender">
                             <Select v-model="formValidate.gender" @on-change="getLeaderEvent" label-in-value placeholder="请选择性别">
@@ -60,8 +54,6 @@
                             <DatePicker v-model="formValidate.birthday" type="date" placeholder="请选择出生日期" class="widthPercentage"></DatePicker>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row>
                     <Col span="12">
                         <FormItem class="formItemMargin" label="手机号：" prop="mobile">
                             <InputNumber v-model="formValidate.mobile" placeholder="请输入手机号" class="widthPercentage"/>
@@ -72,8 +64,6 @@
                             <Input v-model="formValidate.tel" placeholder="请输入办公电话"/>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row>
                     <Col span="12">
                         <FormItem class="formItemMargin" label="所属部门：" prop="deptId">
                             <Cascader :data="deptList" v-model="formValidate.deptArray" @on-change="getDeptEvent" placeholder="请选择所属部门" change-on-select></Cascader>
@@ -84,8 +74,6 @@
                             <Input v-model="formValidate.email" placeholder="请输入办公邮箱"/>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row>
                     <Col span="12">
                         <FormItem class="formItemMargin" label="岗位工种：" prop="postId">
                             <Select
@@ -107,15 +95,26 @@
                             <InputNumber v-model="formValidate.sortNum" :min="1"/>
                         </FormItem>
                     </Col>
-                </Row>
-                <Row>
-                    <Col>
+                    <Col span="12">
+                        <FormItem label="班组：" class="formItemMargin">
+                            <Select
+                                    v-model="formValidate.groupId"
+                                    @on-change="getGroupEvent"
+                                    :filterable="true"
+                                    :label-in-value="true"
+                                    :clearable="true"
+                                    placeholder="请选择班组"
+                            >
+                                <Option v-for="item in groupList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col span="24">
                         <FormItem class="formItemMargin" label="描述：">
                             <Input v-model="formValidate.remark" type="textarea" :rows="4" placeholder="请输入..." :maxlength="512" :autosize="{minRows:2,maxRows:10}"/>
                         </FormItem>
                     </Col>
                 </Row>
-
             </Form>
             <div slot="footer">
                 <modal-footer
@@ -135,10 +134,6 @@
         components: { modalContentLoading, modalFooter },
         props: {
             saveUserModalState: {
-                type: Boolean,
-                default: false
-            },
-            saveUserModalLoading: {
                 type: Boolean,
                 default: false
             },
@@ -168,7 +163,7 @@
                 } else {
                     callback(new Error());
                 }
-            }
+            };
             const validatorMobile = (rule, value, callback) => {
                 if (value && /^1\d{10}$/.test(value)) {
                     this.onJobValidatorMessage = '';
@@ -176,10 +171,12 @@
                 } else {
                     callback(new Error());
                 }
-            }
+            };
             const validatorDeptId = (rule, value, callback) => value && value.length !== 0 ? callback() : callback(new Error());
             const validatorPostId = (rule, value, callback) => value ? callback() : callback(new Error());
             return {
+                saveUserModalLoading: false,
+                groupList: [],
                 genderList: [
                     {id: 1, name: '男'},
                     {id: 0, name: '女'}
@@ -205,6 +202,12 @@
             };
         },
         methods: {
+            getGroupEvent (e) {
+                if (e) {
+                    this.formValidate.groupId = e.value;
+                    this.formValidate.groupName = e.label;
+                };
+            },
             getLeaderEvent (e) {
                 if (e) this.formValidate.leaderName = e.label;
             },
@@ -385,9 +388,16 @@
             },
             saveUserModalData: {
                 handler (newVal, oldVal) {
-                    this.formValidate = JSON.parse(JSON.stringify(newVal));
-                    this.getSubDeptMethods(this.formValidate.deptId);
-                    this.formValidate.mobile = parseFloat(this.formValidate.mobile);
+                    this.saveUserModalLoading = true;
+                    this.$call('group.list').then(res => {
+                        if (res.data.status === 200) {
+                            this.groupList = res.data.res;
+                            this.formValidate = JSON.parse(JSON.stringify(newVal));
+                            this.getSubDeptMethods(this.formValidate.deptId);
+                            this.formValidate.mobile = parseFloat(this.formValidate.mobile);
+                            this.saveUserModalLoading = false;
+                        };
+                    });
                 },
                 deep: true
             }

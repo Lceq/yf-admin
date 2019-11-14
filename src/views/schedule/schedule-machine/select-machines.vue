@@ -55,7 +55,6 @@
 
 <script>
 import modal from '../../public/modal';
-import { getProcessListRequest } from '@api/common';
 export default {
     name: 'select-machines',
     components: { modal },
@@ -313,7 +312,7 @@ export default {
             }
         },
         getProcessList () {
-            getProcessListRequest().then(res => {
+            this.$api.common.usableProcessListRequest().then(res => {
                 if (res.data.status === 200) {
                     this.processList = res.data.res;
                     this.JudgeUserMachineList();

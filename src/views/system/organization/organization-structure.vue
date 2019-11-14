@@ -128,9 +128,6 @@
     import modalFooter from '../../components/modal-footer';
     import syncModal from './sync-modal';
     import modalContentLoading from '../../components/modal-content-loading';
-    import { deptSaveRequest, deptListRequest, deptDetailRequest, deptEnableRequest, deptDisableRequest, deptDeleteRequest } from '@api/basic/dept';
-    import { dictListRequest } from '@api/basic/dictionary';
-    import { userSearchRequest } from '@api/user/user';
     export default {
         name: 'list-user',
         components: { tipsModal, otherMessage, modalFooter, syncModal, modalContentLoading },
@@ -344,7 +341,7 @@
             },
             // 搜索负责人
             getSuperiorRequest (query, type) {
-                userSearchRequest({name: ''}).then((res) => {
+                this.$api.user.userSearchRequest({name: ''}).then((res) => {
                     if (res.data.status === 200) {
                         this.addSearchSwitch = false;
                         res.data.res.forEach((item) => {
@@ -402,7 +399,7 @@
             },
             // 禁用的请求
             postDisableHttp (id) {
-                deptDisableRequest([id]).then((res) => {
+                this.$api.dept.deptDisableRequest([id]).then((res) => {
                     if (res.data.status === 200) {
                         this.getAllDeptListHttp();
                         this.isEnable = false;
@@ -415,7 +412,7 @@
             },
             // 取消禁用的请求
             postEnableHttp (id) {
-                deptEnableRequest([id]).then((res) => {
+                this.$api.dept.deptEnableRequest([id]).then((res) => {
                     if (res.data.status === 200) {
                         this.getAllDeptListHttp();
                         this.isEnable = false;
@@ -429,7 +426,7 @@
             // 删除的请求
             postDeleteHttp (param) {
                 this.deleteHintsButtonLoading = true;
-                deptDeleteRequest([param]).then((res) => {
+                this.$api.dept.deptDeleteRequest([param]).then((res) => {
                     if (res.data.status === 200) {
                         this.getAllDeptListHttp();
                         this.deleteHintsButtonLoading = false;
@@ -514,7 +511,7 @@
                     'processTypeName': this.formValidate.processTypeName,
                     'deptProcessList': this.selectDeptProcessList
                 };
-                deptSaveRequest(params).then((res) => {
+                this.$api.dept.deptSaveRequest(params).then((res) => {
                     if (res.data.status === 200) {
                         this.editParentId = '';
                         this.buttonLoading = false;
@@ -543,7 +540,7 @@
                 this.saveModalTitle = '编辑组织';
                 this.saveModalState = true;
                 this.spinShow = true;
-                deptDetailRequest({id: this.editId}).then((res) => {
+                this.$api.dept.deptDetailRequest({id: this.editId}).then((res) => {
                     if (res.data.status === 200) {
                         let responseData = res.data.res;
                         this.getProcessListHttp().then(res => {
@@ -570,7 +567,7 @@
             },
             // 获取所有部门
             getAllDeptListHttp () {
-                return deptListRequest({}).then((res) => {
+                return this.$api.dept.deptListRequest({}).then((res) => {
                     if (res.data.status === 200) {
                         this.globalLoadingShow = false;
                         this.treeData = toTree(res.data.res);
@@ -583,7 +580,7 @@
             // 获取列表数据
             getListHttp () {
                 this.loadingStatus = true;
-                deptListRequest({parentId: this.treeObj[0].id}).then((res) => {
+                this.$api.dept.deptListRequest({parentId: this.treeObj[0].id}).then((res) => {
                     if (res.data.status === 200) {
                         this.loadingStatus = false;
                         this.treeListSubData = this.translateChinese(res.data.res);
@@ -633,7 +630,7 @@
                 };
             },
             getTreeListRequest () {
-                return deptListRequest({}).then((res) => {
+                return this.$api.dept.deptListRequest({}).then((res) => {
                     if (res.data.status === 200) {
                         this.globalLoadingShow = false;
                         this.treeData = toTree(res.data.res);
@@ -654,7 +651,7 @@
             },
             // 获取工段类别
             getProcessTypeListRequest () {
-                dictListRequest({parentCode: 'process_type'}).then(res => {
+                this.$api.dictionary.dictListRequest({parentCode: 'process_type'}).then(res => {
                     if (res.data.status === 200) {
                         this.processTypeList = res.data.res;
                     };

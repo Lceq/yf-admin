@@ -44,11 +44,8 @@ export default {
     },
     hrUserStateCountRequest (params) {
         return proxy.call('hr.user.stateCount', params);
+    },
+    userSearchRequest (params) {
+        return proxy.call('user.search', params);
     }
-};
-const userSearchRequest = function (params) {
-    return proxy.call('user.search', params);
-};
-export {
-    userSearchRequest
 };

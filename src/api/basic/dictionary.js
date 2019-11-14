@@ -32,11 +32,8 @@ export default({
     // 获取纸管、纱管、筒圈
     tubeListHttp (params) {
         return post('dict/category/list/tube/color', params);
+    },
+    dictListRequest (params) {
+        return proxy.call('dict.list', params);
     }
 });
-const dictListRequest = function (params) {
-    return proxy.call('dict.list', params);
-};
-export {
-    dictListRequest
-};

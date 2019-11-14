@@ -28,7 +28,6 @@
     </div>
 </template>
 <script>
-    import { hrDeptListRequest } from '@api/basic/dept';
     import modalContentLoading from '@components/modal-content-loading.vue';
     import { setPage, noticeTips } from '../../../libs/common';
     export default {
@@ -87,7 +86,7 @@
             },
             getHrDeptListData () {
                 this.tableLoading = true;
-                hrDeptListRequest({
+                this.$api.dept.hrDeptListRequest({
                     isSync: false,
                     deptName: this.queryBarDeptName,
                     pageIndex: this.pageIndex,

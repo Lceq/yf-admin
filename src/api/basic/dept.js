@@ -56,34 +56,26 @@ export default {
     listHttp () {
         return fetch('dept/workshops');
     },
+    /* 最新api定义规则(以request结尾) */
     deptListRequest (params) {
         return proxy.call('dept.list', params);
+    },
+    deptSaveRequest (params) {
+        return proxy.call('dept.save', params);
+    },
+    deptDetailRequest (params) {
+        return proxy.call('dept.detail', params);
+    },
+    deptEnableRequest (params) {
+        return proxy.call('dept.enable', params);
+    },
+    deptDisableRequest (params) {
+        return proxy.call('dept.disable', params);
+    },
+    deptDeleteRequest (params) {
+        return proxy.call('dept.delete', params);
+    },
+    hrDeptListRequest (params) {
+        return proxy.call('hr.dept.list', params);
     }
-};
-
-/* 最新api定义规则(以request结尾) */
-
-const hrDeptListRequest = function (params) {
-    return proxy.call('hr.dept.list', params);
-};
-const deptSaveRequest = function (params) {
-    return proxy.call('dept.save', params);
-};
-const deptListRequest = function (params) {
-    return proxy.call('dept.list', params);
-};
-const deptDetailRequest = function (params) {
-    return proxy.call('dept.detail', params);
-};
-const deptEnableRequest = function (params) {
-    return proxy.call('dept.enable', params);
-};
-const deptDisableRequest = function (params) {
-    return proxy.call('dept.disable', params);
-};
-const deptDeleteRequest = function (params) {
-    return proxy.call('dept.delete', params);
-};
-export {
-    hrDeptListRequest, deptSaveRequest, deptListRequest, deptDetailRequest, deptEnableRequest, deptDisableRequest, deptDeleteRequest
 };

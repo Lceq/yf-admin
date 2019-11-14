@@ -53,7 +53,6 @@
 </template>
 <script>
 import modal from '../public/modal';
-import { getProcessListRequest } from '@api/common';
 export default {
     name: 'select-machines',
     components: {
@@ -418,7 +417,7 @@ export default {
         showMachineData (val) {
             const _this = this;
             if (val) {
-                getProcessListRequest().then(res => {
+                this.$api.common.usableProcessListRequest().then(res => {
                     if (res.data.status === 200) {
                         _this.processList = res.data.res;
                         _this.userId = val.userId;

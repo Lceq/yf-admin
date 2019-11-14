@@ -1503,7 +1503,7 @@
                     'idCard': this.addEmpForCus.idCard,
                     'groupId': this.addEmpForCus.groupId,
                     'groupName': this.addEmpForCus.groupName,
-            };
+                };
                 this.$post(api.empSave(), params).then((res) => {
                     if (res.data.status === 200) {
                         this.showPostSelect = false;

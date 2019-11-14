@@ -47,7 +47,29 @@
                 activeMenuAuditSate: 1,
                 menuArr: [],
                 queryBarName: '',
-                saveUserModalData: {},
+                saveUserModalData: {
+                    'name': '',
+                    'code': '',
+                    'internalCode': '',
+                    'loginName': '',
+                    'password': '123456',
+                    'sortNum': 1,
+                    'deptId': null,
+                    'deptName': '',
+                    'mobile': '',
+                    'email': '',
+                    'gender': '',
+                    'tel': '',
+                    'leaderId': null,
+                    'leaderName': '',
+                    'remark': '',
+                    'birthday': '',
+                    'postId': null,
+                    'postName': '',
+                    'idCard': '',
+                    'groupId': null,
+                    'groupName': ''
+                },
                 saveUserModalState: false,
                 tableHeader: [
                     {title: '集团编号', key: 'code', sortable: true, align: 'left', fixed: 'left', minWidth: 130},
@@ -147,9 +169,10 @@
             },
             onSyncEvent (row) {
                 this.saveUserModalState = true;
-                this.saveUserModalData = row;
+                Object.assign(this.saveUserModalData, row);
                 this.$delete(this.saveUserModalData, 'corpId');
                 this.saveUserModalData.hrUserId = row.id;
+                this.$delete(this.saveUserModalData, 'id');
             },
             getPageCodeEvent (e) {
                 this.pageIndex = e;

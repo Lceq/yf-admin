@@ -656,7 +656,12 @@
                 await this.getListHttp();
             },
             getProcessListHttp () {
-                return this.$api.process.getSearchProcessList().then(res => { this.queryBarProcessList = res; });
+                return this.$api.common.userDefaultProcessRequest().then(res => {
+                    if (res.data.status === 200) {
+                        this.queryBarProcessId = res.data.res.processDefaultId;
+                        this.queryBarProcessList = res.data.res.processList;
+                    };
+                });
             }
         },
         created () {

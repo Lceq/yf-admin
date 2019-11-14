@@ -993,8 +993,10 @@
         },
         methods: {
             getGroupEvent (e) {
-                this.addEmpForCus.groupId = e.value;
-                this.addEmpForCus.groupName = e.label;
+                if (e) {
+                    this.addEmpForCus.groupId = e.value;
+                    this.addEmpForCus.groupName = e.label;
+                };
             },
             // 数据权限的设置----------开始
             // 获取数据权限

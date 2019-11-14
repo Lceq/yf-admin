@@ -11,5 +11,17 @@ export default {
             auditState: 3,
             state: 1
         });
+    },
+    // 登录人的信息
+    userInfoRequest () {
+        return proxy.call('user.info');
+    },
+    // 登录人默认车间及车间列表
+    userWorkshopRequest () {
+        return proxy.call('user.data.workshops2');
+    },
+    // 登录人默认工序及工序列表
+    userDefaultProcessRequest () {
+        return proxy.call('user.defaultProcess');
     }
 };

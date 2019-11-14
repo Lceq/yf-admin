@@ -44,10 +44,10 @@ import production from './schedule/production'; // 值班
 // 数据状态
 import state from './state/state';
 import manufacture from './manufacture/manufacture';
+// 通用api
 import common from './common/index';
-// 公共api
 export default {
-    // 公共
+    // 通用
     common,
     // --------基础-------
     dept,

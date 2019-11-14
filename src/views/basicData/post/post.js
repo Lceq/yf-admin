@@ -35,7 +35,6 @@ export default ({
             ],
             curPostType: '',
             curProcessId: '',
-            //
             auditDisabled: true,
             tableHeight: 660,
             isEdit: false,
@@ -95,7 +94,8 @@ export default ({
                 wageType: '1',
                 processId: null,
                 isRegularDaily: '1',
-                sortNum: null
+                sortNum: null,
+                shortName: ''
             },
             ruleValidate: {
                 code: [{required: true, validator: xwValidate.code, trigger: 'blur'}],
@@ -125,6 +125,7 @@ export default ({
             this.formValidate.code = e.code;
             this.formValidate.name = e.name;
             // this.formValidate.type = e.typeCode;
+            this.formValidate.shortName = e.shortName;
             this.formValidate.processId = e.processId;
             this.formValidate.processName = e.processName;
             this.formValidate.processCode = e.processCode;
@@ -148,6 +149,7 @@ export default ({
             // this.formValidate.name = '';
             // this.colorValue = '#ffffff';
             // 清空数据
+            this.formValidate.shortName = '';
             this.formValidate.code = '';
             this.formValidate.name = '';
             this.formValidate.type = '';
@@ -174,6 +176,7 @@ export default ({
                     this.formValidate.code = content.res.auditState;
                     this.formValidate.code = content.res.code;
                     this.formValidate.name = content.res.name;
+                    this.formValidate.shortName = res.data.res.shortName;
                     this.formValidate.type = content.res.typeCode;
                     this.formValidate.typeName = content.res.typeName;
                     this.formValidate.property = [content.res.isWatcher === true ? '1' : '0', content.res.isRepair === true ? '2' : '0'];
@@ -231,6 +234,7 @@ export default ({
                         id: this.curPostId,
                         code: this.formValidate.code,
                         name: this.formValidate.name,
+                        shortName: this.formValidate.shortName,
                         typeCode: this.formValidate.type ? this.formValidate.type : null,
                         typeName: this.formValidate.type ? this.postTypeList.find(x => x.code === this.formValidate.type).name : null,
                         sortNum: this.formValidate.sortNum,
@@ -260,6 +264,7 @@ export default ({
         postCancel () {
             this.postShow = false;
             this.postLoading = false;
+            this.formValidate.shortName = '';
         },
         getPostList () {
             let params = {

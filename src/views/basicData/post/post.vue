@@ -67,6 +67,14 @@
                     </Row>
                     <Row>
                         <Col span="22">
+                            <FormItem label="岗位简称：" class="formItemMargin">
+                                <p v-if="!isCouldSave" class="modal-readonly">{{ formValidate.shortName }}</p>
+                                <Input v-else type="text" v-model="formValidate.shortName" placeholder="请输入岗位简称"/>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="22">
                             <FormItem label="岗位分类：" class="formItemMargin">
                                 <p v-if="!isCouldSave" class="modal-readonly">{{ formValidate.typeName }}</p>
                                 <Select v-else label-in-value v-model="formValidate.type">

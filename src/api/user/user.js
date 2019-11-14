@@ -30,6 +30,20 @@ export default {
     },
     groupDetailRequest (params) {
         return proxy.call('group.detail', params);
+    },
+    // 添加员工
+    userSaveRequest (params) {
+        return proxy.call('user.save', params);
+    },
+    userListRequest (params) {
+        return proxy.call('user.list', params);
+    },
+    // user同步list
+    hrUserListRequest (params) {
+        return proxy.call('hr.user.list', params);
+    },
+    hrUserStateCountRequest (params) {
+        return proxy.call('hr.user.stateCount', params);
     }
 };
 const userSearchRequest = function (params) {

@@ -55,6 +55,9 @@ export default {
     },
     listHttp () {
         return fetch('dept/workshops');
+    },
+    deptListRequest (params) {
+        return proxy.call('dept.list', params);
     }
 };
 

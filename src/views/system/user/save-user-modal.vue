@@ -3,7 +3,7 @@
         <modal-content-loading :spinShow="saveUserModalLoading"></modal-content-loading>
         <Modal
                 v-model="showModal"
-                title="编辑员工"
+                title="同步员工"
                 :mask-closable="false"
                 :width="800"
                 @on-visible-change="visibleChangeEvent"
@@ -181,14 +181,8 @@
             const validatorPostId = (rule, value, callback) => value ? callback() : callback(new Error());
             return {
                 genderList: [
-                    {
-                        id: 1,
-                        name: '男'
-                    },
-                    {
-                        id: 0,
-                        name: '女'
-                    }
+                    {id: 1, name: '男'},
+                    {id: 0, name: '女'}
                 ],
                 sourcePostList: [],
                 allDeptData: [],
@@ -357,7 +351,7 @@
                 this.saveModalButtonLoading = true;
                 this.formValidate.birthday ? this.formValidate.birthday = formatDate(this.formValidate.birthday) : this.formValidate.birthday = '';
                 this.formValidate.isImport = false;
-                this.$call('user.save', this.formValidate).then(res => {
+                this.$api.user.userSaveRequest(this.formValidate).then(res => {
                     if (res.data.status === 200) {
                         this.saveModalButtonLoading = false;
                         noticeTips(this, 'saveTips');
@@ -369,7 +363,7 @@
             },
             // 获取员工列表数据
             getUserListRequest () {
-                this.$call('user.list').then(res => {
+                this.$api.user.userListRequest().then(res => {
                     if (res.data.status === 200) {
                         this.userList = res.data.res;
                     };
@@ -377,7 +371,7 @@
             },
             // 获取部门列表数据
             getDeptListRequest () {
-                this.$call('dept.list').then(res => {
+                this.$api.dept.deptListRequest().then(res => {
                     if (res.data.status === 200) {
                         this.allDeptData = JSON.parse(JSON.stringify(res.data.res));
                         this.deptList = toTree(res.data.res)[0].children;

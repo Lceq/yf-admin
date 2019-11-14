@@ -242,7 +242,7 @@ export default ({
                         sortNum: this.formValidate.sortNum,
                         isWatcher: this.formValidate.isWatcher,
                         wageType: this.formValidate.wageType,
-                        isRepair: !this.formValidate.isRepair,
+                        isRepair: this.formValidate.isRepair,
                         processId: this.formValidate.processId,
                         processName: this.formValidate.processId ? this.processList.find(x => x.id === this.formValidate.processId).name : '',
                         isRegularDaily: this.formValidate.isRegularDaily === '1',

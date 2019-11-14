@@ -148,6 +148,7 @@
             onSyncEvent (row) {
                 this.saveUserModalState = true;
                 this.saveUserModalData = row;
+                this.$delete(this.saveUserModalData, 'corpId');
                 this.saveUserModalData.hrUserId = row.id;
             },
             getPageCodeEvent (e) {

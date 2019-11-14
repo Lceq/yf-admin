@@ -90,12 +90,13 @@ export default ({
                 code: '',
                 name: '',
                 type: '',
-                property: [],
+                isWatcher: false,
                 wageType: '1',
                 processId: null,
                 isRegularDaily: '1',
                 sortNum: null,
-                shortName: ''
+                shortName: '',
+                isRepair: false
             },
             ruleValidate: {
                 code: [{required: true, validator: xwValidate.code, trigger: 'blur'}],
@@ -129,7 +130,8 @@ export default ({
             this.formValidate.processId = e.processId;
             this.formValidate.processName = e.processName;
             this.formValidate.processCode = e.processCode;
-            this.formValidate.property = e.isWatcher ? '1' : '2';
+            // this.formValidate.isWatcher = e.isWatcher;
+            // this.formValidate.isRepair = e.isRepair;
             this.postTitle = '新增岗位';
             this.postShow = true;
         },
@@ -149,11 +151,12 @@ export default ({
             // this.formValidate.name = '';
             // this.colorValue = '#ffffff';
             // 清空数据
+            this.formValidate.isRepair = false;
             this.formValidate.shortName = '';
             this.formValidate.code = '';
             this.formValidate.name = '';
             this.formValidate.type = '';
-            this.formValidate.property = [];
+            this.formValidate.isWatcher = false;
             this.formValidate.wageType = '1';
             this.formValidate.processId = '';
             this.formValidate.isRegularDaily = '1';
@@ -171,7 +174,6 @@ export default ({
             this.$api.post.getPostDetail({id: this.curPostId}).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
-                    // debugger
                     this.postTitle = content.res.auditState === 3 ? '岗位详情' : '编辑岗位';
                     this.formValidate.code = content.res.auditState;
                     this.formValidate.code = content.res.code;
@@ -179,13 +181,13 @@ export default ({
                     this.formValidate.shortName = res.data.res.shortName;
                     this.formValidate.type = content.res.typeCode;
                     this.formValidate.typeName = content.res.typeName;
-                    this.formValidate.property = [content.res.isWatcher === true ? '1' : '0', content.res.isRepair === true ? '2' : '0'];
+                    this.formValidate.isWatcher = content.res.isWatcher;
+                    this.formValidate.isRepair = content.res.isRepair;
                     this.formValidate.wageType = content.res.wageType + '';
                     this.formValidate.processId = content.res.processId;
                     this.formValidate.processName = content.res.processName;
                     this.formValidate.isRegularDaily = content.res.isRegularDaily === true ? '1' : '0';
                     this.formValidate.sortNum = content.res.sortNum;
-                    //
                     this.createName = content.res.createName;
                     this.createTime = content.res.createTime;
                     this.updateTime = content.res.updateTime;
@@ -238,9 +240,9 @@ export default ({
                         typeCode: this.formValidate.type ? this.formValidate.type : null,
                         typeName: this.formValidate.type ? this.postTypeList.find(x => x.code === this.formValidate.type).name : null,
                         sortNum: this.formValidate.sortNum,
-                        isWatcher: !!this.formValidate.property.find(x => x === '1'),
+                        isWatcher: this.formValidate.isWatcher,
                         wageType: this.formValidate.wageType,
-                        isRepair: !!this.formValidate.property.find(x => x === '2'),
+                        isRepair: !this.formValidate.isRepair,
                         processId: this.formValidate.processId,
                         processName: this.formValidate.processId ? this.processList.find(x => x.id === this.formValidate.processId).name : '',
                         isRegularDaily: this.formValidate.isRegularDaily === '1',

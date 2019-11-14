@@ -387,9 +387,9 @@
                 this.showModal = newVal;
             },
             saveUserModalData: {
-                handler (newVal, oldVal) {
+                handler (newVal) {
                     this.saveUserModalLoading = true;
-                    this.$call('group.list').then(res => {
+                    this.$api.user.groupListRequest().then(res => {
                         if (res.data.status === 200) {
                             this.groupList = res.data.res;
                             this.formValidate = JSON.parse(JSON.stringify(newVal));

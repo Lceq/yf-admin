@@ -85,12 +85,15 @@
                     </Row>
                     <Row>
                         <Col span="18">
-                            <FormItem label="岗位属性：" class="formItemMargin">
-                                <CheckboxGroup v-model="formValidate.property">
-                                    <!--<Checkbox label="1">计件</Checkbox>-->
-                                    <Checkbox :disabled="!isCouldSave" label="1">看台</Checkbox>
-                                    <Checkbox :disabled="!isCouldSave" label="2">维修</Checkbox>
-                                </CheckboxGroup>
+                            <FormItem label="是否看台：" class="formItemMargin">
+                                <Checkbox v-model="formValidate.isWatcher">是</Checkbox>
+                            </FormItem>
+                        </Col>
+                    </Row>
+                    <Row>
+                        <Col span="18">
+                            <FormItem label="是否维修：" class="formItemMargin">
+                                <Checkbox v-model="formValidate.isRepair">是</Checkbox>
                             </FormItem>
                         </Col>
                     </Row>

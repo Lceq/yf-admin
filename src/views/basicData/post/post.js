@@ -121,6 +121,7 @@ export default ({
     },
     methods: {
         onSyncModalConfirmEvent (e) {
+            this.isCouldSave = true;
             this.syncModalState = false;
             this.formValidate.hrPostId = e.id;
             this.formValidate.code = e.code;

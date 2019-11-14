@@ -90,7 +90,8 @@
                             return h('div', [
                                 h('Button', {
                                     props: {
-                                        size: 'small'
+                                        size: 'small',
+                                        disabled: this.activeMenuAuditSate === 2
                                     },
                                     style: {
                                         marginRight: '5px'

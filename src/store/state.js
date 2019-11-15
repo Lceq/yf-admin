@@ -12,6 +12,7 @@ const state = {
     codeTestChinese: false,
     maniViewHeight: 0,
     addRouterList: [],
+    isLoadModule: false, // 是否加载过角色模块
     allModuleList: [] // 所有模块列表
 };
 export default state;

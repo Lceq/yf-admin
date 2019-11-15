@@ -1513,10 +1513,6 @@
                         this.saveModalState = false;
                         this.getOnjobUserListHttp(this.treeNodeObj[0].id);
                         noticeTips(this, 'saveTips');
-                    } else if (res.data.status === 415) {
-                        this.saveModalState = false;
-                        this.buttonLoading = false;
-                        this.$Loading.finish();
                     } else {
                         this.buttonLoading = false;
                     };

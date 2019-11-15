@@ -318,7 +318,8 @@ export default ({
             prdNoticeCode: '',
             productNameCode: '',
             prdOrderNoticeCodeName: '',
-            processId: '',
+            processId: null,
+            defaultProcessId: null,
             workshopId: null,
             machineNameCode: '',
             replacementState: 'false',
@@ -589,11 +590,10 @@ export default ({
             this.prdBomCode = '';
             this.prdOrderCode = '';
             this.prdNoticeCode = '';
-            this.processId = '';
             this.productNameCode = '';
             this.machineNameCode = '';
             this.dateTo = '';
-            this.processId = '';
+            this.processId = JSON.parse(JSON.stringify(this.defaultProcessId));
             this.prdOrderNoticeCodeName = '';
             this.machineNameCode = '';
             // debugger
@@ -641,8 +641,12 @@ export default ({
         },
         // 获取工序
         getProcessList () {
-            this.$api.process.getSearchProcessList().then(res => {
-                this.processList = res;
+            return this.$api.common.userDefaultProcessRequest().then(res => {
+                if (res.data.status === 200) {
+                    this.processId = res.data.res.processDefaultId;
+                    this.defaultProcessId = res.data.res.processDefaultId;
+                    this.processList = res.data.res.processList;
+                };
             });
         },
         changeTime (val) {

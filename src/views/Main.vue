@@ -195,6 +195,7 @@
                     this.$store.commit('logout', this);
                     this.$store.commit('clearOpenedSubmenu');
                     this.$store.state.addRouterList = [];
+                    this.$store.state.isLoadModule = false;
                     this.$router.push({
                         name: 'login'
                     });

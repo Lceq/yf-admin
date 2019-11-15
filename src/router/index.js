@@ -12,9 +12,10 @@ Vue.use(VueRouter);
 const RouterConfig = {
     routes: routers
 };
-let addRouterArr = [];
 export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
+    // console.log('来', from)
+    // console.log('去', to)
     // 如果路由携带token
     if (to.query && to.query.token) {
         // 路由携带的和cookie的不同, 替换cookie的token
@@ -22,7 +23,6 @@ router.beforeEach((to, from, next) => {
             Cookies.set('token', to.query.token);
         };
     };
-    addRouterArr = store.state.addRouterList;
     // 已登录
     if (Cookies.get('token')) { // 未登录且前往的页面不是登录页
         // 已经登录且前往的是登录页
@@ -32,8 +32,8 @@ router.beforeEach((to, from, next) => {
                 name: 'home_index'
             });
         } else {
-            // 角色对应的模块存在的情况下
-            if (addRouterArr && addRouterArr.length !== 0) {
+            // 已加载角色对应的模块的情况下
+            if (store.state.isLoadModule) {
                 next();
             } else {
                 // 获取角色对应的模块

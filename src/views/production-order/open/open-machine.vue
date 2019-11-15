@@ -14,7 +14,7 @@
                                     <Select class="formEachStyle textLeft" v-model="workshopId" placeholder="请选择车间">
                                         <Option v-for="(item, index) in workshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
                                     </Select>
-                                    <Select class="formEachStyle textLeft" v-model="processId" placeholder="请选择工序">
+                                    <Select class="formEachStyle textLeft" v-model="processId" placeholder="请选择工序" clearable>
                                         <Option v-for="(item, index) in processList" :style="item.style" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </Col>

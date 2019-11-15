@@ -99,6 +99,7 @@
                     let tagsList = [];
                     let addRouterList = [];
                     addRouterList = JSON.parse(JSON.stringify(store.state.addRouterList));
+                    store.state.isLoadModule = true;
                     if (addRouterList && addRouterList.length !== 0) {
                         addRouterList.map((item) => {
                             item.children.length <= 1 ? tagsList.push(item.children[0]) : tagsList.push(...item.children);

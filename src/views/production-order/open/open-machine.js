@@ -359,7 +359,8 @@ export default ({
             prdNoticeCode: '',
             productNameCode: '',
             prdOrderNoticeCodeName: '',
-            processId: '',
+            processId: null,
+            defaultProcessId: null,
             workshopId: null,
             machineNameCode: '',
             replacementState: 'false',
@@ -679,7 +680,7 @@ export default ({
             this.curCompletionState = val.id;
             //
             this.dateTo = '';
-            this.processId = '';
+            this.processId = JSON.parse(JSON.stringify(this.defaultProcessId));
             this.prdOrderNoticeCodeName = '';
             this.machineNameCode = '';
             this.prdBomCode = '';
@@ -726,12 +727,6 @@ export default ({
                     this.openMachineData = content.res;
                     // console.log(this.openMachineData);
                 }
-            });
-        },
-        // 获取工序
-        getProcessList () {
-            this.$api.process.getSearchProcessList().then(res => {
-                this.processList = res;
             });
         },
         changeTime (val) {
@@ -806,6 +801,15 @@ export default ({
                     this.getOpenMachineData();
                 }
             });
+        },
+        getProcessListHttp () {
+            return this.$api.common.userDefaultProcessRequest().then(res => {
+                if (res.data.status === 200) {
+                    this.processId = res.data.res.processDefaultId;
+                    this.defaultProcessId = res.data.res.processDefaultId;
+                    this.processList = res.data.res.processList;
+                };
+            });
         }
     },
     updated () {
@@ -819,7 +823,7 @@ export default ({
     mounted () {
         this.openMachineColumns = this.openMachineColumnsList.filter(item => item.have === undefined);
         this.getUserWorkshop();
-        this.getProcessList();
+        this.getProcessListHttp();
         this.$nextTick(() => {
             let H = document.getElementById('selectedHeight').clientHeight;
             this.tableHeight = document.documentElement.clientHeight - H - 235;

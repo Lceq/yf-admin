@@ -102,7 +102,8 @@
         components: { tipsModal, leftMenu },
         data () {
             return {
-                queryBarProcessId: '',
+                queryBarProcessId: null,
+                defaultProcessId: null,
                 queryBarProcessList: [],
                 activeMenuAuditSate: 1,
                 queryBarIsQuote: null,
@@ -356,7 +357,7 @@
                 this.queryBarOrderCode = '';
                 this.orderFromDate = '';
                 this.orderToDate = '';
-                this.queryBarProcessId = '';
+                this.queryBarProcessId = JSON.parse(JSON.stringify(this.defaultProcessId));
                 this.getListHttp();
                 this.getMenuHttp();
             },
@@ -462,7 +463,6 @@
             },
             // 搜索按钮的点击事件
             queryBarSearchButtonClickEvent () {
-                this.globalLoadingShow = true;
                 this.pageIndex = 1;
                 this.pageTotal = 1;
                 this.getListHttp();
@@ -659,6 +659,7 @@
                 return this.$api.common.userDefaultProcessRequest().then(res => {
                     if (res.data.status === 200) {
                         this.queryBarProcessId = res.data.res.processDefaultId;
+                        this.defaultProcessId = res.data.res.processDefaultId;
                         this.queryBarProcessList = res.data.res.processList;
                     };
                 });

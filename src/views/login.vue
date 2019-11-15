@@ -119,12 +119,12 @@
                 }
             },
             getLoginMsgHttp () {
-                this.$fetch(api.getLoginMsg()).then(res => {
+                this.$api.common.userInfoRequest().then(res => {
                     if (res.data.status === 200) {
                         Cookies.set('user', res.data.res.name);
                         Cookies.set('routeName', 'home_index');
                         // this.$router.go(0);
-                        this.$router.push({ name: 'home_index' });
+                        this.$router.push({ path: 'home_index', query: {}, params: {} });
                     };
                 });
             },

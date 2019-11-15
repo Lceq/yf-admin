@@ -14,8 +14,6 @@ const RouterConfig = {
 };
 export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
-    // console.log('来', from)
-    // console.log('去', to)
     // 如果路由携带token
     if (to.query && to.query.token) {
         // 路由携带的和cookie的不同, 替换cookie的token

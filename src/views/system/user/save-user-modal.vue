@@ -214,7 +214,7 @@
             // 获取部门
             getDeptEvent (e) {
                 if (e && e.length !== 0) {
-                    this.deptList.forEach((item) => {
+                    this.allDeptData.forEach((item) => {
                         if (item.id === e[e.length - 1]) {
                             this.formValidate.deptId = item.id;
                             this.formValidate.deptName = item.name;

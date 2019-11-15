@@ -184,6 +184,9 @@
                     // 退出登录
                     Cookies.remove('token');
                     Cookies.remove('routeName');
+                    localStorage.removeItem('serviceList');
+                    localStorage.removeItem('cachePage');
+                    localStorage.removeItem('pageOpenedList');
                     this.$store.commit('logout', this);
                     this.$store.commit('clearOpenedSubmenu');
                     this.$store.state.addRouterList = [];

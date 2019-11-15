@@ -171,7 +171,9 @@
                 if (pathArr.length >= 2) {
                     this.$store.commit('addOpenSubmenu', pathArr[1].name);
                 }
-                this.userName = Cookies.get('user');
+                this.$api.common.userInfoRequest().then(res => {
+                    if (res.data.status === 200) this.userName = res.data.res.name;
+                });
                 let messageCount = 3;
                 this.messageCount = messageCount.toString();
                 this.checkTag(this.$route.name);

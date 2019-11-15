@@ -26,13 +26,6 @@
                     :before-push="beforePush"
                     :open-names="openedSubmenuArr"
                     :menu-list="getAddRouterList">
-                <!--<div slot="top" class="logo-bar">
-                    <div v-show="!shrink" class="flex-left">
-                        <img src="../images/menu-logo-min.png" key="min-logo" />
-                        <p style="line-height: 50px;font-weight: bold;">{{mainTitle}}</p>
-                    </div>
-                    <img v-show="shrink" src="../images/menu-logo-min.png" key="min-logo" />
-                </div>-->
                 <div slot="top" class="logo-con">
                     <img v-show="!shrink" style="padding-right: 8px;" src="../images/menu-logo.png" key="max-logo" />
                     <img v-show="shrink" src="../images/menu-logo-min.png" key="min-logo" />
@@ -127,7 +120,6 @@
         },
         data () {
             return {
-                mainTitle: process.env.MAIN_TITLE,
                 moduleAllList: [],
                 menuOpenShow: false,
                 menuList: [],
@@ -186,9 +178,7 @@
                 if (name === 'ownSpace') {
                     util.openNewPage(this, 'ownspace_index');
                     this.$router.push({
-                        name: 'login',
-                        query: {},
-                        params: {}
+                        path: 'ownSpace'
                     });
                 } else if (name === 'loginout') {
                     // 退出登录

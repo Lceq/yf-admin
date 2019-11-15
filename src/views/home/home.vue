@@ -9,23 +9,23 @@
                             <Row type="flex" justify="space-around" align="middle" class="user-infor">
                                 <Col >
                                     <Row class-name="made-child-con-middle" type="flex" align="middle">
-                                        <Avatar class="heardPhoto"  icon="ios-person" size="large" />
+                                        <img class="heardPhoto" :src="loginMessage.picUrl">
                                     </Row>
                                 </Col>
                                 <Col :sm="14" :md="14" :lg="14">
                                     <Row>
                                         <Col>
-                                            <b class="login-person-name">{{ loginName }}</b>
-                                            <p class="login-title">{{ loginTitle }}</p>
+                                            <b class="login-person-name">{{ loginMessage.name }}</b>
+                                            <p class="login-title">{{ loginMessage.postName }}</p>
                                         </Col>
                                     </Row>
                                     <Row>
-                                        <Col><p class="notwrap login-head">上次登录时间&nbsp;:</p></Col>
-                                        <Col class="loginTimeStyle login-time-style">&nbsp;{{lastLoginTime}}</Col>
+                                        <Col><p class="notwrap login-head">最近登录时间&nbsp;:</p></Col>
+                                        <Col class="loginTimeStyle login-time-style">&nbsp;{{loginMessage.loginTime}}</Col>
                                     </Row>
                                     <Row>
-                                        <Col class="float-left"><p class="notwrap">上次登录地点&nbsp;: </p></Col>
-                                        <Col class="loginTimeStyle float-left">&nbsp;上海</Col>
+                                        <Col class="float-left"><p class="notwrap">IP地址&nbsp;: </p></Col>
+                                        <Col class="loginTimeStyle float-left">&nbsp;{{loginMessage.loginIp}}</Col>
                                     </Row>
                                 </Col>
                             </Row>
@@ -191,6 +191,7 @@ export default {
     },
     data () {
         return {
+            loginMessage: {},
             selectShortCutList: [],
             addShortCutModalContentLoading: false,
             allModuleList: [],
@@ -200,7 +201,6 @@ export default {
             inLineAutoPlay: true,
             openMachineAutoPlay: true,
             loginTitle: '',
-            loginName: '',
             lastLoginTime: '',
             allProcessList: [],
             processContain: [],
@@ -352,8 +352,8 @@ export default {
         // 数组对象的排序
         bubbleArray (array) {
             let temp = 0;
-            for (var i = 0; i < array.length - 1; i++) {
-                for (var k = 0; k < array.length - 1 - i; k++) {
+            for (let i = 0; i < array.length - 1; i++) {
+                for (let k = 0; k < array.length - 1 - i; k++) {
                     // 根据工序的id进行排序
                     if (array[k].processId > array[k + 1].processId) {
                         temp = array[k];
@@ -368,12 +368,12 @@ export default {
             let processArrays = [];
             let colorArray = ['#2d8cf0', '#5cb85c', '#ff9900', '#9a66e4'];
             processArrays = this.processContain;
-            let result = new Array();
+            let result = [];
             let colorNum = 0;
-            for (var i = 0; i < processArrays.length; i += 4) {
+            for (let i = 0; i < processArrays.length; i += 4) {
                 colorNum = 0;
-                var carouselItem = new Array();
-                for (var j = 0; j < 4; j++) {
+                let carouselItem = [];
+                for (let j = 0; j < 4; j++) {
                     if ((i + j) >= processArrays.length) {
                         continue;
                     };
@@ -393,10 +393,10 @@ export default {
             let circleIcon = ['#2d8cf0', '#19be6b', '#ff9900', '#ed3f14', '#ea8cca', '#9a66e4'];
             let circleIconNum = 0;
             let result = new Array();
-            for (var i = 0; i < arr.length; i += 6) {
+            for (let i = 0; i < arr.length; i += 6) {
                 circleIconNum = 0;
-                var carouselItem = new Array();
-                for (var j = 0; j < 6; j++) {
+                let carouselItem = new Array();
+                for (let j = 0; j < 6; j++) {
                     if ((i + j) >= arr.length) {
                         continue;
                     };
@@ -424,12 +424,10 @@ export default {
             });
         },
         getLoginMsgHttp (resolve, reject) {
-            return this.$fetch(api.getLoginMsg()).then(res => {
+            return this.$api.common.userInfoRequest().then(res => {
                 if (res.data.status === 200) {
+                    this.loginMessage = res.data.res;
                     resolve(res);
-                    this.loginName = res.data.res.name;
-                    this.loginTitle = res.data.res.postName;
-                    this.lastLoginTime = res.data.res.loginTime;
                 };
             });
         },

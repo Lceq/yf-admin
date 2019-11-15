@@ -103,14 +103,8 @@
                 toCreated: false,
                 queryBarIsQuote: null,
                 isQuoteList: [
-                    {
-                        id: 'true',
-                        name: '已引用'
-                    },
-                    {
-                        id: 'false',
-                        name: '未引用'
-                    }
+                    {id: 'true', name: '已引用'},
+                    {id: 'false', name: '未引用'}
                 ],
                 contentLoadingSpinShow: false,
                 menuArr: [],
@@ -122,20 +116,8 @@
                 deleteMsg: '',
                 deleteButtonLoading: false,
                 tableHeader: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        fixed: 'left',
-                        align: 'center'
-                    },
-                    {
-                        title: '单据日期',
-                        key: 'date',
-                        align: 'left',
-                        fixed: 'left',
-                        sortable: true,
-                        minWidth: 110
-                    },
+                    {type: 'selection', width: 60, fixed: 'left', align: 'center'},
+                    {title: '单据日期', key: 'date', align: 'left', fixed: 'left', sortable: true, minWidth: 110},
                     {
                         title: '制造BOM单号',
                         key: 'code',
@@ -200,25 +182,9 @@
                             };
                         }
                     },
-                    {
-                        title: '生产单号',
-                        key: 'prdOrderCode',
-                        align: 'left',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '生产车间',
-                        key: 'workshopName',
-                        align: 'left',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '产品',
-                        key: 'productName',
-                        align: 'left',
-                        minWidth: 200,
+                    {title: '生产单号', key: 'prdOrderCode', align: 'left', minWidth: 110, sortable: true},
+                    {title: '生产车间', key: 'workshopName', align: 'left', minWidth: 110, sortable: true},
+                    {title: '产品', key: 'productName', align: 'left', minWidth: 200,
                         sortable: true,
                         render: (h, params) => {
                             return h('div', {
@@ -228,25 +194,9 @@
                             });
                         }
                     },
-                    {
-                        title: '规格',
-                        key: 'productModels',
-                        align: 'left',
-                        minWidth: 140,
-                        sortable: true
-                    },
-                    {
-                        title: '批号',
-                        key: 'batchCode',
-                        align: 'left',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '单位',
-                        key: 'unitName',
-                        align: 'left',
-                        minWidth: 110,
+                    {title: '规格', key: 'productModels', align: 'left', minWidth: 140, sortable: true},
+                    {title: '批号', key: 'batchCode', align: 'left', minWidth: 110, sortable: true},
+                    {title: '单位', key: 'unitName', align: 'left', minWidth: 110,
                         sortable: true,
                         render: (h, params) => {
                             return h('div', {
@@ -256,27 +206,9 @@
                             });
                         }
                     },
-                    {
-                        title: '生产数量',
-                        key: 'productionQty',
-                        align: 'right',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '单据状态',
-                        key: 'auditStateName',
-                        minWidth: 110,
-                        align: 'center',
-                        sortable: true
-                    },
-                    {
-                        title: '引用状态',
-                        key: 'isQuoteName',
-                        align: 'center',
-                        minWidth: 110,
-                        sortable: true
-                    },
+                    {title: '生产数量', key: 'productionQty', align: 'right', minWidth: 110, sortable: true},
+                    {title: '单据状态', key: 'auditStateName', minWidth: 110, align: 'center', sortable: true},
+                    {title: '引用状态', key: 'isQuoteName', align: 'center', minWidth: 110, sortable: true},
                 ],
                 tableData: [],
                 queryBarOrderSate: '1',
@@ -301,9 +233,7 @@
             addClickEvent () {
                 this.$router.push({
                     path: 'addManufactureBOM',
-                    query: {
-                        activated: true
-                    }
+                    query: {activated: true}
                 });
             },
             // 获取id
@@ -330,9 +260,7 @@
                 }).then(res => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((item) => {
-                            if (item.id === 1) {
-                                item.name = '待提交';
-                            };
+                            if (item.id === 1) item.name = '待提交';
                         });
                         this.menuArr = res.data.res;
                     };
@@ -590,6 +518,7 @@
             this.getDependentDataHttp();
         },
         mounted () {
+            _this = this;
             this.calculationTableHeight();
         },
         activated () {

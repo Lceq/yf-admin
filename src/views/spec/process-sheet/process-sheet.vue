@@ -494,6 +494,7 @@
             this.getDependentDataHttp();
         },
         mounted () {
+            _this = this;
             this.$nextTick(() => { this.calculationTableHeight(); });
         },
         activated () {

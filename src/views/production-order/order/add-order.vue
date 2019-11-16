@@ -341,7 +341,7 @@
     </card>
 </template>
 <script>
-    import { mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, toDaySeconds, compClientHeight, addNum, setPage, accDivision, emptyTips } from '../../../libs/common';
+    import { formatDay, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, toDaySeconds, compClientHeight, addNum, setPage, accDivision, emptyTips } from '../../../libs/common';
     import tipsModal from '../../public/deleteWarning';
     import tipsClear from '../../components/tips-modal';
     import selectMaterialModal from './select-material';
@@ -679,7 +679,7 @@
             getProductionNumEvent (e) {
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
                     if (Date.parse(this.formValidate.deliveryDateFrom) <= Date.parse(this.formValidate.deliveryDateTo)) {
-                        let dayNum = this.dateDiff(formatDate(this.formValidate.deliveryDateFrom), formatDate(this.formValidate.deliveryDateTo));
+                        let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
                         this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                         this.calculateQty();
                     } else {
@@ -689,15 +689,32 @@
                     this.tableData = JSON.parse(JSON.stringify(this.initTableData));
                 };
             },
-            // 获取起、止时间之间的天数
-            dateDiff (sDate1, sDate2) {
-                let aDate, oDate1, oDate2, iDays;
-                aDate = sDate1.split('-');
-                oDate1 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
-                aDate = sDate2.split('-');
-                oDate2 = new Date(aDate[1] + '-' + aDate[2] + '-' + aDate[0]);
-                iDays = parseInt(Math.abs(oDate1 - oDate2) / 1000 / 60 / 60 / 24);
-                return iDays + 1;
+            format (time) {
+                let ymd = '';
+                let mouth = (time.getMonth() + 1) >= 10 ? (time.getMonth() + 1) : ('0' + (time.getMonth() + 1));
+                let day = time.getDate() >= 10 ? time.getDate() : ('0' + time.getDate());
+                ymd += time.getFullYear() + '-'; // 获取年份。
+                ymd += mouth + '-'; // 获取月份。
+                ymd += day; // 获取日。
+                return ymd; // 返回日期。
+            },
+            getAllDate (start, end) {
+                let dateArr = [];
+                let startArr = start.split('-');
+                let endArr = end.split('-');
+                let db = new Date();
+                db.setUTCFullYear(startArr[0], startArr[1] - 1, startArr[2]);
+                let de = new Date();
+                de.setUTCFullYear(endArr[0], endArr[1] - 1, endArr[2]);
+                let unixDb = db.getTime();
+                let unixDe = de.getTime();
+                let stamp;
+                const oneDay = 24 * 60 * 60 * 1000;
+                for (stamp = unixDb; stamp <= unixDe;) {
+                    dateArr.push(this.format(new Date(parseInt(stamp))));
+                    stamp = stamp + oneDay;
+                }
+                return dateArr;
             },
             // 日供货量的事件
             getDailySupplyQtyEvent (e) {
@@ -715,7 +732,7 @@
                     let day = Math.ceil(mathJsDiv(this.formValidate.productionQty, this.formValidate.dailySupplyQty));
                     for (let i = 0; i < parseInt(day); i++) {
                         this.tableData.push({
-                            deliveryDate: formatDate(new Date(this.formValidate.deliveryDateFrom).valueOf() + i * 24 * 60 * 60 * 1000),
+                            deliveryDate: formatDay(new Date(this.formValidate.deliveryDateFrom).valueOf() + i * 24 * 60 * 60 * 1000),
                             deliveredQty: this.formValidate.dailySupplyQty
                         });
                     };
@@ -833,7 +850,7 @@
                 this.selectMaterialObj = this.selectMaterialObj || {id: '', code: '', name: '', models: ''};
                 this.emergencyStateList.forEach((item) => { item.id === this.formValidate.priorityId ? this.formValidate.priorityName = item.name : false; });
                 let params = {
-                    'orderDate': formatDate(this.formValidate.orderDate),
+                    'orderDate': formatDay(this.formValidate.orderDate),
                     'workshopId': this.formValidate.workshopId,
                     'workshopName': this.formValidate.workshopName,
                     'typeId': this.formValidate.typeId,
@@ -859,8 +876,8 @@
                     'plannerId': this.formValidate.plannerId,
                     'plannerName': this.formValidate.plannerName,
                     'techRequirement': this.formValidate.techRequirement,
-                    'deliveryDateFrom': this.formValidate.deliveryDateFrom ? formatDate(this.formValidate.deliveryDateFrom) : '',
-                    'deliveryDateTo': this.formValidate.deliveryDateTo ? formatDate(this.formValidate.deliveryDateTo) : '',
+                    'deliveryDateFrom': this.formValidate.deliveryDateFrom ? formatDay(this.formValidate.deliveryDateFrom) : '',
+                    'deliveryDateTo': this.formValidate.deliveryDateTo ? formatDay(this.formValidate.deliveryDateTo) : '',
                     'orderDeliveryList': this.tableData,
                     'qualityRequirement': this.formValidate.qualityRequirement,
                     'technologyId': this.formValidate.technologyId,
@@ -1143,7 +1160,7 @@
                 }
                 // this.startTimeAndEndTime();
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
-                    let dayNum = this.dateDiff(formatDate(this.formValidate.deliveryDateFrom), formatDate(this.formValidate.deliveryDateTo));
+                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
                     this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                 };
                 this.calculateQty();
@@ -1169,7 +1186,7 @@
                 };
                 // this.startTimeAndEndTime();
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
-                    let dayNum = this.dateDiff(formatDate(this.formValidate.deliveryDateFrom), formatDate(this.formValidate.deliveryDateTo));
+                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
                     this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                 }
                 this.calculateQty();
@@ -1486,7 +1503,7 @@
                     });
                 }, 0);
             },
-            // 根据开始和结束时间获取区间内的日期
+            /*// 根据开始和结束时间获取区间内的日期
             getAllDate (startTime, endTime) {
                 let StartStandardTime = new Date(startTime);
                 let endStandardTime = new Date(endTime);
@@ -1499,7 +1516,7 @@
                     dateArr.push(d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
                 };
                 return dateArr;
-            },
+            },*/
             // 获取默认车间
             getWorkshop (resolve, reject) {
                 return this.$call('user.data.workshops2').then(res => {

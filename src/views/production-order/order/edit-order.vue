@@ -371,7 +371,7 @@
 </template>
 <script>
     import api from '../../../ajax/api';
-    import common, { mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, translateState, toDaySeconds, compClientHeight, addNum, getOperationData, setPage, accDivision, emptyTips } from '../../../libs/common';
+    import common, { formatDay, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, translateState, toDaySeconds, compClientHeight, addNum, getOperationData, setPage, accDivision, emptyTips } from '../../../libs/common';
     import tipsModal from '../../public/deleteWarning';
     import pageOtherMessage from '../../components/operation-log';
     import selectMaterialModal from './select-material';
@@ -937,7 +937,7 @@
                     let day = Math.ceil(mathJsDiv(this.formValidate.productionQty, this.formValidate.dailySupplyQty));
                     for (let i = 0; i < parseInt(day); i++) {
                         this.tableData.push({
-                            deliveryDate: formatDate(new Date(this.formValidate.deliveryDateFrom).valueOf() + i * 24 * 60 * 60 * 1000),
+                            deliveryDate: formatDay(new Date(this.formValidate.deliveryDateFrom).valueOf() + i * 24 * 60 * 60 * 1000),
                             deliveredQty: this.formValidate.dailySupplyQty
                         });
                     };
@@ -952,7 +952,7 @@
             getProductionNumEvent (e) {
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
                     if (Date.parse(this.formValidate.deliveryDateFrom) <= Date.parse(this.formValidate.deliveryDateTo)) {
-                        let dayNum = this.dateDiff(formatDate(this.formValidate.deliveryDateFrom), formatDate(this.formValidate.deliveryDateTo));
+                        let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
                         this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                         this.calculateQty();
                     } else {
@@ -961,6 +961,33 @@
                 } else {
                     this.tableData = JSON.parse(JSON.stringify(this.initTableData));
                 };
+            },
+            format (time) {
+                let ymd = '';
+                let mouth = (time.getMonth() + 1) >= 10 ? (time.getMonth() + 1) : ('0' + (time.getMonth() + 1));
+                let day = time.getDate() >= 10 ? time.getDate() : ('0' + time.getDate());
+                ymd += time.getFullYear() + '-'; // 获取年份。
+                ymd += mouth + '-'; // 获取月份。
+                ymd += day; // 获取日。
+                return ymd; // 返回日期。
+            },
+            getAllDate (start, end) {
+                let dateArr = [];
+                let startArr = start.split('-');
+                let endArr = end.split('-');
+                let db = new Date();
+                db.setUTCFullYear(startArr[0], startArr[1] - 1, startArr[2]);
+                let de = new Date();
+                de.setUTCFullYear(endArr[0], endArr[1] - 1, endArr[2]);
+                let unixDb = db.getTime();
+                let unixDe = de.getTime();
+                let stamp;
+                const oneDay = 24 * 60 * 60 * 1000;
+                for (stamp = unixDb; stamp <= unixDe;) {
+                    dateArr.push(this.format(new Date(parseInt(stamp))));
+                    stamp = stamp + oneDay;
+                }
+                return dateArr;
             },
             // 获取物料的请求
             getSelectMaterialModalData (categoryId = '', name = '') {
@@ -1045,7 +1072,7 @@
                 };
                 // this.startTimeAndEndTime();
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
-                    let dayNum = this.dateDiff(formatDate(this.formValidate.deliveryDateFrom), formatDate(this.formValidate.deliveryDateTo));
+                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
                     this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                 }
                 this.calculateQty();
@@ -1072,24 +1099,10 @@
                 };
                 // this.startTimeAndEndTime();
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
-                    let dayNum = this.dateDiff(formatDate(this.formValidate.deliveryDateFrom), formatDate(this.formValidate.deliveryDateTo));
+                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
                     this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                 }
                 this.calculateQty();
-            },
-            // 根据开始和结束时间获取区间内的日期
-            getAllDate (startTime, endTime) {
-                let StartStandardTime = new Date(startTime);
-                let endStandardTime = new Date(endTime);
-                let bdTime = StartStandardTime.getTime();// 获取时间戳
-                let beTime = endStandardTime.getTime();
-                let timeDiff = beTime - bdTime;// 获取时间差
-                let dateArr = [];
-                for (let i = 0; i <= timeDiff; i += 86400000) {
-                    let d = new Date(bdTime + i);// 累加一天的事件戳
-                    dateArr.push(d.getFullYear() + '-' + (d.getMonth() + 1) + '-' + d.getDate());
-                };
-                return dateArr;
             },
             // 开始日期和结束日期存在，罗列日期
             startTimeAndEndTime () {
@@ -1207,8 +1220,8 @@
                     'plannerId': this.formValidate.plannerId,
                     'plannerName': this.formValidate.plannerName,
                     'techRequirement': this.formValidate.techRequirement,
-                    'deliveryDateFrom': this.formValidate.deliveryDateFrom ? formatDate(this.formValidate.deliveryDateFrom) : '',
-                    'deliveryDateTo': this.formValidate.deliveryDateTo ? formatDate(this.formValidate.deliveryDateTo) : '',
+                    'deliveryDateFrom': this.formValidate.deliveryDateFrom ? formatDay(this.formValidate.deliveryDateFrom) : '',
+                    'deliveryDateTo': this.formValidate.deliveryDateTo ? formatDay(this.formValidate.deliveryDateTo) : '',
                     'orderDeliveryList': this.tableData,
                     'qualityRequirement': this.formValidate.qualityRequirement,
                     'technologyId': this.formValidate.technologyId,

@@ -1,43 +1,43 @@
-import { fetch, post } from '../../ajax/http';
+import { fetch, post, proxy } from '../../ajax/http';
 // 生产订单
 export default({
     saveHttp (params) {
-        return post('prd/order/save', params);
+        return proxy.call('prd.order.save', params);
     },
     stagingHttp (params) {
         return post('prd/order/save?staging=true', params);
     },
     detailHttp (params) {
-        return post('prd/order/detail', params);
+        return proxy.call('prd.order.detail', params);
     },
     listHttp (params) {
-        return post('prd/order/list', params);
+        return proxy.call('prd.order.list', params);
     },
     submitHttp (params) {
-        return post('prd/order/submit', params);
+        return proxy.call('prd.order.submit', params);
     },
     cancelHttp (params) {
         return post('prd/order/cancel', params);
     },
     approveHttp (params) {
-        return post('prd/order/approve', params);
+        return proxy.call('prd.order.approve', params);
     },
     unapproveHttp (params) {
-        return post('prd/order/unapprove', params);
+        return proxy.call('prd.order.unapprove', params);
     },
     closeHttp (params) {
-        return post('prd/order/close', params);
+        return proxy.call('prd.order.close', params);
     },
     uncloseHttp (params) {
-        return post('prd/order/unclose', params);
+        return proxy.call('prd.order.unclose', params);
     },
     deleteHttp (params) {
-        return post('prd/order/delete', params);
+        return proxy.call('prd.order.delete', params);
     },
     auditStateListHttp (params) {
-        return post('enum/audit/state', params);
+        return proxy.call('enum.audit.state', params);
     },
     leftMenuListHttp (params) {
-        return post('prd/order/stateCount', params);
+        return proxy.call('prd.order.stateCount', params);
     }
 });

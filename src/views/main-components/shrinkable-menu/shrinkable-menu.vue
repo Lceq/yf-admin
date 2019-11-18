@@ -82,7 +82,7 @@
                     if (willpush) {
                         if (path.indexOf('/') !== -1) { // 如果是动态页面
                             this.$router.push({
-                                name: 'dynamic-router',
+                                path: 'dynamic-router',
                                 params: {
                                     aId: path.substr(path.indexOf('/') + 1),
                                     query: {
@@ -92,7 +92,7 @@
                             });
                         } else {
                             this.$router.push({
-                                name: path,
+                                path: path,
                                 query: {
                                     activated: true // true刷新缓存
                                 }
@@ -101,16 +101,16 @@
                     }
                 } else {
                     try {
-                        if (moduleItem.navFullUrl.indexOf('?') !== -1) {
-                            moduleItem.navFullUrl = moduleItem.navFullUrl + `&token=${Cookies.get('token')}`;
-                            window.location.href = moduleItem.navFullUrl;
-                        } else {
-                            if (moduleItem.navFullUrl) {
-                                moduleItem.navFullUrl = moduleItem.navFullUrl + `?token=${Cookies.get('token')}`;
+                        if (moduleItem.navFullUrl) {
+                            if (moduleItem.navFullUrl.indexOf('?') !== -1) {
+                                moduleItem.navFullUrl = moduleItem.navFullUrl + `&token=${Cookies.get('token')}`;
                                 window.location.href = moduleItem.navFullUrl;
                             } else {
-                                this.$Message.error('模块尚未配置!');
+                                moduleItem.navFullUrl = moduleItem.navFullUrl + `?token=${Cookies.get('token')}`;
+                                window.location.href = moduleItem.navFullUrl;
                             };
+                        } else {
+                            this.$Message.error('模块尚未配置!');
                         };
                     } catch (e) {
                         throw new Error('invalid link');

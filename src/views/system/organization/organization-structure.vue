@@ -266,6 +266,7 @@
                 this.formValidate.parentId = e[e.length - 1];
             },
             onSyncModalConfirmEvent (e) {
+                this.editId = null;
                 this.syncModalState = false;
                 this.formValidate.hrDeptId = e.id;
                 this.$delete(this.formValidate, 'id');

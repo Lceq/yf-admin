@@ -268,6 +268,7 @@
             onSyncModalConfirmEvent (e) {
                 this.syncModalState = false;
                 this.formValidate.hrDeptId = e.id;
+                this.$delete(this.formValidate, 'id');
                 this.formValidate.shortName = e.shortName;
                 this.formValidate.name = e.name;
                 this.formValidate.typeId = e.typeId;
@@ -376,6 +377,7 @@
                 this.formValidate.hrDeptId = null;
                 this.saveModalTitle = '新增组织';
                 this.formValidate.parentId = this.treeObj[0].id;
+                this.$delete(this.formValidate, 'id');
                 if (this.treeObj.length === 0) {
                     this.publicHintsMsg = '请选择上级部门！';
                     this.publicHintsData = true;

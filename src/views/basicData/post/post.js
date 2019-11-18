@@ -127,6 +127,7 @@ export default ({
             this.formValidate.hrPostId = e.id;
             this.formValidate.code = e.code;
             this.formValidate.name = e.name;
+            this.$delete(this.formValidate, 'id');
             // this.formValidate.type = e.typeCode;
             this.formValidate.shortName = e.shortName;
             this.formValidate.processId = e.processId;
@@ -148,6 +149,7 @@ export default ({
             this.isEdit = false;
             this.postShow = true;
             this.isCouldSave = true;
+            this.$delete(this.formValidate, 'id');
             this.postTitle = '新增岗位';
             // this.formValidate.code = '';
             // this.formValidate.name = '';

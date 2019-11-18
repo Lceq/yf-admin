@@ -65,7 +65,7 @@
                         </FormItem>
                     </Col>
                     <Col span="12">
-                        <FormItem class="formItemMargin" label="所属部门：" prop="deptId">
+                        <FormItem class="formItemMargin" label="所属部门：" prop="deptArray">
                             <Cascader :data="deptList" v-model="formValidate.deptArray" @on-change="getDeptEvent" placeholder="请选择所属部门" change-on-select></Cascader>
                         </FormItem>
                     </Col>
@@ -172,8 +172,9 @@
                     callback(new Error());
                 }
             };
-            const validatorDeptId = (rule, value, callback) => value && value.length !== 0 ? callback() : callback(new Error());
+            const validatorDeptId = (rule, value, callback) => this.formValidate.deptArray && this.formValidate.deptArray.length !== 0 ? callback() : callback(new Error());
             const validatorPostId = (rule, value, callback) => value ? callback() : callback(new Error());
+            const validatorGender = (rule, value, callback) => value || value === 0 ? callback() : callback(new Error());
             return {
                 saveUserModalLoading: false,
                 groupList: [],
@@ -196,7 +197,8 @@
                     internalCode: [{ required: true, validator: validatorInternalCode, trigger: 'change' }],
                     mobile: [{ required: true, validator: validatorMobile, trigger: 'change' }],
                     deptArray: [{ required: true, validator: validatorDeptId, trigger: 'change' }],
-                    postId: [{ required: true, validator: validatorPostId, trigger: 'change' }]
+                    postId: [{ required: true, validator: validatorPostId, trigger: 'change' }],
+                    gender: [{ required: true, validator: validatorGender, trigger: 'change' }],
                 },
                 showModal: false
             };

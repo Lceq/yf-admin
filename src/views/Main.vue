@@ -178,7 +178,7 @@
                 if (name === 'ownSpace') {
                     util.openNewPage(this, 'ownspace_index');
                     this.$router.push({
-                        name: 'login',
+                        path: 'ownspace_index',
                         query: {},
                         params: {}
                     });

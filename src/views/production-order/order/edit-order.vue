@@ -952,7 +952,7 @@
             getProductionNumEvent (e) {
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
                     if (Date.parse(this.formValidate.deliveryDateFrom) <= Date.parse(this.formValidate.deliveryDateTo)) {
-                        let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
+                        let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length;
                         this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                         this.calculateQty();
                     } else {
@@ -1072,7 +1072,7 @@
                 };
                 // this.startTimeAndEndTime();
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
-                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
+                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length;
                     this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                 }
                 this.calculateQty();
@@ -1099,7 +1099,7 @@
                 };
                 // this.startTimeAndEndTime();
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
-                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length + 1;
+                    let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length;
                     this.formValidate.dailySupplyQty = parseInt(mathJsDiv(this.formValidate.productionQty, dayNum));
                 }
                 this.calculateQty();

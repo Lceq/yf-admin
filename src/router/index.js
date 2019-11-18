@@ -14,11 +14,14 @@ const RouterConfig = {
 };
 export const router = new VueRouter(RouterConfig);
 router.beforeEach((to, from, next) => {
-    // 如果路由携带token
-    if (to.query && to.query.token) {
-        // 路由携带的和cookie的不同, 替换cookie的token
-        if (Cookies.get('token') !== to.query.token) {
-            Cookies.set('token', to.query.token);
+    // 不是从login页来时(相反的，从在login页进入时，不能取路由上的token来自动登录，用于浏览器的回退)
+    if (from.name !== 'login') {
+        // 如果路由携带token
+        if (to.query && to.query.token) {
+            // 路由携带的和cookie的不同, 替换cookie的token
+            if (Cookies.get('token') !== to.query.token) {
+                Cookies.set('token', to.query.token);
+            };
         };
     };
     // 已登录

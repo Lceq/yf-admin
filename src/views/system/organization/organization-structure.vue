@@ -543,7 +543,7 @@
                 this.$api.dept.deptDetailRequest({id: this.editId}).then((res) => {
                     if (res.data.status === 200) {
                         let responseData = res.data.res;
-                        this.getProcessListHttp().then(res => {
+                        this.getProcessListHttp(res.data.res.processTypeId).then(res => {
                             if (res.data.status === 200) {
                                 this.processList = res.data.res;
                                 this.formValidate = responseData;

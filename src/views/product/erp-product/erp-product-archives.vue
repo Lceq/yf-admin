@@ -217,7 +217,10 @@
             // 同步事件
             syncDataEvent (rowVal) {
                 this.saveModalState = true;
-                rowVal.materialType = this.getFatherPath(rowVal.path, rowVal.categoryId);
+                // 排除物料分类id为0(id等于0指mes不存在该物料)
+                if (rowVal.categoryId) {
+                    rowVal.materialType = this.getFatherPath(rowVal.path, rowVal.categoryId);
+                };
                 rowVal.enableBatch = true;
                 rowVal.isReused = false;
                 this.saveModalDetailData = rowVal;

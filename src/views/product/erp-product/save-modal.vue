@@ -547,21 +547,24 @@
             },
             // 请求新增栏内表格的数据
             getAddAttrTable (id) {
-                this.$api.product.productPropertyItemList({categoryId: id}).then((res) => {
-                    if (res.data.status === 200) {
-                        res.data.res.forEach((items, index) => {
-                            if (items.values && items.values.length !== 0) {
-                                items.values.forEach((v) => {
-                                    v.value = v.name;
-                                    v.label = v.name;
-                                });
-                            } else {
-                                items.values = [];
-                            };
-                        });
-                        this.attrTableData = res.data.res;
-                    };
-                });
+                // 远纺同步的数据id为0代表mes不存在该物料类别
+                if (id) {
+                    this.$api.product.productPropertyItemList({categoryId: id}).then((res) => {
+                        if (res.data.status === 200) {
+                            res.data.res.forEach((items, index) => {
+                                if (items.values && items.values.length !== 0) {
+                                    items.values.forEach((v) => {
+                                        v.value = v.name;
+                                        v.label = v.name;
+                                    });
+                                } else {
+                                    items.values = [];
+                                };
+                            });
+                            this.attrTableData = res.data.res;
+                        };
+                    });
+                };
             },
             // 获取选择的物料类别对象
             getMaterialTypeEvent (value, selectedData) {

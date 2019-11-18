@@ -1,4 +1,4 @@
-import { post, fetch } from '../../ajax/http';
+import { post, fetch, proxy } from '../../ajax/http';
 
 // 物料档案
 export default {
@@ -20,7 +20,7 @@ export default {
     },
     // 获取物料类别对应的辅助属性
     productPropertyItemList (params) {
-        return post('product/property/item/list', params);
+        return proxy.call('product.property.item.list', params);
     },
     productApproveHttp (params) {
         return post('product/approve', params);

@@ -164,7 +164,10 @@
                     this.$store.commit('addOpenSubmenu', pathArr[1].name);
                 }
                 this.$api.common.userInfoRequest().then(res => {
-                    if (res.data.status === 200) this.userName = res.data.res.name;
+                    if (res.data.status === 200) {
+                        console.log('登录人信息', res.data.res)
+                        this.userName = res.data.res.name;
+                    };
                 });
                 let messageCount = 3;
                 this.messageCount = messageCount.toString();

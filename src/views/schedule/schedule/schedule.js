@@ -222,7 +222,7 @@ export default {
                     {required: true, validator: xwValidate.select, trigger: 'change'}
                 ]
             },
-            //日期多选
+            // 日期多选
             calendarChecked: [],
             checkLen: 0,
             checks: false,
@@ -315,6 +315,13 @@ export default {
         },
         // 点击上一月
         clickLastMonth () {
+            this.$nextTick(() => {
+                this.calendarChecked = []
+                if (this.calendarChecked.length < 1) {
+                    this.isDisabled = true;
+                }
+            })
+
             this.calendarSixData = [];
             this.curCalendarDate = [];
             this.calendarDate.year = this.calendarDate.lastYear;
@@ -325,6 +332,12 @@ export default {
         },
         // 点击下一月
         clickNextMonth () {
+            this.$nextTick(() => {
+                this.calendarChecked = []
+                if (this.calendarChecked.length < 1) {
+                    this.isDisabled = true;
+                }
+            })
             this.calendarSixData = [];
             this.curCalendarDate = [];
             this.calendarDate.year = this.calendarDate.nextYear;
@@ -342,7 +355,7 @@ export default {
                 this.changeShiftType(dateDay);
             }
         },
-        //选择批量排班
+        // 选择批量排班
         evCalendarChecked ($event, dayData) {
             this.days = dayData;
             this.checkedDay = dayData.isCheck;
@@ -370,7 +383,7 @@ export default {
                 this.isDisabled = true;
             }
         },
-        //点击批量排班
+        // 点击批量排班
         evBatch (days) {
             this.curTimeJoin = this.CheckedArr.join(',');
             this.isOnDuty = days.isOnDuty;
@@ -438,6 +451,10 @@ export default {
         },
         // 改变车间
         ChangeWorkshop (val) {
+            this.$nextTick(() => {
+                this.calendarChecked = [];
+                this.isDisabled = true;
+            });
             this.currentWorkshopId = val;
             this.calendarSixData = [];
             this.curCalendarDate = [];

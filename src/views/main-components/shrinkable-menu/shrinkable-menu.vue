@@ -103,10 +103,15 @@
                     try {
                         if (moduleItem.navFullUrl.indexOf('?') !== -1) {
                             moduleItem.navFullUrl = moduleItem.navFullUrl + `&token=${Cookies.get('token')}`;
+                            window.location.href = moduleItem.navFullUrl;
                         } else {
-                            moduleItem.navFullUrl = moduleItem.navFullUrl + `?token=${Cookies.get('token')}`;
+                            if (moduleItem.navFullUrl) {
+                                moduleItem.navFullUrl = moduleItem.navFullUrl + `?token=${Cookies.get('token')}`;
+                                window.location.href = moduleItem.navFullUrl;
+                            } else {
+                                this.$Message.error('模块尚未配置!');
+                            };
                         };
-                        window.location.href = moduleItem.navFullUrl;
                     } catch (e) {
                         throw new Error('invalid link');
                     }

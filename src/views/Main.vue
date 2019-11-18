@@ -178,7 +178,9 @@
                 if (name === 'ownSpace') {
                     util.openNewPage(this, 'ownspace_index');
                     this.$router.push({
-                        path: 'ownSpace'
+                        name: 'login',
+                        query: {},
+                        params: {}
                     });
                 } else if (name === 'loginout') {
                     // 退出登录
@@ -192,7 +194,9 @@
                     this.$store.state.addRouterList = [];
                     this.$store.state.isLoadModule = false;
                     this.$router.push({
-                        name: 'login'
+                        path: 'login',
+                        query: {},
+                        params: {}
                     });
                     iView.LoadingBar.finish();
                 }

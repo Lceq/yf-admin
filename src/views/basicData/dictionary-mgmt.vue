@@ -18,8 +18,10 @@
                     </Row>
                     <Row className="parentFlexBetween marginBottom"  align="middle">
                         <Col class="leftFlex">
-                            <Button v-show="this.rightItems.add" :disabled="isSystem"  icon="md-add" type="primary" class="queryBarMarginRight" @click="addDirEvent">新增</Button>
-                            <Button v-show="this.rightItems.delete" :disabled="isSystem" icon="ios-trash" type="error" @click="deleteDirEvent">删除</Button>
+                           <!-- <Button v-show="this.rightItems.add" :disabled="isSystem"  icon="md-add" type="primary" class="queryBarMarginRight" @click="addDirEvent">新增</Button>
+                            <Button v-show="this.rightItems.delete" :disabled="isSystem" icon="ios-trash" type="error" @click="deleteDirEvent">删除</Button>-->
+                            <Button  icon="md-add" type="primary" class="queryBarMarginRight" @click="addDirEvent">新增</Button>
+                            <Button icon="ios-trash" type="error" @click="deleteDirEvent">删除</Button>
                         </Col>
                         <Col v-show="tubeTypeList.length">
                             <Select @on-change="changeClassType" class="formWidth" v-model="classTypeId" clearable>

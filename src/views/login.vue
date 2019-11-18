@@ -87,7 +87,7 @@
                 form: {
                     userName: 'admin',
                     password: '',
-                    companyCode: '1008'
+                    companyCode: '8600'
                 },
                 rules: {
                     companyCode: [

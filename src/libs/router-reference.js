@@ -71,6 +71,7 @@ const routerReference = {
     'erp-order': () => import('@/views/production-order/erp-order/list-erp-order.vue'),
     'order': { meta: { keepAlive: true }, component: () => import('@/views/production-order/order/list-order.vue') },
     'manufactureBOM': () => import('@/views/production-order/manufacture/list-manufacture.vue'),
+    'list-standard-bom': () => import('@/views/production-order/standard-bom/list-standard-bom.vue'),
     'pre-arrange': () => import('@/views/production-order/machine-arrange/pre-arrange.vue'),
     'post-arrange': () => import('@/views/production-order/machine-arrange/post-arrange.vue'),
     'notice': () => import('@/views/production-order/notice/list-notice.vue'),

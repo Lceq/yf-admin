@@ -16,87 +16,87 @@
                 <Row>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="BOM单号:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.code}}</div>
+                            <div class="read-only-item">{{formValidate.code}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="单据日期:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.date}}</div>
+                            <div class="read-only-item">{{formValidate.date}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="生产单号:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.prdOrderCode}}</div>
+                            <div class="read-only-item">{{formValidate.prdOrderCode}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="生产车间:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.workshopName}}</div>
+                            <div class="read-only-item">{{formValidate.workshopName}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="产品:" prop="materielCodeIpt" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.productCode ? `${formValidate.productName}(${formValidate.productCode})` : ''}}</div>
+                            <div class="read-only-item">{{formValidate.productCode ? `${formValidate.productName}(${formValidate.productCode})` : ''}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="规格:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.productModels}}</div>
+                            <div class="read-only-item">{{formValidate.productModels}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="纱线用途:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.purposeName}}</div>
+                            <div class="read-only-item">{{formValidate.purposeName}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="纱线捻向:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.twistDirectionName}}</div>
+                            <div class="read-only-item">{{formValidate.twistDirectionName}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="批号:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.batchCode}}</div>
+                            <div class="read-only-item">{{formValidate.batchCode}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="计量单位:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.unitValue}}</div>
+                            <div class="read-only-item">{{formValidate.unitValue}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="订单数量:" prop="specUserIpt" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.productionQty}}</div>
+                            <div class="read-only-item">{{formValidate.productionQty}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="工艺路线:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.specPathName}}</div>
+                            <div class="read-only-item">{{formValidate.specPathName}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="交货开始时间:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.deliveryDateFrom}}</div>
+                            <div class="read-only-item">{{formValidate.deliveryDateFrom}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="交货结束时间:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.deliveryDateTo}}</div>
+                            <div class="read-only-item">{{formValidate.deliveryDateTo}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="日供货量:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.dailySupplyQty}}</div>
+                            <div class="read-only-item">{{formValidate.dailySupplyQty}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="单据状态:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{formValidate.auditStateName}}</div>
+                            <div class="read-only-item">{{formValidate.auditStateName}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="引用状态:" class="formItemMargin">
-                            <div class="exhibitionInputBackground">{{ formValidate.isQuoteName }}</div>
+                            <div class="read-only-item">{{ formValidate.isQuoteName }}</div>
                         </FormItem>
                     </Col>
                 </Row>
@@ -131,27 +131,27 @@
                                     <Row>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                             <FormItem label="产出物料:" class="formItemMargin" :label-width="110">
-                                                <div class="exhibitionInputBackground">{{item.productCode ? `${item.productName}(${item.productCode})` : ''}}</div>
+                                                <div class="read-only-item">{{item.productCode ? `${item.productName}(${item.productCode})` : ''}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                         <FormItem label="规格:" class="formItemMargin" :label-width="110">
-                                            <div class="exhibitionInputBackground">{{item.productModels}}</div>
+                                            <div class="read-only-item">{{item.productModels}}</div>
                                         </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                             <FormItem label="批号:" class="formItemMargin" :label-width="110">
-                                                <div class="exhibitionInputBackground">{{item.batchCode}}</div>
+                                                <div class="read-only-item">{{item.batchCode}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                             <FormItem label="计量单位:" class="formItemMargin" :label-width="110">
-                                                <div class="exhibitionInputBackground">{{item.unitName ? `${item.unitName}(${item.unitCode})` : ''}}</div>
+                                                <div class="read-only-item">{{item.unitName ? `${item.unitName}(${item.unitCode})` : ''}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                             <FormItem label="生产数量:" prop="specUserIpt" class="formItemMargin" :label-width="110">
-                                                <div class="exhibitionInputBackground">{{item.productionQty}}</div>
+                                                <div class="read-only-item">{{item.productionQty}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">

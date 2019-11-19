@@ -17,89 +17,89 @@
             <Row>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="BOM单号:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.code}}</div>
+                        <div class="read-only-item">{{bomDetailData.code}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="单据日期:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.date}}</div>
+                        <div class="read-only-item">{{bomDetailData.date}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="生产单号:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.prdOrderCode}}</div>
+                        <div class="read-only-item">{{bomDetailData.prdOrderCode}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="生产车间:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.workshopName}}</div>
+                        <div class="read-only-item">{{bomDetailData.workshopName}}</div>
                     </FormItem>
                 </Col>
             </Row>
             <Row>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="产出物料:" prop="materielCodeIpt" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.productCode ? `${bomDetailData.productName}(${bomDetailData.productCode})` : ''}}</div>
+                        <div class="read-only-item">{{bomDetailData.productCode ? `${bomDetailData.productName}(${bomDetailData.productCode})` : ''}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="规格:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.productModels}}</div>
+                        <div class="read-only-item">{{bomDetailData.productModels}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="纱线用途:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{ bomDetailData.purposeName }}</div>
+                        <div class="read-only-item">{{ bomDetailData.purposeName }}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="纱线捻向:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{ bomDetailData.twistDirectionName }}</div>
+                        <div class="read-only-item">{{ bomDetailData.twistDirectionName }}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="批号:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.batchCode}}</div>
+                        <div class="read-only-item">{{bomDetailData.batchCode}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="计量单位:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.unitName ? `${bomDetailData.unitName}(${bomDetailData.unitCode})`: '' }}</div>
+                        <div class="read-only-item">{{bomDetailData.unitName ? `${bomDetailData.unitName}(${bomDetailData.unitCode})`: '' }}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="订单数量:" prop="specUserIpt" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.productionQty}}</div>
+                        <div class="read-only-item">{{bomDetailData.productionQty}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="工艺路线:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.specPathName}}</div>
+                        <div class="read-only-item">{{bomDetailData.specPathName}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="交货开始时间:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.deliveryDateFrom}}</div>
+                        <div class="read-only-item">{{bomDetailData.deliveryDateFrom}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="交货结束时间:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.deliveryDateTo}}</div>
+                        <div class="read-only-item">{{bomDetailData.deliveryDateTo}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="日供货量:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{bomDetailData.dailySupplyQty}}</div>
+                        <div class="read-only-item">{{bomDetailData.dailySupplyQty}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="引用状态:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{ bomDetailData.isQuoteName }}</div>
+                        <div class="read-only-item">{{ bomDetailData.isQuoteName }}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="单据状态:" class="formItemMargin">
-                        <div class="exhibitionInputBackground">{{ auditStateName }}</div>
+                        <div class="read-only-item">{{ auditStateName }}</div>
                     </FormItem>
                 </Col>
             </Row>
@@ -116,54 +116,54 @@
                                     <Row>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="产出物料:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.productCode ? `${productItem.productName}(${productItem.productCode})` : ''}}</div>
+                                                <div class="read-only-item">{{productItem.productCode ? `${productItem.productName}(${productItem.productCode})` : ''}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="规格:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.productModels}}</div>
+                                                <div class="read-only-item">{{productItem.productModels}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="批号:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.batchCode}}</div>
+                                                <div class="read-only-item">{{productItem.batchCode}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="计量单位:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.unitName ? `${productItem.unitName}(${productItem.unitCode})` : ''}}</div>
+                                                <div class="read-only-item">{{productItem.unitName ? `${productItem.unitName}(${productItem.unitCode})` : ''}}</div>
                                             </FormItem>
                                         </Col>
                                     </Row>
                                     <Row>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="生产数量:" prop="specUserIpt" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.productionQty}}</div>
+                                                <div class="read-only-item">{{productItem.productionQty}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="计划开工时间:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.planStartDate}}</div>
+                                                <div class="read-only-item">{{productItem.planStartDate}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="计划完工时间:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.planFinishDate}}</div>
+                                                <div class="read-only-item">{{productItem.planFinishDate}}</div>
                                             </FormItem>
                                         </Col>
                                         <!--<Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="制成率%:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.pullRate}}</div>
+                                                <div class="read-only-item">{{productItem.pullRate}}</div>
                                             </FormItem>
                                         </Col>-->
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="上机准备时间:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.preparationHours}}</div>
+                                                <div class="read-only-item">{{productItem.preparationHours}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="前道提前时间:" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{productItem.feedingHours}}</div>
+                                                <div class="read-only-item">{{productItem.feedingHours}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">

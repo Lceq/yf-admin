@@ -45,8 +45,8 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
-                        <FormItem label="销售单号:" class="formItemMargin" prop="salesCode">
-                            <Input type="text" v-model="formValidate.salesCode" placeholder="请输入销售单号"/>
+                        <FormItem label="SAP订单:" class="formItemMargin" prop="salesCode">
+                            <Input type="text" v-model="formValidate.salesCode" placeholder="请输入SAP订单"/>
                         </FormItem>
                     </Col>
                 </Row>
@@ -110,14 +110,14 @@
                                     </Select>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="纱线捻向:" prop="twistDirectionId" class="formItemMargin">
                                     <Select label-in-value v-model="formValidate.twistDirectionId" placeholder="请选择纱线捻向" @on-change="getTwistDirectionEvent">
                                         <Option v-for="item in twistDirectionList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                            </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            </Col>-->
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="批号:" class="formItemMargin" prop="batchCode">
                                     <div class="flex-left line-height-27">
                                         <Select
@@ -132,7 +132,17 @@
                                         </Select>
                                         <Button :disabled="formValidate.productCode ? false : true" @click="clickMainBatchCodeCodeEvent" class="remoteSearchButton" size="small" icon="ios-search"></Button>
                                         <Poptip trigger="hover" content="点击新增批号" placement="bottom">
-                                            <Button :disabled="formValidate.productCode ? false : true" @click="addBatchCodeEvent" class="line-height-27 add-batch-code-button" size="small" icon="ios-create"></Button>
+                                            <Button :disabled="!formValidate.productCode" @click="addBatchCodeEvent" class="line-height-27 add-batch-code-button" size="small" icon="ios-create"></Button>
+                                        </Poptip>
+                                    </div>
+                                </FormItem>
+                            </Col>-->
+                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                <FormItem label="批号:" class="formItemMargin" prop="batchCode">
+                                    <div class="flex-left line-height-27">
+                                        <Input v-model="formValidate.batchCode" class="widthPercentage"/>
+                                        <Poptip trigger="hover" content="点击创建批号" placement="bottom">
+                                            <Button :disabled="!formValidate.productCode || !formValidate.batchCode" @click="createBatchCodeEvent" class="line-height-27 add-batch-code-button" size="small" icon="ios-create" :loading="createBatchCodeLoading"></Button>
                                         </Poptip>
                                     </div>
                                 </FormItem>
@@ -149,7 +159,7 @@
                                     <InputNumber :min="0" :step="1" :precision='0' v-model="formValidate.productionQty" @on-blur="getProductionNumEvent" class="widthPercentage"></InputNumber>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="溢短装(±%):" class="formItemMargin" prop="weightRate">
                                     <InputNumber
                                             class="widthPercentage"
@@ -158,7 +168,7 @@
                                             v-model="formValidate.weightRate"
                                     ></InputNumber>
                                 </FormItem>
-                            </Col>
+                            </Col>-->
                         </Row>
                         <Row>
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
@@ -192,11 +202,11 @@
                                     <div class="modal-readonly">{{ formValidate.productionQty }}</div>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="日供货量:" class="formItemMargin" prop="dailySupplyQty">
                                     <InputNumber :min="1" :precision="0" v-model="formValidate.dailySupplyQty" @on-blur="getDailySupplyQtyEvent" class="widthPercentage"/>
                                 </FormItem>
-                            </Col>
+                            </Col>-->
                         </Row>
                         <Row>
                             <Col  :sm="24" :md="24" :lg="24" :xl="24" :xxl="12">
@@ -237,25 +247,25 @@
                                     <InputNumber class="widthPercentage" :min="1" v-model="formValidate.packetQty"></InputNumber>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="编织袋规格:" :label-width="140" class="formItemMargin" prop="packingBag">
                                     <Input v-model="formValidate.packingBag"/>
                                 </FormItem>
-                            </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            </Col>-->
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="封包绳颜色:" :label-width="140" class="formItemMargin" prop="bagMouthId">
                                     <Select label-in-value v-model="formValidate.bagMouthId" @on-change="getBagMouthEvent">
                                         <Option v-for="item in bagMouthList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                            </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            </Col>-->
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="腰绳颜色:" :label-width="140" class="formItemMargin" prop="waistRopeId">
                                     <Select transfer label-in-value v-model="formValidate.waistRopeId" @on-change="getWaistRopeEvent">
                                         <Option v-for="item in waistRopeList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                            </Col>
+                            </Col>-->
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="是否纸板:" :label-width="140" class="formItemMargin">
                                     <Checkbox v-model="formValidate.isCardboard">是</Checkbox>
@@ -341,7 +351,7 @@
     </card>
 </template>
 <script>
-    import { formatDay, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, toDaySeconds, compClientHeight, addNum, setPage, accDivision, emptyTips } from '../../../libs/common';
+    import { formatDay, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, toDaySeconds, compClientHeight, addNum, setPage, accDivision, emptyTips, toDay } from '../../../libs/common';
     import tipsModal from '../../public/deleteWarning';
     import tipsClear from '../../components/tips-modal';
     import selectMaterialModal from './select-material';
@@ -392,8 +402,8 @@
             const validatePaperTubeId = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateWaistRopeId = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateBagMouthId = (rule, value, callback) => value ? callback() : callback(new Error());
-
             return {
+                createBatchCodeLoading: false,
                 bagMouthList: [],
                 paperTubeList: [],
                 waistRopeList: [],
@@ -645,6 +655,28 @@
             };
         },
         methods: {
+            createBatchCodeEvent () {
+                let params = {
+                    batchCode: this.formValidate.batchCode,
+                    productId: this.selectMaterialObj.id,
+                    productCode: this.selectMaterialObj.code,
+                    batchDate: toDay(),
+                    productName: this.selectMaterialObj.name,
+                    productModels: this.selectMaterialObj.models,
+                    auditState: 3
+                };
+                this.createBatchCodeLoading = true;
+                this.$call('product.batch.save', params).then(res => {
+                    if (res.data.status === 200) {
+                        noticeTips(this, 'saveTips');
+                        this.showModal = false;
+                        this.createBatchCodeLoading = false;
+                    } else {
+                        this.formValidate.batchCode = '';
+                        this.createBatchCodeLoading = false;
+                    }
+                });
+            },
             // 纸管颜色事件
             getPaperTubeIdEvent (e) {
                 if (e) {

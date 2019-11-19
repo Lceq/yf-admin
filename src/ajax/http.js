@@ -10,75 +10,7 @@ const REQUEST_HOST = process.env.REQUEST_HOST;
 // axios.defaults.timeout = 10000;
 axios.defaults.baseURL = '';
 
-let serverFindList = []; // 缓存的的url集合
-let fullUrl = ''; // 调取的url
-let switchServer = false; // 是否阻止请求
 // 请求拦截
-/*axios.interceptors.request.use(
-    config => {
-        // config.data = qs.stringify(config.data);
-        config.headers = {
-            'Content-Type': 'application/json',
-            'auth-token': Cookies.get('token')
-        };
-        let url = config.url;
-
-
-
-        // 先找缓存的url
-        if (store.state.serverFindList.length !== 0) {
-            serverFindList  = store.state.serverFindList;
-            serverFindList.forEach(item => {
-                if (item.url === url) {
-                    fullUrl = item.fullUrl;
-                };
-            });
-            // 如果在缓存能找到
-            if (fullUrl) {
-                switchServer = true;
-                url = fullUrl;
-            } else {
-                // 是"服务发现"接口service/url
-                if (config.url.indexOf('service/url') !== -1) {
-                    switchServer = true;
-                    url = REQUEST_HOST + '/service/url';
-                } else {
-
-                    switchServer = false;
-                    axios.post(REQUEST_HOST + '/service/url', config.data).then(res => {
-                        if (res.data.status === 200) {
-                            store.state.serverFindList = [...store.state.serverList, res.data.res];
-                        } else {
-                            throw new Error('此接口不存在!');
-                        };
-                    });
-                };
-            };
-        };
-
-
-        // 解决ie缓存不更新数据的问题
-        if (url.indexOf('http://') < 0 && url.indexOf('https://') < 0) {
-            url = REQUEST_HOST + '/' + url;
-        }
-        if (url.indexOf('?') < 0) {
-            url += '?';
-        }
-        url += '&r=' + Math.random();
-        config.url = url;
-
-        iView.LoadingBar.start();
-        if (!switchServer) {
-            config.url = ''
-        };
-        return config;
-    },
-    error => {
-        iView.LoadingBar.error();
-        return Promise.reject(error);
-    }
-);*/
-
 axios.interceptors.request.use(
     config => {
         // config.data = qs.stringify(config.data);
@@ -170,7 +102,7 @@ axios.interceptors.response.use(
     }
 );
 
-// 封装get
+// get
 export function fetch (url, data) {
     return axios({
         url: url,
@@ -179,7 +111,7 @@ export function fetch (url, data) {
     });
 }
 
-// 封装post
+// post
 export function post (url, data) {
     return axios({
         url: url,

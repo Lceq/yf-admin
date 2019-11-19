@@ -11,7 +11,7 @@
         color: #fff;
         font-size: 20px;
         img{
-            height: 44px;
+            height: 36px;
             width: auto;
         }
     }
@@ -26,10 +26,19 @@
                     :before-push="beforePush"
                     :open-names="openedSubmenuArr"
                     :menu-list="getAddRouterList">
-                <div slot="top" class="logo-con">
+                <div slot="top" class="logo-bar">
+                   <div v-show="!shrink" class="flex-left">
+                       <div style="height: 50px;display: flex;justify-content: center;align-items: center;">
+                           <img src="../images/login-logo.png" key="min-logo"/>
+                       </div>
+                       <p style="line-height: 50px;font-weight: bold;margin-left: 10px;">智造管理平台</p>
+                   </div>
+                   <img v-show="shrink" src="../images/login-logo.png" key="min-logo" style="width: 44px;"/>
+               </div>
+                <!--<div slot="top" class="logo-con">
                     <img v-show="!shrink" style="padding-right: 8px;" src="../images/menu-logo.png" key="max-logo" />
                     <img v-show="shrink" src="../images/menu-logo-min.png" key="min-logo" />
-                </div>
+                </div>-->
             </shrinkable-menu>
         </div>
         <div class="main-header-con" :style="{paddingLeft: shrink?'60px':'200px'}">

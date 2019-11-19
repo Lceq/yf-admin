@@ -33,9 +33,10 @@ module.exports = merge(webpackBaseConfig, {
             minChunks: Infinity
         }),
         new HtmlWebpackPlugin({
-            title: '远纺实际开发项目' + package.version,
+            title: '远纺工业(无锡)有限公司' + package.version,
+            favicon: './favicon.png',
             filename: '../index.html',
-            inject: false
+            inject: true
         }),
         new CopyWebpackPlugin([
             {

@@ -76,7 +76,7 @@ module.exports = merge(webpackBaseConfig, {
             ]
         }),
         new HtmlWebpackPlugin({
-            title: '昇虹生产管理平台',
+            title: '远纺工业(无锡)有限公司',
             favicon: './favicon.png',
             filename: '../index.html',
             template: '!!ejs-loader!./src/template/index.ejs',

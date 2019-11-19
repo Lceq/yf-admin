@@ -4,15 +4,15 @@
 
 <template>
     <div class="login" @keydown.enter="handleSubmit">
-        <div class="copyRight">@2017-2020 杭州昇虹智能科技有限公司版权所有</div>
-        <div class="logoPosition"></div>
-        <div class="loginFrame">
+        <div class="copy-right">@2017-2020 杭州昇虹智能科技有限公司版权所有</div>
+        <div class="logo-position"></div>
+        <div class="login-frame">
             <div>
-                <div class="loginInputBackground">
-                    <div class="loginHeaderFlex">
-                        <p class="loginLogo"></p>
-                        <p class="loginHeaderTitle">昇虹纺纱智造管理平台 - <span class="loginHeaderSmallFont">纺纱专版</span></p>
-                        <!--<p class="loginHeaderTitle">{{loginTitle}}  <span class="loginHeaderSmallFont">{{loginTitleMin}}</span></p>-->
+                <div class="login-input-bg">
+                    <div class="login-header-bar">
+                        <p class="login-logo"></p>
+                        <p class="login-header-title">远纺工业(无锡)有限公司</p>
+                        <!--<p class="login-header-title">{{loginTitle}}  <span class="loginHeaderSmallFont">{{loginTitleMin}}</span></p>-->
                     </div>
                     <div class="form-con">
                         <Form ref="loginForm" :model="form" :rules="rules" method="post">
@@ -50,11 +50,9 @@
 </template>
 
 <script>
-    var timeStr = null;
     import Cookies from 'js-cookie';
-    import qs from 'qs';
-    import api from '../ajax/api';
     import global from '../libs/common';
+    let timeStr = null;
     export default {
         data () {
             const validateCode = (rule, value, callback) => {
@@ -90,15 +88,9 @@
                     companyCode: '8600'
                 },
                 rules: {
-                    companyCode: [
-                        { required: true, validator: validateCode, trigger: 'blur' }
-                    ],
-                    userName: [
-                        { required: true, validator: validateUserName, trigger: 'blur' }
-                    ],
-                    password: [
-                        { required: true, validator: validatePassword, trigger: 'blur' }
-                    ]
+                    companyCode: [{ required: true, validator: validateCode, trigger: 'blur' }],
+                    userName: [{ required: true, validator: validateUserName, trigger: 'blur' }],
+                    password: [{ required: true, validator: validatePassword, trigger: 'blur' }]
                 },
                 loginErrorMsg: '',
                 buttonLoading: false
@@ -123,7 +115,6 @@
                     if (res.data.status === 200) {
                         Cookies.set('user', res.data.res.name);
                         Cookies.set('routeName', 'home_index');
-                        // this.$router.go(0);
                         this.$router.push({ path: 'home_index', query: {}, params: {} });
                     };
                 });
@@ -133,7 +124,7 @@
                     if (valid) {
                         this.buttonLoading = true;
                         // 创建form-data数据
-                        var data = new FormData();
+                        let data = new FormData();
                         data.append('loginname', this.form.userName);
                         data.append('password', this.form.password);
                         data.append('corpcode', this.form.companyCode);
@@ -147,7 +138,7 @@
                             if (res.data.status === 200) {
                                 setTimeout(() => {
                                     this.fullScreenEvent(); // 全屏事件
-                                }, 100)
+                                }, 100);
                                 clearInterval(timeStr);
                                 this.$store.dispatch({type: 'hideErrorModal', payload: ''});
                                 global.isTimeout = false;
@@ -238,7 +229,7 @@
         background:rgba(255,255,255,0);
         color: #fff;
     }
-    .copyRight{
+    .copy-right{
         width:320px;
         color:#fff;
         text-align: center;
@@ -252,11 +243,11 @@
         background:rgba(255,255,255,0);
         color: #fff;
     }
-    .loginHeaderFlex{
+    .login-header-bar{
         width:360px;
         display:flex;
-        justify-content: space-between;
         align-items: center;
+        justify-content: center;
     }
     .loginHeaderSmallFont{
         font-size:16px;
@@ -265,13 +256,13 @@
         width:360px;
         margin-bottom:30px;
     }
-    .loginLogo{
-        width:33px;
-        height:44px;
+    .login-logo{
+        width:36px;
+        height:38px;
         margin-right: 4px;
         background: url("../images/login-logo.png");
     }
-    .loginInputBackground{
+    .login-input-bg{
         width:432px;
         height:414px;
         display: flex;
@@ -284,12 +275,12 @@
         color:red;
         text-align:center
     }
-    .loginHeaderTitle{
+    .login-header-title{
         text-align: center;
         font-size:23px;
-        margin:40px 0;
+        margin:40px 0 40px 8px;
     }
-    .logoPosition{
+    .logo-position{
         width:590px;
         height:649px;
         position: absolute;
@@ -299,7 +290,7 @@
         left:0;
         background:url('../images/bg-text.png');
     }
-    .loginFrame{
+    .login-frame{
         height:400px;
         position: absolute;
         top:50%;

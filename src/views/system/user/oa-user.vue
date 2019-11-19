@@ -35,7 +35,7 @@
     </div>
 </template>
 <script>
-    import { setPage, compClientHeight, clearSpace } from '../../../libs/common';
+    import { setPage, compClientHeight, clearSpace, toDay } from '../../../libs/common';
     import saveUserModal from './save-user-modal';
     import leftMenu from '../../layout/layout';
     export default {
@@ -171,6 +171,7 @@
                 this.saveUserModalState = true;
                 Object.assign(this.saveUserModalData, row);
                 this.$delete(this.saveUserModalData, 'corpId');
+                this.saveUserModalData.birthday = row.birthday ? row.birthday : toDay();
                 this.saveUserModalData.hrUserId = row.id;
                 this.$delete(this.saveUserModalData, 'id');
             },

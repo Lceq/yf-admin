@@ -272,7 +272,7 @@
                 this.$delete(this.formValidate, 'id');
                 this.formValidate.shortName = e.shortName;
                 this.formValidate.name = e.name;
-                this.formValidate.typeId = e.typeId;
+                this.formValidate.typeId = e.typeId ? e.typeId : 0;
                 this.isSync = true;
                 this.saveModalTitle = '新增';
                 this.saveModalState = true;

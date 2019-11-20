@@ -5,7 +5,7 @@
 <template>
     <Menu class="rePosition" ref="sideMenu" :active-name="activeName" :open-names="openNames" :theme="menuTheme" width="auto" @on-select="changeMenu" accordion >
         <template v-if="menuList[0].path !== undefined" v-for="item in menuList">
-            <Submenu :name="item.name" :key="item.code">
+            <Submenu :name="item.name" :key="item.id">
                 <template slot="title">
                     <!--<Icon class="iconSize" :type="item.icon" :size="iconSize"></Icon>-->
                     <Icon v-if="item.icon.indexOf('sh-iconfont') === -1" class="iconSize" :type="item.icon" :size="iconSize"/>

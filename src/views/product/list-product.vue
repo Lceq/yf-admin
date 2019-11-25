@@ -102,13 +102,20 @@
                 </Row>
                 <Row>
                     <Col span="12">
-                        <FormItem label="规格型号：" prop="models" class="formItemMargin">
-                            <Input type="text" v-model="formValidate.models" placeholder="请输入规格型号" class="inputLength"/>
-                        </FormItem>
+                        <div v-show="requiredModels">
+                            <FormItem v-if="requiredModels" label="规格型号：" prop="models" class="formItemMargin">
+                                <Input type="text" v-model="formValidate.models" placeholder="请输入规格型号" class="inputLength"/>
+                            </FormItem>
+                        </div>
+                        <div v-show="!requiredModels">
+                            <FormItem v-if="!requiredModels" label="规格型号：" class="formItemMargin">
+                                <Input type="text" v-model="formValidate.models" placeholder="请输入规格型号" class="inputLength"/>
+                            </FormItem>
+                        </div>
                     </Col>
-                    <Col span="12">
-                        <FormItem label="色号：" class="formItemMargin">
-                            <Select v-model="formValidate.colorId" placeholder="请选择色号" class="inputLength" @on-change="getColorEvent">
+                    <Col span="12" v-show="showColor">
+                        <FormItem v-if="showColor" label="色号：" class="formItemMargin">
+                            <Select v-if="showColor" v-model="formValidate.colorId" placeholder="请选择色号" class="inputLength" @on-change="getColorEvent">
                                 <Option v-for="item in colorList" :value="item.id" :key="item.id">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
@@ -122,9 +129,9 @@
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col span="12">
-                        <FormItem label="条码：" class="formItemMargin">
-                            <Input type="text" v-model="formValidate.barCode" placeholder="请输入条码" class="inputLength"/>
+                    <Col span="12" v-show="showBarCode">
+                        <FormItem v-if="showBarCode" label="条码：" class="formItemMargin">
+                            <Input v-if="showBarCode" type="text" v-model="formValidate.barCode" placeholder="请输入条码" class="inputLength"/>
                         </FormItem>
                     </Col>
                 </Row>
@@ -198,16 +205,23 @@
                                 </Row>
                             </Col>
                             <Col v-show="showBasicTabSupplier">
-                                <FormItem label="供应商：" prop="supplierId" class="formItemMargin" v-if="showBasicTabSupplier">
+                                <FormItem label="供应商：" class="formItemMargin" v-if="showBasicTabSupplier">
                                     <Select transfer v-if="showBasicTabSupplier" v-model="formValidate.supplierId" class="inputLength" placeholder="请选择供应商">
                                         <Option v-for="item in basicTabSupplierList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
                                     </Select>
                                 </FormItem>
                             </Col>
                             <Col v-if="showPacketWeight">
-                                <FormItem label="平均包重(KG)：" class="formItemMargin" prop="packetWeight">
-                                    <InputNumber v-model="formValidate.packetWeight" class="inputLength" :min="0"></InputNumber>
-                                </FormItem>
+                                <div v-show="requiredPacketWeight">
+                                    <FormItem v-if="requiredPacketWeight" label="平均包重(KG)：" class="formItemMargin" prop="packetWeight">
+                                        <InputNumber v-model="formValidate.packetWeight" class="inputLength" :min="0"></InputNumber>
+                                    </FormItem>
+                                </div>
+                                <div v-show="!requiredPacketWeight">
+                                    <FormItem v-if="!requiredPacketWeight" label="平均包重(KG)：" class="formItemMargin">
+                                        <InputNumber v-model="formValidate.packetWeight" class="inputLength" :min="0"></InputNumber>
+                                    </FormItem>
+                                </div>
                             </Col>
                         </Row>
                         <Row v-show="showBasicTabCore">
@@ -376,6 +390,10 @@
             const validateYarnCount = (rule, value, callback) => { this.formValidate.yarnCount ? callback() : callback(new Error()); };
             const validateTwist = (rule, value, callback) => { this.formValidate.twist ? callback() : callback(new Error()); };
             return {
+                showBarCode: false,
+                showColor: false,
+                requiredPacketWeight: false,
+                requiredModels: true,
                 globalLoadingShow: false,
                 uploadRequestUrl: process.env.REQUEST_HOST + '/image/upload',
                 operationData: [],
@@ -881,6 +899,13 @@
             },
             // 初始化基本信息的数据
             initBasicData () {
+                this.formValidate.colorId = null;
+                this.formValidate.colorCode = '';
+                this.formValidate.colorName = '';
+                this.formValidate.barCode = '';
+                this.formValidate.packetWeight = null;
+                this.formValidate.models = '';
+
                 this.formValidate.componentId = null;
                 this.formValidate.yarnCount = null;
                 this.formValidate.purposeId = '';

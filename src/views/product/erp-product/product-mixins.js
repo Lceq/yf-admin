@@ -2,8 +2,14 @@ import { getOperationData, noticeTips, setPage, clearSpace, compClientHeight, de
 export default {
     methods: {
         showTabsIpt (typeName) {
+            console.log('类型', typeName)
             if (typeName) {
                 if (typeName === '成品') {
+                    this.showBarCode = true;
+                    this.showColor = true;
+                    this.requiredPacketWeight = true;
+                    this.requiredModels = true;
+
                     this.showMachiningProcess = true;
                     this.showBasicTabMaterial = true;
                     this.showBasicTabYarnUse = true;
@@ -19,6 +25,11 @@ export default {
                     this.showBasicTabIsReused = false;
                     this.showPacketWeight = false;
                 } else if (typeName === '半成品') {
+                    this.showBarCode = true;
+                    this.showColor = true;
+                    this.requiredPacketWeight = true;
+                    this.requiredModels = true;
+
                     this.showMachiningProcess = true;
                     this.showBasicTabMaterial = true;
                     this.showBasicTabYarnUse = false;
@@ -34,6 +45,11 @@ export default {
                     this.showBasicTabIsReused = false;
                     this.showPacketWeight = false;
                 } else if (typeName === '原料') {
+                    this.showBarCode = false;
+                    this.showColor = false;
+                    this.requiredPacketWeight = false;
+                    this.requiredModels = false;
+
                     this.showMachiningProcess = false;
                     this.showBasicTabMaterial = false;
                     this.showBasicTabYarnUse = false;
@@ -49,6 +65,11 @@ export default {
                     this.showBasicTabIsReused = false;
                     this.showPacketWeight = true;
                 } else if (typeName === '辅料') {
+                    this.showBarCode = true;
+                    this.showColor = true;
+                    this.requiredPacketWeight = true;
+                    this.requiredModels = true;
+
                     this.showMachiningProcess = false;
                     this.showBasicTabMaterial = false;
                     this.showBasicTabYarnUse = false;
@@ -64,6 +85,11 @@ export default {
                     this.showBasicTabIsReused = false;
                     this.showPacketWeight = false;
                 } else if (typeName === '机物料') {
+                    this.showBarCode = true;
+                    this.showColor = true;
+                    this.requiredPacketWeight = true;
+                    this.requiredModels = true;
+
                     this.showMachiningProcess = false;
                     this.showBasicTabMaterial = false;
                     this.showBasicTabYarnUse = false;
@@ -79,6 +105,11 @@ export default {
                     this.showBasicTabIsReused = false;
                     this.showPacketWeight = false;
                 } else if (typeName === '副产品') { // 原料成分、配比、加工工序
+                    this.showBarCode = true;
+                    this.showColor = true;
+                    this.requiredPacketWeight = true;
+                    this.requiredModels = true;
+
                     this.showMachiningProcess = true;
                     this.showBasicTabMaterial = true;
                     this.showBasicTabYarnUse = false;
@@ -94,6 +125,11 @@ export default {
                     this.showBasicTabIsReused = true;
                     this.showPacketWeight = true;
                 } else {
+                    this.showBarCode = true;
+                    this.showColor = true;
+                    this.requiredPacketWeight = true;
+                    this.requiredModels = true;
+
                     this.showMachiningProcess = false;
                     this.showBasicTabMaterial = false;
                     this.showBasicTabYarnUse = false;

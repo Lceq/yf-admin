@@ -2,7 +2,7 @@
     @import "./main.less";
     .logo-bar{
         position: fixed;
-        padding: 8px;
+        padding: 8px 12px;
         text-align: center;
         top: 0;
         left: 0px;
@@ -33,7 +33,7 @@
                        </div>
                        <p style="line-height: 50px;font-weight: bold;margin-left: 10px;">智造管理平台</p>
                    </div>
-                   <img v-show="shrink" src="../images/login-logo.png" key="min-logo" style="width: 44px;"/>
+                   <img v-show="shrink" src="../images/login-logo.png" key="min-logo" style="width: 36px;"/>
                </div>
                 <!--<div slot="top" class="logo-con">
                     <img v-show="!shrink" style="padding-right: 8px;" src="../images/menu-logo.png" key="max-logo" />

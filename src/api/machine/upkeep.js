@@ -49,10 +49,6 @@ export default {
     planCodeSaveHttp (params) {
         return proxy.call('maintenance.plan.save', params);
     },
-    // 保养类型列表
-    upkeepTypeListHttp () {
-        return proxy.call('maintenance.type.list');
-    },
     // 保养机台列表
     upkeepMachineListHttp () {
         return proxy.call('machine.maintenance.repair.list');
@@ -116,6 +112,19 @@ export default {
     // 保养项目的列表
     upkeepItemListHttp (params) {
         return proxy.call('maintenance.item.list', params);
+    },
+    // 保养类型保存
+    upkeepTypeSaveHttp (params) {
+        return proxy.call('maintenance.type.save', params);
+    },
+    upkeepTypeDetailHttp (params) {
+        return proxy.call('maintenance.type.detail', params);
+    },
+    upkeepTypeDeleteHttp (params) {
+        return proxy.call('maintenance.type.delete', params);
+    },
+    upkeepTypeListHttp (params) {
+        return proxy.call('maintenance.type.list', params);
     }
 
 };

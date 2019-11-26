@@ -11,60 +11,54 @@
                 <Table :height="tableHeight" size="small" border :columns="tableHeader" :data="tableData" @on-selection-change="getCheckObjEvent"></Table>
             </Col>
         </Row>
-        <Row>
-            <Col>
-                <Modal
-                        v-model="saveModalState"
-                        :title="saveModalTitle"
-                        @on-visible-change="saveModalStateChangeEvent"
-                        :maskClosable="false"
-                >
-                    <Form :label-width="110" ref="formValidate" :model="formValidate" :rules="ruleValidate" :show-message="false">
-                        <Row>
-                            <Col span="24">
-                            <FormItem label="保养类型编码：" prop="maintainCodeIpt" class="formItemMargin">
-                                <Input type="text" v-model="formValidate.maintainCodeIpt" placeholder="请输入保养类型编码"/>
-                            </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col span="24">
-                            <FormItem label="保养类型名称：" prop="maintainNameIpt" class="formItemMargin">
-                                <Input type="text" v-model="formValidate.maintainNameIpt" placeholder="请输入保养类型名称"/>
-                            </FormItem>
-                            </Col>
-                        </Row>
-                        <Row v-show="showOther">
-                            <Col>
-                                <other-message
-                                        :createName="createName"
-                                        :createTime="createTime"
-                                        :updateName="updateName"
-                                        :updateTime="updateTime"
-                                ></other-message>
-                            </Col>
-                        </Row>
-                    </Form>
-                    <div slot="footer">
-                        <modal-footer
-                            :buttonLoading="buttonLoading"
-                            @saveModalConfirmEvent="confirmEvent"
-                            @saveModalCancelEvent="cancelEvent"
-                        ></modal-footer>
-                    </div>
-                </Modal>
-            </Col>
-        </Row>
-        <Row>
-            <tips-modal
-                    :v-model="deleteModalStatus"
-                    :tipMsg="deleteModalMsg"
-                    :loading="deleteButtonLoading"
-                    @cancel="deleteModalCancel"
-                    @confirm="deleteModalConfirm"
-            >
-            </tips-modal>
-        </Row>
+        <Modal
+                v-model="saveModalState"
+                :title="saveModalTitle"
+                @on-visible-change="saveModalStateChangeEvent"
+                :maskClosable="false"
+        >
+            <Form :label-width="110" ref="formValidate" :model="formValidate" :rules="ruleValidate" :show-message="false">
+                <Row>
+                    <Col span="24">
+                        <FormItem label="保养类型编码：" prop="maintainCodeIpt" class="formItemMargin">
+                            <Input type="text" v-model="formValidate.maintainCodeIpt" placeholder="请输入保养类型编码"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col span="24">
+                        <FormItem label="保养类型名称：" prop="maintainNameIpt" class="formItemMargin">
+                            <Input type="text" v-model="formValidate.maintainNameIpt" placeholder="请输入保养类型名称"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row v-show="showOther">
+                    <Col>
+                        <other-message
+                                :createName="createName"
+                                :createTime="createTime"
+                                :updateName="updateName"
+                                :updateTime="updateTime"
+                        ></other-message>
+                    </Col>
+                </Row>
+            </Form>
+            <div slot="footer">
+                <modal-footer
+                        :buttonLoading="buttonLoading"
+                        @saveModalConfirmEvent="confirmEvent"
+                        @saveModalCancelEvent="cancelEvent"
+                ></modal-footer>
+            </div>
+        </Modal>
+        <tips-modal
+                :v-model="deleteModalStatus"
+                :tipMsg="deleteModalMsg"
+                :loading="deleteButtonLoading"
+                @cancel="deleteModalCancel"
+                @confirm="deleteModalConfirm"
+        >
+        </tips-modal>
     </card>
 </template>
 <script>
@@ -176,7 +170,7 @@
                 let arrId = [];
                 this.checkArray.forEach((items) => { arrId.push(items.id); });
                 this.deleteButtonLoading = true;
-                this.$post('maintenance/type/delete', arrId).then(res => {
+                this.$api.upkeep.upkeepTypeDeleteHttp(arrId).then(res => {
                     if (res.data.status === 200) {
                         this.deleteButtonLoading = false;
                         this.deleteModalMsg = '';
@@ -199,7 +193,7 @@
                 this.showOther = true;
                 this.editId = id;
                 this.saveModalTitle = '编辑保养类型';
-                this.$fetch('maintenance/type/detail/' + id).then(res => {
+                this.$api.upkeep.upkeepTypeDetailHttp({id}).then(res => {
                     if (res.data.status === 200) {
                         this.saveModalState = true;
                         this.formValidate.maintainNameIpt = res.data.res.name;
@@ -223,13 +217,11 @@
                 });
             },
             saveHttp () {
-                this.$post('maintenance/type/save',
-                    {
-                        id: this.editId,
-                        name: this.formValidate.maintainNameIpt,
-                        code: this.formValidate.maintainCodeIpt
-                    }
-                ).then(res => {
+                this.$api.upkeep.upkeepTypeSaveHttp({
+                    id: this.editId,
+                    name: this.formValidate.maintainNameIpt,
+                    code: this.formValidate.maintainCodeIpt
+                }).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'saveTips');
                         this.saveModalState = false;
@@ -241,8 +233,9 @@
                 });
             },
             getListHttp () {
-                this.$call('maintenance.type.list').then(res => {
+                this.$api.upkeep.upkeepTypeListHttp().then(res => {
                     if (res.data.status === 200) {
+                        this.checkArray = [];
                         this.tableData = res.data.res;
                     };
                 });

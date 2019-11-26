@@ -314,7 +314,7 @@ export default ({
                         faultTypeName: this.faultTypeList.find(y => y.id === this.formValidate.faultTypeId).name,
                         // faultTypeName: this.formValidate.faultTypeName,
                         // postIds: this.formValidate.postIds,
-                        autoGather: this.formValidate.autoGather === '1' ? true : false,
+                        autoGather: this.formValidate.autoGather === '1',
                         faultSubclassPostList: this.formValidate.postIds.map(x => {
                             return {
                                 postId: x,
@@ -352,6 +352,5 @@ export default ({
             let Height = document.getElementById('selectedHeight').clientHeight;
             this.tableHeight = document.documentElement.clientHeight - Height - 120;
         };
-        //
     }
 });

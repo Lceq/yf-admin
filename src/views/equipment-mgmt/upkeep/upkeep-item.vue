@@ -23,86 +23,78 @@
                 <Page :placement="pageUp" :total="pageTotal" show-elevator :page-size-opts="pageOpts" :show-total="true" :page-size="pageSize" @on-change="getPageEvent" :show-sizer="true" @on-page-size-change="pageChange"></Page>
             </Col>
         </Row>
-        <Row>
-            <Col>
-                <Modal
-                        v-model="addUpkeepItemModalState"
-                        :title="adEdModalTitle"
-                        :mask-closable="false"
-                        @on-visible-change="getAdEdModalStateChangeEvent"
-                >
-                    <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="130" :show-message="false">
-                        <Row type="flex" justify="space-between">
-                            <Col span="20">
-                                <FormItem label="保养项目名称:" class="formItemMargin" prop="modalCycleUpkeepName">
-                                    <Input placeholder="请输入保养项目名称" type="text" v-model="formValidate.modalCycleUpkeepName"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row type="flex" justify="space-between">
-                            <Col span="20">
-                                <FormItem label="工序:" class="formItemMargin" prop="modalProcess">
-                                    <Select v-model="formValidate.modalProcess" placeholder="请选择工序">
-                                        <Option v-for="item in modalProcessList":style="item.style" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                                    </Select>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row type="flex" justify="space-between">
-                            <Col span="20">
-                                <FormItem label="周期最小值:" class="formItemMargin" prop="modalCycleMin">
-                                    <InputNumber class="widthPercentage" :precision="0" :min="0" v-model="formValidate.modalCycleMin"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row type="flex" justify="space-between">
-                            <Col span="20">
-                                <FormItem label="周期最大值:" class="formItemMargin" prop="modalCycleMax">
-                                    <InputNumber class="widthPercentage" :precision="0" :min="0" v-model="formValidate.modalCycleMax"/>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
-                            <Col>
-                                <FormItem label="周期单位:" class="formItemMargin" prop="modalCycleUnit">
-                                    <RadioGroup v-model="formValidate.modalCycleUnit">
-                                        <Radio label="0">天</Radio>
-                                        <Radio label="1">月</Radio>
-                                        <Radio label="2">年</Radio>
-                                    </RadioGroup>
-                                </FormItem>
-                            </Col>
-                        </Row>
-                        <Row v-show="showOtherBar">
-                            <Col>
-                                <other-message
-                                        :createName="createName"
-                                        :createTime="createTime"
-                                        :updateName="updateName"
-                                        :updateTime="updateTime"
-                                ></other-message>
-                            </Col>
-                        </Row>
-                    </Form>
-                    <div slot="footer">
-                        <Button :loading="adEdButtonLoading" type="success" @click="confirmEvent">确认</Button>
-                        <Button class="cancelButton" @click="cancelEvent">取消</Button>
-                    </div>
-                </Modal>
-            </Col>
-        </Row>
-        <Row>
-            <Col>
-                <delete-tips
-                    :tipMsg="deleteTipsMsg"
-                    :loading="deleteButtonLoading"
-                    :v-model="deleteTipsState"
-                    @cancel="deleteTipsCancel"
-                    @confirm="deleteTipsConfirm"
-                >
-                </delete-tips>
-            </Col>
-        </Row>
+        <Modal
+                v-model="addUpkeepItemModalState"
+                :title="adEdModalTitle"
+                :mask-closable="false"
+                @on-visible-change="getAdEdModalStateChangeEvent"
+        >
+            <Form ref="formValidate" :model="formValidate" :rules="ruleValidate" :label-width="130" :show-message="false">
+                <Row type="flex" justify="space-between">
+                    <Col span="20">
+                        <FormItem label="保养项目名称:" class="formItemMargin" prop="modalCycleUpkeepName">
+                            <Input placeholder="请输入保养项目名称" type="text" v-model="formValidate.modalCycleUpkeepName"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row type="flex" justify="space-between">
+                    <Col span="20">
+                        <FormItem label="工序:" class="formItemMargin" prop="modalProcess">
+                            <Select v-model="formValidate.modalProcess" placeholder="请选择工序">
+                                <Option v-for="item in modalProcessList":style="item.style" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row type="flex" justify="space-between">
+                    <Col span="20">
+                        <FormItem label="周期最小值:" class="formItemMargin" prop="modalCycleMin">
+                            <InputNumber class="widthPercentage" :precision="0" :min="0" v-model="formValidate.modalCycleMin"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row type="flex" justify="space-between">
+                    <Col span="20">
+                        <FormItem label="周期最大值:" class="formItemMargin" prop="modalCycleMax">
+                            <InputNumber class="widthPercentage" :precision="0" :min="0" v-model="formValidate.modalCycleMax"/>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col>
+                        <FormItem label="周期单位:" class="formItemMargin" prop="modalCycleUnit">
+                            <RadioGroup v-model="formValidate.modalCycleUnit">
+                                <Radio label="0">天</Radio>
+                                <Radio label="1">月</Radio>
+                                <Radio label="2">年</Radio>
+                            </RadioGroup>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row v-show="showOtherBar">
+                    <Col>
+                        <other-message
+                                :createName="createName"
+                                :createTime="createTime"
+                                :updateName="updateName"
+                                :updateTime="updateTime"
+                        ></other-message>
+                    </Col>
+                </Row>
+            </Form>
+            <div slot="footer">
+                <Button :loading="adEdButtonLoading" type="success" @click="confirmEvent">确认</Button>
+                <Button class="cancelButton" @click="cancelEvent">取消</Button>
+            </div>
+        </Modal>
+        <delete-tips
+                :tipMsg="deleteTipsMsg"
+                :loading="deleteButtonLoading"
+                :v-model="deleteTipsState"
+                @cancel="deleteTipsCancel"
+                @confirm="deleteTipsConfirm"
+        >
+        </delete-tips>
     </card>
 </template>
 <script>
@@ -327,7 +319,7 @@
                 this.getDetailHttp();
             },
             getDetailHttp () {
-                this.$api.upkeep.upkeepItemDetailHttp(this.editId).then(res => {
+                this.$api.upkeep.upkeepItemDetailHttp({id: this.editId}).then(res => {
                     if (res.data.status === 200) {
                         this.formValidate.modalCycleUpkeepName = res.data.res.name;
                         this.formValidate.modalProcess = res.data.res.processId;

@@ -10,31 +10,24 @@
             <div>
                 <Row type="flex">
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="BOM单号:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.bomOrderValue}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="单据日期:" prop="billDateValue" class="formItemMargin">
                             <DatePicker :editable="false" class="widthPercentage" v-model="formValidate.billDateValue" type="date" placeholder="请选择日期"></DatePicker>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="生产单号:" prop="productionOrderValue" class="formItemMargin">
+                        <FormItem label="产品:" prop="productionOrderValue" class="formItemMargin">
                             <div class="flex-left">
                                 <Select
                                         class="remoteSearchSelect"
                                         filterable
-                                        placeholder="请输入生产单号"
+                                        placeholder="请输入产品"
                                         remote
                                         v-model="formValidate.productionOrderValue"
-                                        :remote-method="remoteProductionOrderMethod"
-                                        :loading="remoteProductionOrderLoading"
-                                        @on-change="getSelectProductionOrderEvent"
+                                        @on-change="getSelectProductionEvent"
                                 >
-                                    <Option v-for="(option, index) in productionOrderList" :value="option.code" :key="index">{{option.code}}</Option>
+                                    <Option v-for="(option, index) in productionList" :value="option.code" :key="index">{{`${option.name}(${option.code})`}}</Option>
                                 </Select>
-                                <Button @click="clickMainProductionOrderEvent" class="remoteSearchButton" size="small" icon="ios-search"></Button>
+                                <Button @click="clickMainProductionEvent" class="remoteSearchButton" size="small" icon="ios-search"></Button>
                             </div>
                         </FormItem>
                     </Col>
@@ -44,23 +37,8 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="产品:" prop="materielCodeIpt" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.materielCodeValue ? formValidate.materielNameValue + '(' + formValidate.materielCodeValue + ')' : ''}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="规格:" class="formItemMargin">
                             <div class="read-only-item">{{selectOrderObj.productModels}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="纱线用途:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.purposeName}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="纱线捻向:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.twistDirectionName}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
@@ -71,33 +49,13 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="批号:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.batchCodeValue}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="计量单位:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.unitValue}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="订单数量:" class="formItemMargin">
+                        <FormItem label="标准数量:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.orderCountValue}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="交货开始时间:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.deliveryDateFrom}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="交货结束时间:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.deliveryDateTo}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="日供货量:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.dailySupplyQty}}</div>
                         </FormItem>
                     </Col>
                 </Row>
@@ -140,11 +98,6 @@
                                     </FormItem>
                                     </Col>
                                     <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                        <FormItem label="批号:" class="formItemMargin" :label-width="110">
-                                            <div class="read-only-item">{{item.batchCode}}</div>
-                                        </FormItem>
-                                    </Col>
-                                    <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                         <FormItem label="计量单位:" class="formItemMargin" :label-width="110">
                                             <div class="read-only-item">{{item.unitName ? `${item.unitName}(${item.unitCode})` : ''}}</div>
                                         </FormItem>
@@ -152,26 +105,6 @@
                                     <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                         <FormItem label="生产数量:" class="formItemMargin" :label-width="110">
                                             <div class="read-only-item">{{item.productionQty}}</div>
-                                        </FormItem>
-                                    </Col>
-                                    <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                        <FormItem label="计划开工时间:" class="formItemMargin" :label-width="110"
-
-                                        >
-                                            <!--  :key="index"
-                                                  :prop="'productModuleList.' + index + '.planStartDate'"
-                                                  :rules="{required: true, type: 'date', trigger: 'change'}"-->
-                                            <DatePicker @on-change="getPlanStartDateEvent($event, item.planFinishDate, index)" :clearable="false" transfer v-model="item.planStartDate" type="date" placeholder="请选择计划开工时间" class="widthPercentage"></DatePicker>
-                                        </FormItem>
-                                    </Col>
-                                    <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                        <FormItem label="计划完工时间:" class="formItemMargin" :label-width="110"
-
-                                        >
-                                            <!-- :key="index"
-                                                  :prop="'productModuleList.' + index + '.planFinishDate'"
-                                                  :rules="{required: true, type: 'date', trigger: 'change'}"-->
-                                            <DatePicker @on-change="getPlanFinishDateEvent($event, item.planStartDate, index)" :clearable="false" transfer v-model="item.planFinishDate" type="date" placeholder="请选择计划完工时间" class="widthPercentage"></DatePicker>
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -284,19 +217,6 @@
                 @see-process-modal-confirm-event="seeProcessModalConfirmEvent"
                 @see-process-modal-cancel-event="seeProcessModalCancelEvent"
         ></see-spec-sheet>
-        <select-order-modal
-                :spin-show="selectOrderModalSpinShow"
-                :select-bill-modal-state="selectOrderModalState"
-                :select-bill-modal-title="selectOrderModalTitle"
-                :select-bill-table-header="selectOrderTableHeader"
-                :select-bill-page-total="selectOrderPageTotal"
-                :select-bill-modal-table-data="selectOrderModalTableData"
-                :select-bill-modal-show-material-input="selectOrderModalShowMaterialInput"
-                @on-visible-change="selectOrderModalStateChangeEvent"
-                @select-bill-modal-search-event="selectOrderModalSearchBtnEvent"
-                @on-change-page="getSelectOrderModalPageCodeEvent"
-                @confirm-event="selectOrderConfirmEvent"
-        ></select-order-modal>
         <select-material-modal
                 :dynamic-name="'物料'"
                 :spin-show="materialModalContentSpinShow"
@@ -353,6 +273,11 @@
                 @select-batch-modal-search-event="selectBatchModalSearchBtnEvent"
                 @select-batch-modal-confirm-event="selectBatchModalConfirmEvent"
         ></select-batch-modal>
+        <select-product-modal
+            :select-material-modal-state="selectProductModalState"
+            @on-visible-change="onSelectProductModalVisibleChange"
+            @confirm-event="selectProductConfirmEvent"
+        ></select-product-modal>
     </card>
 </template>
 <script>
@@ -361,6 +286,7 @@
     import selectOrderModal from '../../components/select-bill-modal';
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import selectMaterialModal from '../order/select-material';
+    import selectProductModal from '../order/select-material';
     import { noticeTips, formatDate, toDay, setPage, compClientHeight, emptyTips, addNum } from '../../../libs/common';
     import tipsClear from '../../public/deleteWarning';
     import tipsModal from '../../components/tips-modal';
@@ -369,13 +295,16 @@
     export default {
         name: 'add-manufacture',
         components: {
-            bomTable, seeSpecSheet, selectOrderModal, selectMaterialModal, selectSpecSheetModal, tipsClear, tipsModal, selectBatchModal, addBatchCodeModal
+            selectProductModal, bomTable, seeSpecSheet, selectMaterialModal, selectSpecSheetModal, tipsClear, tipsModal, selectBatchModal, addBatchCodeModal
         },
         data () {
             const validateBillDate = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateProductOrder = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateSpecPath = (rule, value, callback) => value ? callback() : callback(new Error());
             return {
+                selectProductModalState: false,
+                productionList: [],
+
                 globalLoadingShow: false,
                 backButtonLoading: false,
                 nextButtonLoading: false,
@@ -394,7 +323,6 @@
                 tipsModalIcon: '',
                 tipsModalMessage: '',
                 activeTabPane: '0',
-                selectOrderModalSpinShow: false,
                 clearTipsStatus: false,
                 clearTipsMsg: '',
                 index: 1,
@@ -407,18 +335,14 @@
                 selectMaterialModalState: false,
                 formValidate: {
                     purposeId: '',
-                    purposeName: '',
                     technologyId: '',
                     twistDirectionId: '',
                     bomOrderValue: '自动生成BOM单号',
                     billDateValue: toDay(),
                     productionOrderValue: '',
                     workshopValue: '',
-                    materielCodeValue: '',
-                    materielNameValue: '',
-                    batchCodeValue: '',
                     unitValue: '',
-                    orderCountValue: '',
+                    orderCountValue: 1,
                     specPathValue: null,
                     specPathNameValue: '',
                     dynamicColorValue: null
@@ -428,43 +352,11 @@
                     productionOrderValue: [{required: true, validator: validateProductOrder, trigger: 'change'}],
                     specPathValue: [{required: true, validator: validateSpecPath, trigger: 'change'}]
                 },
-                selectOrderModalState: false,
                 specModalContentSpinShow: false,
                 materialModalContentSpinShow: false,
-                selectOrderModalTitle: '',
-                selectOrderTableHeader: [
-                    {title: '订单日期', key: 'orderDate', align: 'center'},
-                    {title: '订单号', key: 'code', align: 'center'},
-                    {title: '产品编号', key: 'productCode', align: 'center'},
-                    {title: '产品名称', key: 'productName', align: 'center', width: 160},
-                    {title: '生产工序', key: 'processName', align: 'center'},
-                    {title: '批号', key: 'batchCode', align: 'center'},
-                    {
-                        title: '计量单位',
-                        key: 'unitCode',
-                        align: 'center',
-                        render: (h, params) => {
-                            return h('div', {
-                                domProps: {
-                                    innerHTML: params.row.unitName ? `${params.row.unitName}(${params.row.unitCode})` : ''
-                                }
-                            });
-                        }
-                    },
-                    {title: '订单数量', key: 'productionQty', align: 'center'}
-                ],
-                selectOrderPageTotal: 0,
-                selectOrderModalTableData: [],
-                selectOrderModalShowMaterialInput: true,
-                selectOrderModalPageIndex: 1,
-                selectOrderModalMaterialValue: '',
-                selectOrderModalCodeValue: '',
                 selectPrdModalPageTotal: 0,
                 selectPrdModalTableData: [],
                 selectPrdModalRemoteProductList: [],
-                remoteProductionOrderLoading: false,
-                productionOrderList: [],
-                remoteProductionOrderList: [],
                 remoteMaterialList: [],
                 specPathList: [],
                 current: 0,
@@ -488,8 +380,6 @@
                         disableSetSpecButton: true,
                         preparationHours: 2,
                         pullRate: null,
-                        planStartDate: '',
-                        planFinishDate: '',
                         bomMaterielList: [
                             {
                                 mproductId: null,
@@ -577,27 +467,33 @@
             };
         },
         methods: {
-            getPlanStartDateEvent (dateFrom, dateTo, index) {
-                if (new Date(dateFrom + ' 00:00:00').valueOf() > new Date(this.formValidate.deliveryDateTo + ' 00:00:00').valueOf() || new Date(dateFrom + ' 00:00:00').valueOf() < new Date(this.formValidate.deliveryDateFrom + ' 00:00:00').valueOf()) {
-                    emptyTips(this, '计划开台时间应在交货日期范围内!');
-                } else {
-                    if (new Date(dateFrom + ' 00:00:00').valueOf() > new Date(formatDate(dateTo)).valueOf()) {
-                        this.formDynamic.productModuleList[index].planStartDate = '';
-                        this.$set(this.formDynamic.productModuleList[index], 'planStartDate', '');
-                        emptyTips(this, '计划开台时间不能大于计划完工时间!');
-                    };
+            getSelectProductionEvent (e) {
+                console.log(e)
+                if (e) {
+                    this.productionList.forEach(item => {
+                        if (item.code === e) {
+                            this.setProductMethod(item);
+                        };
+                    });
                 };
             },
-            getPlanFinishDateEvent (dateTo, dateFrom, index) {
-                if (new Date(dateTo + ' 00:00:00').valueOf() > new Date(this.formValidate.deliveryDateTo + ' 00:00:00').valueOf() || new Date(dateTo + ' 00:00:00').valueOf() < new Date(this.formValidate.deliveryDateFrom + ' 00:00:00').valueOf()) {
-                    emptyTips(this, '计划完工时间应在交货日期范围内!');
-                } else {
-                    if (new Date(formatDate(dateFrom)).valueOf() > new Date(dateTo + ' 00:00:00').valueOf()) {
-                        this.$set(this.formDynamic.productModuleList[index], 'planFinishDate', '');
-                        emptyTips(this, '计划完工时间不能小于计划开台时间!');
-                    };
-                };
+            // 产品按钮的事件
+            clickMainProductionEvent () {
+                this.selectProductModalState = true;
+                this.getMainOrderListHttp();
             },
+            // 产品的"确认选择"事件
+            selectProductConfirmEvent (e) {
+                this.current = 0;
+                this.formValidate.specPathValue = '';
+                this.pathProcessList = [];
+                this.setProductMethod(e);
+            },
+            // 主表选择产品modal
+            onSelectProductModalVisibleChange (e) {
+                this.selectProductModalState = e;
+            },
+
             getProductToBatchCodeListHttp (productCode, batchCode = '') {
                 return this.$call('product.batch.list',{
                     productNameCode: productCode,
@@ -826,9 +722,7 @@
                             this.formDynamic.productModuleList[this.productModuleIndex].specSheetCode = '';
                             query = item.code;
                             if (query) {
-                                this.remoteProductionOrderLoading = true;
                                 setTimeout(() => {
-                                    this.remoteProductionOrderLoading = false;
                                     this.formDynamic.productModuleList[this.productModuleIndex].specSheetList = this.formDynamic.productModuleList[this.productModuleIndex].remoteSpecSheetList.filter(options => options.code.toLowerCase().indexOf(query.toLowerCase()) > -1);
                                     this.formDynamic.productModuleList[this.productModuleIndex].specSheetCode = item.code;
                                 }, 200);
@@ -857,9 +751,7 @@
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetCode', '');
                 query = e.code;
                 if (query) {
-                    this.remoteProductionOrderLoading = true;
                     setTimeout(() => {
-                        this.remoteProductionOrderLoading = false;
                         this.formDynamic.productModuleList[this.productModuleIndex].specSheetList = this.formDynamic.productModuleList[this.productModuleIndex].remoteSpecSheetList.filter(item => item.code.toLowerCase().indexOf(query.toLowerCase()) > -1);
                         this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetCode', e.code);
                     }, 200);
@@ -1180,10 +1072,6 @@
             saveBomChildHttp (bomId) {
                 let that = this;
                 this.globalLoadingShow = true;
-                this.formDynamic.productModuleList.forEach((item)=>{  // 时间格式转成2000-11-11 11:11:11
-                    item.planStartDate = formatDate(item.planStartDate);
-                    item.planFinishDate = formatDate(item.planFinishDate);
-                });
                 let paramsData = {
                     "prdBomId": bomId,
                     "serialNumber": this.current + 1,
@@ -1227,7 +1115,6 @@
                     "productName": this.selectOrderObj.productName,
                     "productCode": this.selectOrderObj.productCode,
                     "productModels": this.selectOrderObj.productModels,
-                    "batchCode": this.selectOrderObj.batchCode,
                     "unitId": this.selectOrderObj.unitId,
                     "unitCode": this.selectOrderObj.unitCode,
                     "unitName": this.selectOrderObj.unitName,
@@ -1235,12 +1122,7 @@
                     "specPathId": this.formValidate.specPathValue,
                     "specPathName": this.formValidate.specPathNameValue,
                     "purposeId": this.formValidate.purposeId,
-                    "purposeName": this.formValidate.purposeName,
                     "twistDirectionId": this.formValidate.twistDirectionId,
-                    "twistDirectionName": this.formValidate.twistDirectionName,
-                    "deliveryDateFrom": this.formValidate.deliveryDateFrom,
-                    "deliveryDateTo": this.formValidate.deliveryDateTo,
-                    "dailySupplyQty": this.formValidate.dailySupplyQty
                 }).then(res => {
                     if (res.data.status === 200) {
                         return res.data.res;
@@ -1289,56 +1171,24 @@
             selectSpecModalStateChangeEvent (e) {
                 this.selectSpecModalState = e;
             },
-            // 选择订单事件
-            getSelectProductionOrderEvent (e) {
-                if (e) {
-                    this.current = 0;
-                    let selectOrderObj = null;
-                    this.remoteProductionOrderList.forEach((item) => {
-                        if (item.code === e) {
-                            selectOrderObj = item;
-                        };
-                    });
-                    this.formValidate.specPathValue = '';
-                    this.pathProcessList = [];
-                    this.setProductMethod(selectOrderObj);
-                };
-            },
             setProductMethod (e) {
                 this.selectOrderObj = e;
-                this.selectOrderModalState = false;
                 this.formDynamic.productModuleList = JSON.parse(JSON.stringify(this.initProductModuleList));
-                this.$set(this.formDynamic.productModuleList[0], 'productId', e.productId);
-                this.$set(this.formDynamic.productModuleList[0], 'productCode', e.productCode);
-                this.$set(this.formDynamic.productModuleList[0], 'productName', e.productName);
-                this.$set(this.formDynamic.productModuleList[0], 'productModels', e.productModels);
-                this.$set(this.formDynamic.productModuleList[0], 'batchCode', e.batchCode);
+                this.$set(this.formDynamic.productModuleList[0], 'productId', e.id);
+                this.$set(this.formDynamic.productModuleList[0], 'productCode', e.code);
+                this.$set(this.formDynamic.productModuleList[0], 'productName', e.name);
+                this.$set(this.formDynamic.productModuleList[0], 'productModels', e.models);
                 this.$set(this.formDynamic.productModuleList[0], 'unitId', e.unitId);
                 this.$set(this.formDynamic.productModuleList[0], 'unitCode', e.unitCode);
                 this.$set(this.formDynamic.productModuleList[0], 'unitName', e.unitName);
-                this.$set(this.formDynamic.productModuleList[0], 'productionQty', e.productionQty);
-                let planStartDateValue = new Date(e.deliveryDateFrom); //设置计划开工和完工时间
-                planStartDateValue.setDate(planStartDateValue.getDate() - 1);
-                let planFinishDateValue = new Date(e.deliveryDateTo);
-                planFinishDateValue.setDate(planFinishDateValue.getDate() - 1);
-                this.$set(this.formDynamic.productModuleList[0], 'planStartDate', formatDate(planStartDateValue));
-                this.$set(this.formDynamic.productModuleList[0], 'planFinishDate', formatDate(planFinishDateValue));
-                this.productionOrderList = [{code: e.code}];
+                this.$set(this.formDynamic.productModuleList[0], 'productionQty', 1);
                 this.$set(this.formValidate, 'productionOrderValue','');
                 setTimeout(()=>{ this.$set(this.formValidate, 'productionOrderValue',e.code); },500);
                 this.formValidate.workshopValue = e.workshopName;
-                this.formValidate.materielCodeValue = e.productCode;
-                this.formValidate.materielNameValue = e.productName;
-                this.formValidate.batchCodeValue = e.batchCode;
                 this.formValidate.unitValue = e.unitName + '(' + e.unitCode + ')';
                 this.formValidate.orderCountValue = e.productionQty;
-                this.formValidate.purposeName = e.purposeName;
                 this.formValidate.purposeId = e.purposeId;
                 this.formValidate.twistDirectionId = e.twistDirectionId;
-                this.formValidate.twistDirectionName = e.twistDirectionName;
-                this.formValidate.deliveryDateFrom = e.deliveryDateFrom;
-                this.formValidate.deliveryDateTo = e.deliveryDateTo;
-                this.formValidate.dailySupplyQty = e.dailySupplyQty;
                 this.formDynamic.productModuleList[0].bomMaterielList[0].remoteProductList = this.remoteProductList;
                 this.getSpecPathHttp(e.processId);
             },
@@ -1363,57 +1213,20 @@
                 // 插入当前
                 this.formDynamic.productModuleList[event.dataIndex].bomMaterielList.splice(event.index + 1, 0, JSON.parse(JSON.stringify(...this.bomMaterialData)));
             },
-            // 生产单号的"确认选择"事件
-            selectOrderConfirmEvent (e) {
-                this.current = 0;
-                this.selectOrderModalState = false;
-                this.formValidate.specPathValue = '';
-                this.pathProcessList = [];
-                this.setProductMethod(e);
-            },
-            // 获取审核的订单
-            getOrderListHttp (resolve, reject) {
-                return this.$api.order.listHttp({
+            // 获取主产品
+            getMainOrderListHttp (resolve, reject) {
+                return this.$call('product.list2', {
                     auditState: 3,
-                    product: this.selectOrderModalMaterialValue,
-                    code: this.selectOrderModalCodeValue,
-                    pageIndex: this.selectOrderModalPageIndex,
                     pageSize: setPage.pageSize,
                     isQuote: false
                 }).then(res => {
                     resolve ? resolve(res) : false;
                     if (res.data.status === 200) {
-                        this.selectOrderModalSpinShow = false;
-                        this.remoteProductionOrderList = res.data.res;
-                        this.selectOrderPageTotal = res.data.count;
-                        this.selectOrderModalTableData = res.data.res;
+                        this.productionList = res.data.res;
                     };
                 }).catch(err => {
                     reject ? reject(err) : false;
                 });
-            },
-            // 生产单号按钮的事件
-            clickMainProductionOrderEvent () {
-                this.selectOrderModalSpinShow = true;
-                this.selectOrderModalState = true;
-                this.selectOrderModalTitle = '选择生产单号';
-                this.selectOrderModalPageIndex = 1;
-                this.selectOrderPageTotal = 0;
-                this.getOrderListHttp();
-            },
-            selectOrderModalStateChangeEvent (e) {
-                this.selectOrderModalState = e;
-            },
-            selectOrderModalSearchBtnEvent (e) {
-                this.selectOrderModalPageIndex = 1;
-                this.selectOrderPageTotal = 0;
-                this.selectOrderModalMaterialValue = e.materialName;
-                this.selectOrderModalCodeValue = e.code;
-                this.getOrderListHttp();
-            },
-            getSelectOrderModalPageCodeEvent (e) {
-                this.selectOrderModalPageIndex = e;
-                this.getOrderListHttp();
             },
             // 工艺路线对应的工序
             getSpecPathProcessListHttp (id) {
@@ -1475,17 +1288,6 @@
                     this.formDynamic.productModuleList[event.dataIndex].bomMaterielList.splice(event.index, 1);
                 };
             },
-            remoteProductionOrderMethod (query) {
-                if (query !== '') {
-                    this.remoteProductionOrderLoading = true;
-                    setTimeout(() => {
-                        this.remoteProductionOrderLoading = false;
-                        this.productionOrderList = this.remoteProductionOrderList.filter(item => item.id + ''.toLowerCase().indexOf(query.toLowerCase()) > -1);
-                    }, 200);
-                } else {
-                    this.productionOrderList = [];
-                }
-            },
             // 获取工艺路线
             getSpecPathHttp (processId) {
                 return this.$api.path.listHttp({auditState: 3, processId: processId}).then(res => {
@@ -1497,19 +1299,13 @@
             // 获取依赖的数据
             getDependencyData () {
                 let orderList = new Promise((resolve, reject) => {
-                    this.getOrderListHttp(resolve, reject);
+                    this.getMainOrderListHttp(resolve, reject);
                 });
                 Promise.all([orderList]).then(res => {
                     // 判断路由是否携带"生产单号"参数
                     if (this.$route.query.orderCode) {
                         let selectOrderObj = {};
                         this.formValidate.productionOrderValue = this.$route.query.orderCode;
-                        this.remoteProductionOrderList.forEach((item) => {
-                            if (item.id === parseFloat(this.$route.query.orderId)) {
-                                selectOrderObj = item;
-                            };
-                        });
-                        this.setProductMethod(selectOrderObj);
                     };
                     this.globalLoadingShow = false;
                 });

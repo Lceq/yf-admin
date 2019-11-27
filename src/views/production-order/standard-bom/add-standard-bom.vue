@@ -1114,6 +1114,16 @@
             saveBomChildHttp (bomId) {
                 let that = this;
                 this.globalLoadingShow = true;
+                // 移除冗余字段
+                this.formDynamic.productModuleList.forEach(item => {
+                    this.$delete(item, 'specSheetParamList');
+                    this.$delete(item, 'specSheetList');
+                    this.$delete(item, 'remoteSpecSheetList');
+                    item.bomMaterielList.forEach(batchItem => {
+                        this.$delete(batchItem, 'batchList');
+                        this.$delete(batchItem, 'remoteProductList');
+                    });
+                });
                 let paramsData = {
                     "bomId": bomId,
                     "serialNumber": this.current + 1,

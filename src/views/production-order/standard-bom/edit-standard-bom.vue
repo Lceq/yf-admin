@@ -179,16 +179,6 @@
                                         <Col><Icon type="ios-color-filter" /><span class="margin-left-10">工艺</span></Col>
                                     </Row>
                                     <Row>
-                                        <!--<Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                            <FormItem label="制成率%:" class="formItemMargin"
-                                                      :label-width="110"
-                                                      :key="index"
-                                                      :prop="'productModuleList.' + index + '.pullRate'"
-                                                      :rules="{required: true, type: 'number', trigger: 'change'}"
-                                            >
-                                                <InputNumber :min="0" :max="100" v-model="item.pullRate" class="widthPercentage"></InputNumber>
-                                            </FormItem>
-                                        </Col>-->
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                             <FormItem label="上机准备时间(小时):" class="formItemMargin"
                                                       :label-width="140"
@@ -911,7 +901,7 @@
                     });
                 });
                 let paramsData = {
-                    "prdBomId": bomId,
+                    "bomId": bomId,
                     "serialNumber": this.current + 1,
                     "processId": this.pathProcessList[this.current].processId,
                     "processCode": this.pathProcessList[this.current].processCode,
@@ -961,7 +951,7 @@
             getBomPreviousStepDetailHttp (processId) {
                 this.globalLoadingShow = true;
                 this.$api.manufacture.bomProcessPreviousStepRequest({
-                    prdBomId: this.saveBomId,
+                    bomId: this.saveBomId,
                     processId: processId
                 }).then(res => {
                     if (res.data.status === 200) {

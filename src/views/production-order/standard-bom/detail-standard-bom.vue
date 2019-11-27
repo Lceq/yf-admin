@@ -16,18 +16,8 @@
             </Row>
             <Row>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="BOM单号:" class="formItemMargin">
-                        <div class="read-only-item">{{bomDetailData.code}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="单据日期:" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.date}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="生产单号:" class="formItemMargin">
-                        <div class="read-only-item">{{bomDetailData.prdOrderCode}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
@@ -48,53 +38,18 @@
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="纱线用途:" class="formItemMargin">
-                        <div class="read-only-item">{{ bomDetailData.purposeName }}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="纱线捻向:" class="formItemMargin">
-                        <div class="read-only-item">{{ bomDetailData.twistDirectionName }}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="批号:" class="formItemMargin">
-                        <div class="read-only-item">{{bomDetailData.batchCode}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="计量单位:" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.unitName ? `${bomDetailData.unitName}(${bomDetailData.unitCode})`: '' }}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="订单数量:" prop="specUserIpt" class="formItemMargin">
+                    <FormItem label="标准数量:" prop="specUserIpt" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.productionQty}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="工艺路线:" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.specPathName}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="交货开始时间:" class="formItemMargin">
-                        <div class="read-only-item">{{bomDetailData.deliveryDateFrom}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="交货结束时间:" class="formItemMargin">
-                        <div class="read-only-item">{{bomDetailData.deliveryDateTo}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="日供货量:" class="formItemMargin">
-                        <div class="read-only-item">{{bomDetailData.dailySupplyQty}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="引用状态:" class="formItemMargin">
-                        <div class="read-only-item">{{ bomDetailData.isQuoteName }}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
@@ -125,11 +80,6 @@
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                                            <FormItem label="批号:" class="formItemMargin">
-                                                <div class="read-only-item">{{productItem.batchCode}}</div>
-                                            </FormItem>
-                                        </Col>
-                                        <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="计量单位:" class="formItemMargin">
                                                 <div class="read-only-item">{{productItem.unitName ? `${productItem.unitName}(${productItem.unitCode})` : ''}}</div>
                                             </FormItem>
@@ -141,21 +91,6 @@
                                                 <div class="read-only-item">{{productItem.productionQty}}</div>
                                             </FormItem>
                                         </Col>
-                                        <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                                            <FormItem label="计划开工时间:" class="formItemMargin">
-                                                <div class="read-only-item">{{productItem.planStartDate}}</div>
-                                            </FormItem>
-                                        </Col>
-                                        <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                                            <FormItem label="计划完工时间:" class="formItemMargin">
-                                                <div class="read-only-item">{{productItem.planFinishDate}}</div>
-                                            </FormItem>
-                                        </Col>
-                                        <!--<Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                                            <FormItem label="制成率%:" class="formItemMargin">
-                                                <div class="read-only-item">{{productItem.pullRate}}</div>
-                                            </FormItem>
-                                        </Col>-->
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="上机准备时间:" class="formItemMargin">
                                                 <div class="read-only-item">{{productItem.preparationHours}}</div>
@@ -293,7 +228,7 @@
         methods: {
             addClick () {
                 this.$router.push({
-                    path: 'addManufactureBOM',
+                    path: 'add-standard-bom',
                     query: {
                         activated: true
                     }
@@ -321,7 +256,7 @@
             },
             editEvent () {
                 this.$router.push({
-                    path: 'editManufactureBOM',
+                    path: 'edit-standard-bom',
                     query: {
                         id: this.$route.query.id,
                         edit: true,
@@ -332,7 +267,7 @@
             },
             backListEvent () {
                 this.$router.push({
-                    path: 'manufactureBOM',
+                    path: 'list-standard-bom',
                     query: {
                         activated: true
                     }
@@ -341,11 +276,11 @@
             },
             // 撤销
             cancelClickEvent () {
-                this.$api.manufacture.cancelHttp([this.$route.query.id]).then(res => {
+                this.$api.manufacture.bomCancelRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'cancelTips');
                         this.$router.push({
-                            path: 'editManufactureBOM',
+                            path: 'edit-standard-bom',
                             query: {
                                 id: this.$route.query.id,
                                 edit: true,
@@ -357,7 +292,7 @@
             },
             // 审核
             auditClickEvent () {
-                this.$api.manufacture.approveHttp([this.$route.query.id]).then(res => {
+                this.$api.manufacture.bomApproveRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         this.getDetailHttp().then(res => {
                             if (res.data.status === 200) {
@@ -373,7 +308,7 @@
             },
             // 反审核
             unAuditClickEvent () {
-                this.$api.manufacture.unapproveHttp([this.$route.query.id]).then(res => {
+                this.$api.manufacture.bomUnApproveRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         this.getDetailHttp().then(res => {
                             if (res.data.status === 200) {
@@ -389,7 +324,7 @@
             },
             // 关闭
             closeClickEvent () {
-                this.$api.manufacture.closeHttp([this.$route.query.id]).then(res => {
+                this.$api.manufacture.bomCloseRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         this.getDetailHttp().then(res => {
                             if (res.data.status === 200) {
@@ -405,7 +340,7 @@
             },
             // 反关闭
             openClickEvent () {
-                this.$api.manufacture.uncloseHttp([this.$route.query.id]).then(res => {
+                this.$api.manufacture.bomUnCloseRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         this.getDetailHttp().then(res => {
                             if (res.data.status === 200) {
@@ -439,14 +374,14 @@
             },
             // 根据工序获取dom详情
             getPreviousStepDetailHttp (processId) {
-                return this.$api.manufacture.previousStepDetailHttp({
-                    prdBomId: this.$route.query.id,
+                return this.$api.manufacture.bomProcessPreviousStepRequest({
+                    bomId: this.$route.query.id,
                     processId: processId
                 });
             },
             // 获取详情
             getDetailHttp () {
-                return this.$api.manufacture.bomDetailHttp({
+                return this.$api.manufacture.bomDetailRequest({
                     id: this.$route.query.id
                 });
             }

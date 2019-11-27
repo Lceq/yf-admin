@@ -152,7 +152,7 @@
                                                         <Option v-for="(option, index) in item.remoteSpecSheetList" :value="option.code" :key="option.id">{{option.code}}</Option>
                                                     </Select>
                                                     <Button @click="clickSpecSheetButtonEvent($event, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
-                                                    <Button size="small" :disabled="item.disableSetSpecButton" type="success" @click="setProcessEvent($event, index)">查看工艺信息</Button>
+                                                    <Button size="small" :disabled="item.disableSetSpecButton" type="success" @click="setProcessEvent($event, item.specSheetCode, index)">查看工艺信息</Button>
                                                 </div>
                                             </FormItem>
                                         </Col>
@@ -200,6 +200,7 @@
             </div>
         </Form>
         <see-spec-sheet
+                :spin-show="setSpecModalSpinShow"
                 :set-process-modal-state="setProcessModalState"
                 :set-process-modal-btn-loading="setProcessModalBtnLoading"
                 :spec-product-obj="specProductObj"
@@ -266,6 +267,7 @@
         },
         data () {
             return {
+                setSpecModalSpinShow: false,
                 toCreated: false,
                 globalLoadingShow: false,
                 backButtonLoading: false,
@@ -600,18 +602,7 @@
                             } else {
                                 this.formDynamic.productModuleList[this.productModuleIndex].specSheetList = [];
                             };
-                            (async () => {
-                                // 获取工艺参数
-                                await this.getSpecDetailHttp(item.id).then(res => {
-                                    specParamsData = res.data.res;
-                                    if (res.data.status === 200) {
-                                        this.$delete(res.data.res, 'id');
-                                        specParamsData = res.data.res;
-                                        Object.assign(this.formDynamic.productModuleList[this.productModuleIndex], specParamsData.specSheetProcessModel);
-                                        this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
-                                    };
-                                });
-                            })();
+                            this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
                         };
                     });
                 };
@@ -633,16 +624,7 @@
                 } else {
                     this.formDynamic.productModuleList[this.productModuleIndex].specSheetList = [];
                 };
-                (async () => {
-                    await this.getSpecDetailHttp(e.id).then(res => {
-                        if (res.data.status === 200) {
-                            this.$delete(res.data.res, 'id');
-                            specParamsData = res.data.res;
-                            Object.assign(this.formDynamic.productModuleList[this.productModuleIndex], JSON.parse(JSON.stringify(specParamsData.specSheetProcessModel)));
-                            this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
-                        };
-                    });
-                })()
+                this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
             },
             selectSpecModalSearchBtnEvent (event) {
                 this.getSpecListHttp(this.formDynamic.productModuleList[this.productModuleIndex].productId, this.pathProcessList[this.current].processId, 1, event.code).then(res => {
@@ -1053,13 +1035,21 @@
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetParamList', []);
             },
             // 设置工艺的事件
-            setProcessEvent (e, index) {
+            setProcessEvent (e, code, index) {
                 this.productModuleIndex = index;
-                this.specProductObj = {};
-                setTimeout(()=>{
-                    this.specProductObj = JSON.parse(JSON.stringify(this.formDynamic.productModuleList[index]));
-                    this.setProcessModalState = true;
-                },500)
+                this.setProcessModalState = true;
+                this.formDynamic.productModuleList[this.productModuleIndex].remoteSpecSheetList.forEach((item)=>{
+                    if (item.code === code) {
+                        // 请求工艺单的参数
+                        this.setSpecModalSpinShow = true;
+                        this.getSpecDetailHttp(item.id).then(res => {
+                            if (res.data.status === 200) {
+                                this.specProductObj = res.data.res.specSheetProcessModel;
+                                this.setSpecModalSpinShow = false;
+                            };
+                        });
+                    };
+                });
             },
             // 获取工艺参数和设备
             getSpecDetailHttp (id) {

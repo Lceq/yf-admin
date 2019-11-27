@@ -20,6 +20,9 @@ export default {
     bomApproveRequest (params) {
         return proxy.call('bom.approve', params);
     },
+    bomUnApproveRequest (params) {
+        return proxy.call('bom.unapprove', params);
+    },
     bomCloseRequest (params) {
         return proxy.call('bom.close', params);
     },

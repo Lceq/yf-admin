@@ -32,6 +32,9 @@ export default {
     bomDetailRequest (params) {
         return proxy.call('bom.detail', params);
     },
+    bomSubmitRequest (params) {
+        return proxy.call('bom.submit', params);
+    },
 
     // 制造bom接口
     listHttp (params) {

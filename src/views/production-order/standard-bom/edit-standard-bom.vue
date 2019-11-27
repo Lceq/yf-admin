@@ -444,7 +444,7 @@
                     if (valid) {
                         this.formDynamic.productModuleList.forEach((item)=>{// 移除id
                             this.$delete(item, 'id');
-                            item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});
+                            // item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});
                             item.bomMaterielList.forEach((bomMaterialItem)=>{this.$delete(bomMaterialItem, 'id');});
                         });
                         this.submitButtonLoading = true;
@@ -823,19 +823,18 @@
             },
             // 提交的请求
             submitHttp (bomId) {
-                this.$api.manufacture.submitHttp([bomId]).then(res => {
+                this.$api.manufacture.bomSubmitRequest([bomId]).then(res => {
                     if (res.data.status === 200) {
                         this.submitButtonLoading = false;
                         noticeTips(this, 'submitTips');
-                        // this.getDetailHttp();
                         this.$router.push({
-                            path: 'bomDetail',
+                            path: 'detail-standard-bom',
                             query: {
                                 id: bomId,
                                 activated: true
                             }
                         });
-                        this.$store.commit('removeTag', 'editManufactureBOM');
+                        this.$store.commit('removeTag', 'edit-standard-bom');
                     };
                 });
             },

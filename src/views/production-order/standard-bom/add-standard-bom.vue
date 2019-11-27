@@ -631,7 +631,7 @@
             // 创建成功提示modal取消事件
             tipsModalCancelEvent () {
                 this.tipsModalState = false;
-                this.$store.commit('removeTag', 'addManufactureBOM');
+                this.$store.commit('removeTag', 'add-standard-bom');
                 this.$router.push({
                     path: 'list-standard-bom',
                     query: {
@@ -726,7 +726,7 @@
             // 提交的请求
             submitHttp (bomId) {
                 this.globalLoadingShow = true;
-                this.$api.manufacture.submitHttp([bomId]).then(res => {
+                this.$api.manufacture.bomSubmitRequest([bomId]).then(res => {
                     if (res.data.status === 200) {
                         this.submitButtonLoading = false;
                         noticeTips(this, 'submitTips');
@@ -930,7 +930,7 @@
             getBomPreviousStepDetailHttp (processId) {
                 this.globalLoadingShow = true;
                 this.$api.manufacture.bomProcessPreviousStepRequest({
-                    prdBomId: this.saveBomId,
+                    bomId: this.saveBomId,
                     processId: processId
                 }).then(res => {
                     if (res.data.status === 200) {

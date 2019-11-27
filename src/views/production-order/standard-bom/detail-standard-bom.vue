@@ -233,7 +233,7 @@
                         activated: true
                     }
                 });
-                this.$store.commit('removeTag', 'bomDetail');
+                this.$store.commit('removeTag', 'detail-standard-bom');
             },
             seeProcessModalCancelEvent () {
                 this.seeSpecSheetModalState = false;

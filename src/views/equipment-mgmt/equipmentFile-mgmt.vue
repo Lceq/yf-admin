@@ -761,6 +761,7 @@
                 this.showOther = false;
                 this.saveModalState = true;
                 this.saveModalTitle = '新增设备档案';
+                this.$delete(this.formValidate, 'id');
             },
             //获取选中的审核状态
             getDropReview(e){

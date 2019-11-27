@@ -5,7 +5,7 @@ export default {
     bomSaveRequest (params) {
         return proxy.call('bom.save', params);
     },
-    bomProcessPreviousStep (params) {
+    bomProcessPreviousStepRequest (params) {
         return proxy.call('bom.process.previousStep', params);
     },
     bomProcessSave (params) {
@@ -21,10 +21,13 @@ export default {
         return proxy.call('bom.approve', params);
     },
     bomCloseRequest (params) {
-        return post('bom.close', params);
+        return proxy.call('bom.close', params);
     },
     bomUnCloseRequest (params) {
-        return post('bom.unclose', params);
+        return proxy.call('bom.unclose', params);
+    },
+    bomDetailRequest (params) {
+        return proxy.call('bom.detail', params);
     },
 
     // 制造bom接口

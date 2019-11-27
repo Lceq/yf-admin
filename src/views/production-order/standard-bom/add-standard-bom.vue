@@ -929,7 +929,7 @@
             },
             getBomPreviousStepDetailHttp (processId) {
                 this.globalLoadingShow = true;
-                this.$api.manufacture.bomProcessPreviousStep({
+                this.$api.manufacture.bomProcessPreviousStepRequest({
                     prdBomId: this.saveBomId,
                     processId: processId
                 }).then(res => {

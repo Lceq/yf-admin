@@ -602,7 +602,6 @@
                             item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
                             item.bomMaterielList.forEach(bomMaterialItem => this.$delete(bomMaterialItem, 'id'));
                         });
-                        // this.nextButtonLoading = true;
                         this.asyncSaveFun();
                     } else {
                         noticeTips(this, 'unCompleteTips');
@@ -902,6 +901,14 @@
                 this.formDynamic.productModuleList.forEach((item)=>{ // 时间格式转成2000-11-11 11:11:11
                     item.planStartDate = formatDate(item.planStartDate);
                     item.planFinishDate = formatDate(item.planFinishDate);
+                    // 移除冗余字段
+                    this.$delete(item, 'specSheetParamList');
+                    this.$delete(item, 'specSheetList');
+                    this.$delete(item, 'remoteSpecSheetList');
+                    item.bomMaterielList.forEach(batchItem => {
+                        this.$delete(batchItem, 'batchList');
+                        this.$delete(batchItem, 'remoteProductList');
+                    });
                 });
                 let paramsData = {
                     "prdBomId": bomId,
@@ -915,7 +922,7 @@
                     // "id": this.bomProcessId,
                     "bomProductList": this.formDynamic.productModuleList
                 };
-                return this.$api.manufacture.saveBomChild(paramsData).then(res => {
+                return this.$api.manufacture.bomProcessSave(paramsData).then(res => {
                     if (res.data.status === 200) {
                         this.nextButtonLoading = false;
                         if (this.current !== this.pathProcessList.length - 1) {
@@ -953,7 +960,7 @@
             },
             getBomPreviousStepDetailHttp (processId) {
                 this.globalLoadingShow = true;
-                this.$api.manufacture.previousStepDetailHttp({
+                this.$api.manufacture.bomProcessPreviousStepRequest({
                     prdBomId: this.saveBomId,
                     processId: processId
                 }).then(res => {
@@ -962,6 +969,7 @@
                         this.bomProcessId = res.data.res.id;
                         let responseMaterialList = res.data.res.bomProductList;
                         this.formDynamic.productModuleList = [];
+                        console.log('发挥', res.data.res)
                         this.getBackDataMethod(responseMaterialList, processId);
                     };
                 });
@@ -1094,7 +1102,7 @@
             },
             // 保存主表请求
             saveBomHttp () {
-                return this.$api.manufacture.saveHttp({
+                return this.$api.manufacture.bomSaveRequest({
                     "id": this.saveBomId,
                     "date": formatDate(this.formValidate.date),
                     "prdOrderId": this.selectOrderObj.id,
@@ -1200,7 +1208,7 @@
             },
             // 获取详情
             getDetailHttp () {
-                return this.$api.manufacture.bomDetailHttp({id: this.$route.query.id}).then(res => {
+                return this.$api.manufacture.bomDetailRequest({id: this.$route.query.id}).then(res => {
                     if (res.data.status === 200) {
                         let responseData = res.data.res;
                         this.formValidate = translateIsQuote(responseData);

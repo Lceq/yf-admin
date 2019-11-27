@@ -15,18 +15,8 @@
             <div>
                 <Row>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="BOM单号:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.code}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="单据日期:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.date}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="生产单号:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.prdOrderCode}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
@@ -45,27 +35,12 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="纱线用途:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.purposeName}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="纱线捻向:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.twistDirectionName}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="批号:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.batchCode}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="计量单位:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.unitValue}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="订单数量:" prop="specUserIpt" class="formItemMargin">
+                        <FormItem label="标准数量:" prop="specUserIpt" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.productionQty}}</div>
                         </FormItem>
                     </Col>
@@ -75,28 +50,8 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="交货开始时间:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.deliveryDateFrom}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="交货结束时间:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.deliveryDateTo}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="日供货量:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.dailySupplyQty}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="单据状态:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.auditStateName}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="引用状态:" class="formItemMargin">
-                            <div class="read-only-item">{{ formValidate.isQuoteName }}</div>
                         </FormItem>
                     </Col>
                 </Row>
@@ -135,13 +90,8 @@
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                        <FormItem label="规格:" class="formItemMargin" :label-width="110">
-                                            <div class="read-only-item">{{item.productModels}}</div>
-                                        </FormItem>
-                                        </Col>
-                                        <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                            <FormItem label="批号:" class="formItemMargin" :label-width="110">
-                                                <div class="read-only-item">{{item.batchCode}}</div>
+                                            <FormItem label="规格:" class="formItemMargin" :label-width="110">
+                                                <div class="read-only-item">{{item.productModels}}</div>
                                             </FormItem>
                                         </Col>
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
@@ -152,26 +102,6 @@
                                         <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                             <FormItem label="生产数量:" prop="specUserIpt" class="formItemMargin" :label-width="110">
                                                 <div class="read-only-item">{{item.productionQty}}</div>
-                                            </FormItem>
-                                        </Col>
-                                        <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                            <FormItem label="计划开工时间:" class="formItemMargin" :label-width="110"
-
-                                            >
-                                                <!-- :key="index"
-                                                      :prop="'productModuleList.' + index + '.planStartDate'"
-                                                      :rules="{required: true, type: 'date', trigger: 'change'}"-->
-                                                <DatePicker @on-change="getPlanStartDateEvent($event, item.planFinishDate, index)" :clearable="false" transfer v-model="item.planStartDate" type="date" placeholder="请选择计划开工时间" class="widthPercentage"></DatePicker>
-                                            </FormItem>
-                                        </Col>
-                                        <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                            <FormItem label="计划完工时间:" class="formItemMargin" :label-width="110"
-
-                                            >
-                                                <!-- :key="index"
-                                                 :prop="'productModuleList.' + index + '.planFinishDate'"
-                                                 :rules="{required: true, type: 'date', trigger: 'change'}"-->
-                                                <DatePicker @on-change="getPlanFinishDateEvent($event, item.planStartDate, index)" :clearable="false" transfer v-model="item.planFinishDate" type="date" placeholder="请选择计划完工时间" class="widthPercentage"></DatePicker>
                                             </FormItem>
                                         </Col>
                                     </Row>
@@ -322,7 +252,7 @@
     </card>
 </template>
 <script>
-    import bomTable from '../manufacture/components/bom-table';
+    import bomTable from './bom-table';
     import seeSpecSheet from '../manufacture/components/see-spec-sheet';
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import selectMaterialModal from '../order/select-material';
@@ -415,27 +345,6 @@
             };
         },
         methods: {
-            getPlanStartDateEvent (dateFrom, dateTo, index) {
-                if (new Date(dateFrom + ' 00:00:00').valueOf() > new Date(this.formValidate.deliveryDateTo + ' 00:00:00').valueOf() || new Date(dateFrom + ' 00:00:00').valueOf() < new Date(this.formValidate.deliveryDateFrom + ' 00:00:00').valueOf()) {
-                    emptyTips(this, '计划开台时间应在交货日期范围内!');
-                } else {
-                    if (new Date(dateFrom + ' 00:00:00').valueOf() > new Date(formatDate(dateTo)).valueOf()) {
-                        this.formDynamic.productModuleList[index].planStartDate = '';
-                        this.$set(this.formDynamic.productModuleList[index], 'planStartDate', '');
-                        emptyTips(this, '计划开台时间不能大于计划完工时间!');
-                    };
-                };
-            },
-            getPlanFinishDateEvent (dateTo, dateFrom, index) {
-                if (new Date(dateTo + ' 00:00:00').valueOf() > new Date(this.formValidate.deliveryDateTo + ' 00:00:00').valueOf() || new Date(dateTo + ' 00:00:00').valueOf() < new Date(this.formValidate.deliveryDateFrom + ' 00:00:00').valueOf()) {
-                    emptyTips(this, '计划完工时间应在交货日期范围内!');
-                } else {
-                    if (new Date(formatDate(dateFrom)).valueOf() > new Date(dateTo + ' 00:00:00').valueOf()) {
-                        this.$set(this.formDynamic.productModuleList[index], 'planFinishDate', '');
-                        emptyTips(this, '计划完工时间不能小于计划开台时间!');
-                    };
-                };
-            },
             getProductToBatchCodeListHttp (productCode, batchCode = '') {
                 return this.$call('product.batch.list',{
                     productNameCode: productCode,
@@ -585,13 +494,16 @@
             },
             // 下一步
             nextEvent () {
+                console.log(111111)
                 this.$refs['formDynamic'].validate((valid) => {
                     if (valid) {
+                        console.log(66666, this.formDynamic.productModuleList)
                         this.formDynamic.productModuleList.forEach((item)=>{ //删除id
                             this.$delete(item, 'id');
-                            item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
+                            // item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
                             item.bomMaterielList.forEach(bomMaterialItem => this.$delete(bomMaterialItem, 'id'));
                         });
+                        console.log(99999)
                         this.asyncSaveFun();
                     } else {
                         noticeTips(this, 'unCompleteTips');
@@ -892,13 +804,13 @@
                     item.planStartDate = formatDate(item.planStartDate);
                     item.planFinishDate = formatDate(item.planFinishDate);
                     // 移除冗余字段
-                    this.$delete(item, 'specSheetParamList');
+                    /*this.$delete(item, 'specSheetParamList');
                     this.$delete(item, 'specSheetList');
                     this.$delete(item, 'remoteSpecSheetList');
                     item.bomMaterielList.forEach(batchItem => {
                         this.$delete(batchItem, 'batchList');
                         this.$delete(batchItem, 'remoteProductList');
-                    });
+                    });*/
                 });
                 let paramsData = {
                     "bomId": bomId,
@@ -1016,23 +928,27 @@
             },
             asyncSaveFun () {
                 let isCheckProduct = true;
+                console.log(222222)
                 if (this.pathProcessList[this.current].isIntegration === false) {
+                    console.log(3333333)
                     // 判断投料是否选择产品
                     this.formDynamic.productModuleList.forEach((item) => {
                         item.bomMaterielList.forEach((materialItem) => {
-                            if (!materialItem.mproductCode || !materialItem.mbatchCode || materialItem.mputinQty === null || materialItem.mattritionRate === null || materialItem.mmixtureRatio === null) {
+                            if (!materialItem.mproductCode || materialItem.mputinQty === null || materialItem.mattritionRate === null || materialItem.mmixtureRatio === null) {
                                 isCheckProduct = false;
                             };
                         });
                     });
                 } else {
                     // 工序是梳棉不存投料
+                    console.log(4444444)
                     this.formDynamic.productModuleList.forEach((item)=>{ // 移除id
                         this.$delete(item, 'id');
                         item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});
                         item.bomMaterielList = [];
                     });
                 };
+
                 if (isCheckProduct === true) {
                     // 占比只能等于或小于100
                     if (!this.validatorMixtureRatio()) {

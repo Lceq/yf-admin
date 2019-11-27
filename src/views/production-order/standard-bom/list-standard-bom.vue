@@ -23,15 +23,12 @@
                         <Col>
                             <Row type="flex" justify="end">
                                 <Col class="flexAlignCenter margin-bottom-10">
-                                    <!--<p class="labelWidth">开始日期:</p>-->
                                     <DatePicker type="date" placeholder="请选择开始时间" class="searchHurdles queryBarMarginRight" v-model="billFromDate"></DatePicker>
                                 </Col>
                                 <Col class="flexAlignCenter margin-bottom-10">
-                                    <!--<p class="labelWidth">结束日期:</p>-->
                                     <DatePicker type="date" placeholder="请选择结束时间" class="searchHurdles queryBarMarginRight" v-model="billToDate"></DatePicker>
                                 </Col>
                                 <Col class="flexAlignCenter margin-bottom-10">
-                                    <!--<span class="labelWidth">生产车间:</span>-->
                                     <Select clearable v-model="queryBarWorkshopValue" placeholder="请选择生产车间" class="searchHurdles">
                                         <Option v-for="item in queryBarWorkshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
                                     </Select>
@@ -39,17 +36,11 @@
                             </Row>
                             <Row type="flex" justify="end" v-show="showMore">
                                 <Col class="flexAlignCenter margin-bottom-10">
-                                    <!--<p class="labelWidth">生产单号:</p>-->
-                                    <Input type="text" v-model.trim="queryBarOrderCodeValue" placeholder="请输入生产单号" class="searchHurdles queryBarMarginRight" @on-enter="queryBarOrderCodeEnterEvent"/>
-                                </Col>
-                                <Col class="flexAlignCenter margin-bottom-10">
-                                    <!--<p class="labelWidth">引用状态:</p>-->
                                     <Select clearable v-model="queryBarIsQuote" placeholder="请选择引用状态" class="searchHurdles queryBarMarginRight">
                                         <Option v-for="item in isQuoteList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </Col>
                                 <Col class="flexAlignCenter margin-bottom-10">
-                                    <!--<p class="labelWidth">所属产品:</p>-->
                                     <Input type="text" v-model.trim="queryBarProductValue" placeholder="请输入产品编号或名称" class="searchHurdles"/>
                                 </Col>
                             </Row>
@@ -71,29 +62,25 @@
                     <Page :total="pageTotal" show-elevator :page-size-opts="pageOpts" :show-total="true" :page-size="pageSize" @on-change="getPage" :show-sizer="true" @on-page-size-change="pageChange"></Page>
                 </Col>
             </Row>
-            <Row>
-                <tips-modal
-                        :v-model="deleteModalStatus"
-                        :tipMsg="deleteMsg"
-                        :loading="deleteButtonLoading"
-                        @cancel="deleteCancel"
-                        @confirm="deleteConfirm"
-                >
-                </tips-modal>
-            </Row>
+            <tips-modal
+                    :v-model="deleteModalStatus"
+                    :tipMsg="deleteMsg"
+                    :loading="deleteButtonLoading"
+                    @cancel="deleteCancel"
+                    @confirm="deleteConfirm"
+            >
+            </tips-modal>
         </div>
     </left-menu>
 </template>
 <script>
-    let _this = this;
     import { noticeTips, formatDate, toDay, setPage, clearSpace, toDaySeconds, translateState, compClientHeight } from '../../../libs/common';
     import tipsModal from '../../public/deleteWarning';
     import leftMenu from '../../layout/layout';
+    let _this = this;
     export default {
         name: 'manufacture-list',
-        components: {
-            tipsModal, leftMenu
-        },
+        components: { tipsModal, leftMenu },
         data () {
             return {
                 toCreated: false,
@@ -115,18 +102,22 @@
                     {type: 'selection', width: 60, fixed: 'left', align: 'center'},
                     {title: '单据日期', key: 'date', align: 'left', fixed: 'left', sortable: true, minWidth: 110},
                     {
-                        title: '制造BOM单号',
+                        title: '产品',
                         key: 'code',
                         fixed: 'left',
                         sortable: true,
-                        minWidth: 130,
+                        width: 300,
                         align: 'left',
                         render: (h, params) => {
                             if (parseInt(params.row.auditState) === 1) {
-                                return h('div', [
+                                return h('div', {
+                                    style: {
+                                        display: 'flex'
+                                    }
+                                }, [
                                     h('a', {
                                         domProps: {
-                                            innerHTML: params.row.code
+                                            innerHTML: params.row.productName ? `${params.row.productName}(${params.row.productCode})` : ''
                                         },
                                         on: {
                                             click: () => {
@@ -138,6 +129,10 @@
                                                     }
                                                 });
                                             }
+                                        },
+                                        style: {
+                                            width: '280px',
+                                            display: 'block'
                                         }
                                     }),
                                     h('Icon', {
@@ -160,7 +155,7 @@
                                 return h('div', [
                                     h('a', {
                                         domProps: {
-                                            innerHTML: params.row.code
+                                            innerHTML: params.row.productName ? `${params.row.productName}(${params.row.productCode})` : ''
                                         },
                                         on: {
                                             click: () => {
@@ -178,20 +173,8 @@
                             };
                         }
                     },
-                    {title: '生产单号', key: 'prdOrderCode', align: 'left', minWidth: 110, sortable: true},
                     {title: '生产车间', key: 'workshopName', align: 'left', minWidth: 110, sortable: true},
-                    {title: '产品', key: 'productName', align: 'left', minWidth: 200,
-                        sortable: true,
-                        render: (h, params) => {
-                            return h('div', {
-                                domProps: {
-                                    innerHTML: params.row.productName ? `${params.row.productName}(${params.row.productCode})` : ''
-                                }
-                            });
-                        }
-                    },
                     {title: '规格', key: 'productModels', align: 'left', minWidth: 140, sortable: true},
-                    {title: '批号', key: 'batchCode', align: 'left', minWidth: 110, sortable: true},
                     {title: '单位', key: 'unitName', align: 'left', minWidth: 110,
                         sortable: true,
                         render: (h, params) => {
@@ -217,7 +200,6 @@
                 pageSize: setPage.pageSize,
                 pageOpts: setPage.pageOpts,
                 pageIndex: 1,
-                queryBarOrderCodeValue: '',
                 queryBarProductValue: '',
                 tableLoading: false,
                 tableHeight: 0
@@ -241,7 +223,6 @@
                 this.pageTotal = 1;
                 this.activeMenuAuditSate = menuData.id;
                 this.queryBarOrderSate = menuData.id + '';
-                this.queryBarOrderCodeValue = '';
                 this.queryBarIsQuote = null;
                 this.queryBarProductValue = '';
                 this.billFromDate = '';
@@ -268,7 +249,7 @@
             // 删除的确认按钮
             deleteConfirm () {
                 this.deleteButtonLoading = true;
-                this.$api.manufacture.deleteHttp(this.getAllIdMethods(this.checkArr)).then((res) => {
+                this.$api.manufacture.bomDeleteRequest(this.getAllIdMethods(this.checkArr)).then((res) => {
                     if (res.data.status === 200) {
                         this.deleteModalStatus = false;
                         this.deleteButtonLoading = false;
@@ -319,7 +300,6 @@
                 return this.$call('bom.list', {
                     dateFrom: this.billFromDate,
                     dateTo: this.billToDate,
-                    prdOrderCode: this.queryBarOrderCodeValue,
                     product: this.queryBarProductValue,
                     auditState: this.queryBarOrderSate,
                     workshopId: this.queryBarWorkshopValue,
@@ -381,7 +361,7 @@
             // 关闭事件
             closeEvent () {
                 if (this.checkArr.length !== 0) {
-                    this.$api.manufacture.closeHttp(this.getAllIdMethods(this.checkArr)).then(res => {
+                    this.$api.manufacture.bomCloseRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                         if (res.data.status === 200) {
                             this.checkArr = [];
                             noticeTips(this, 'closeTips');
@@ -396,8 +376,7 @@
             // 反关闭的事件
             unCloseEvent (e) {
                 if (this.checkArr.length !== 0) {
-                    // 反关闭的请求
-                    this.$api.manufacture.uncloseHttp(this.getAllIdMethods(this.checkArr)).then(res => {
+                    this.$api.manufacture.bomUnCloseRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                         if (res.data.status === 200) {
                             this.checkArr = [];
                             noticeTips(this, 'unCloseTips');
@@ -412,7 +391,7 @@
             // 撤销事件
             cancelEvent (e) {
                 if (this.checkArr.length !== 0) {
-                    this.$api.manufacture.cancelHttp(this.getAllIdMethods(this.checkArr)).then(res => {
+                    this.$api.manufacture.bomCancelRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                         if (res.data.status === 200) {
                             this.getMenuHttp();
                             this.getListHttp();
@@ -458,7 +437,7 @@
                 });
             },
             auditHttp (checkId) {
-                this.$api.manufacture.approveHttp(checkId).then(res => {
+                this.$api.manufacture.bomApproveRequest(checkId).then(res => {
                     if (res.data.status === 200) {
                         this.getMenuHttp();
                         this.getListHttp();

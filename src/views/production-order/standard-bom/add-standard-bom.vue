@@ -9,19 +9,19 @@
         <Form :label-width="90" ref="formValidate" :model="formValidate" :rules="ruleValidate" :show-message="false">
             <div>
                 <Row type="flex">
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
                         <FormItem label="单据日期:" prop="billDateValue" class="formItemMargin">
                             <DatePicker :editable="false" class="widthPercentage" v-model="formValidate.billDateValue" type="date" placeholder="请选择日期"></DatePicker>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
                         <FormItem label="生产车间:" class="formItemMargin" prop="workshopId">
                             <Select v-model="formValidate.workshopId">
                                 <Option v-for="item in workshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
                         <FormItem label="产品:" prop="productionOrderValue" class="formItemMargin">
                             <div class="flex-left">
                                 <Select
@@ -38,26 +38,26 @@
                             </div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
                         <FormItem label="规格:" class="formItemMargin">
                             <div class="read-only-item">{{selectHasProcessProductObj.models}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
                         <FormItem label="工艺路线:" class="formItemMargin" prop="specPathValue">
                             <Select label-in-value :disabled="formValidate.productionOrderValue ? false : true" v-model="formValidate.specPathValue" placeholder="请选择工艺路线" @on-change="getSelectSpecPathEvent">
                                 <Option v-for="item in specPathList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
                         <FormItem label="计量单位:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.unitValue}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
                         <FormItem label="标准数量:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.orderCountValue}}</div>
+                            <div class="read-only-item">{{formValidate.productionQty}}</div>
                         </FormItem>
                     </Col>
                 </Row>
@@ -114,16 +114,6 @@
                                     <Col><Icon type="ios-color-filter" /><span class="margin-left-10">工艺</span></Col>
                                 </Row>
                                 <Row>
-                                    <!--<Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
-                                        <FormItem label="制成率%:" class="formItemMargin"
-                                                  :label-width="110"
-                                                  :key="index"
-                                                  :prop="'productModuleList.' + index + '.pullRate'"
-                                                  :rules="{required: true, type: 'number', trigger: 'change'}"
-                                        >
-                                            <InputNumber :min="0" :max="100" v-model="item.pullRate" class="widthPercentage"></InputNumber>
-                                        </FormItem>
-                                    </Col>-->
                                     <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                         <FormItem label="上机准备时间(小时):" class="formItemMargin"
                                                   :label-width="140"
@@ -290,7 +280,6 @@
 <script>
     import bomTable from './bom-table';
     import seeSpecSheet from '../manufacture/components/see-spec-sheet';
-    import selectOrderModal from '../../components/select-bill-modal';
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import selectMaterialModal from '../order/select-material';
     import selectProductModal from '../order/select-material';
@@ -354,7 +343,7 @@
                     productionOrderValue: '',
                     workshopId: '',
                     unitValue: '',
-                    orderCountValue: 1,
+                    productionQty: 1,
                     specPathValue: null,
                     specPathNameValue: '',
                     dynamicColorValue: null
@@ -482,7 +471,6 @@
         methods: {
             // 选择有工序的产品modal的确认选择事件
             selectHasProcessProductModalConfirmEvent (e) {
-                console.log('返回', e)
                 this.setProductMethod(e);
                 this.selectHasProcessProductObj = e;
                 this.selectProductModalState = false;
@@ -645,7 +633,7 @@
                 this.tipsModalState = false;
                 this.$store.commit('removeTag', 'addManufactureBOM');
                 this.$router.push({
-                    path: 'manufactureBOM',
+                    path: 'list-standard-bom',
                     query: {
                         activated: true
                     }
@@ -974,7 +962,7 @@
                     // 判断投料是否选择产品
                     this.formDynamic.productModuleList.forEach((item) => {
                         item.bomMaterielList.forEach((materialItem) => {
-                            if (!materialItem.mproductCode || !materialItem.mbatchCode || materialItem.mputinQty === null || materialItem.mattritionRate === null || materialItem.mmixtureRatio === null) {
+                            if (!materialItem.mproductCode || materialItem.mputinQty === null || materialItem.mattritionRate === null || materialItem.mmixtureRatio === null) {
                                 isCheckProduct = false;
                             };
                         });
@@ -1127,7 +1115,7 @@
                 let that = this;
                 this.globalLoadingShow = true;
                 let paramsData = {
-                    "prdBomId": bomId,
+                    "bomId": bomId,
                     "serialNumber": this.current + 1,
                     "processId": this.pathProcessList[this.current].processId,
                     "processCode": this.pathProcessList[this.current].processCode,
@@ -1170,16 +1158,19 @@
                     "unitId": this.selectHasProcessProductObj.unitId,
                     "unitCode": this.selectHasProcessProductObj.unitCode,
                     "unitName": this.selectHasProcessProductObj.unitName,
-                    "productionQty": this.selectHasProcessProductObj.productionQty,
+                    "productionQty": this.formValidate.productionQty,
                     "specPathId": this.formValidate.specPathValue,
                     "specPathName": this.formValidate.specPathNameValue,
                     "purposeId": this.formValidate.purposeId,
                     "twistDirectionId": this.formValidate.twistDirectionId,
                 }).then(res => {
                     if (res.data.status === 200) {
+                        this.nextButtonLoading = false;
                         return res.data.res;
+                    } else {
+                        this.nextButtonLoading = false;
                     };
-                })
+                });
             },
             // 设置上机工艺的确认按钮事件
             seeProcessModalConfirmEvent (event) {
@@ -1237,7 +1228,7 @@
                 this.$set(this.formValidate, 'productionOrderValue','');
                 setTimeout(()=>{ this.$set(this.formValidate, 'productionOrderValue',e.code); },500);
                 this.formValidate.unitValue = e.unitName + '(' + e.unitCode + ')';
-                this.formValidate.orderCountValue = 1;
+                this.formValidate.productionQty = 1;
                 this.formValidate.purposeId = e.purposeId;
                 this.formValidate.twistDirectionId = e.twistDirectionId;
                 this.formDynamic.productModuleList[0].bomMaterielList[0].remoteProductList = this.remoteProductList;

@@ -1,9 +1,9 @@
 import { post, proxy } from '../../ajax/http';
 // BOM
 export default {
-    // 标准bom保存接口
+    // 标准bom接口
     bomSaveRequest (params) {
-        return proxy.call('bom/save', params);
+        return proxy.call('bom.save', params);
     },
     bomProcessPreviousStep (params) {
         return proxy.call('bom.process.previousStep', params);
@@ -11,8 +11,23 @@ export default {
     bomProcessSave (params) {
         return proxy.call('bom.process.save', params);
     },
+    bomDeleteRequest (params) {
+        return proxy.call('bom.delete', params);
+    },
+    bomCancelRequest (params) {
+        return proxy.call('bom.cancel', params);
+    },
+    bomApproveRequest (params) {
+        return proxy.call('bom.approve', params);
+    },
+    bomCloseRequest (params) {
+        return post('bom.close', params);
+    },
+    bomUnCloseRequest (params) {
+        return post('bom.unclose', params);
+    },
 
-    // 制造bom
+    // 制造bom接口
     listHttp (params) {
         return post('prd/bom/list', params);
     },

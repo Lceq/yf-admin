@@ -1,6 +1,18 @@
-import { post, fetch } from '../../ajax/http';
-// 制造BOM
+import { post, proxy } from '../../ajax/http';
+// BOM
 export default {
+    // 标准bom保存接口
+    bomSaveRequest (params) {
+        return proxy.call('bom/save', params);
+    },
+    bomProcessPreviousStep (params) {
+        return proxy.call('bom.process.previousStep', params);
+    },
+    bomProcessSave (params) {
+        return proxy.call('bom.process.save', params);
+    },
+
+    // 制造bom
     listHttp (params) {
         return post('prd/bom/list', params);
     },

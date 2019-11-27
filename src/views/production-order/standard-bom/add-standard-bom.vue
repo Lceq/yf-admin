@@ -288,7 +288,7 @@
     </card>
 </template>
 <script>
-    import bomTable from '../manufacture/components/bom-table';
+    import bomTable from './bom-table';
     import seeSpecSheet from '../manufacture/components/see-spec-sheet';
     import selectOrderModal from '../../components/select-bill-modal';
     import selectSpecSheetModal from '../../components/select-bill-modal';
@@ -941,7 +941,7 @@
             },
             getBomPreviousStepDetailHttp (processId) {
                 this.globalLoadingShow = true;
-                this.$api.manufacture.previousStepDetailHttp({
+                this.$api.manufacture.bomProcessPreviousStep({
                     prdBomId: this.saveBomId,
                     processId: processId
                 }).then(res => {
@@ -962,7 +962,6 @@
                             item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
                             item.bomMaterielList.forEach(bomMaterialItem => this.$delete(bomMaterialItem, 'id'));
                         });
-                        // this.nextButtonLoading = true;
                         this.asyncSaveFun();
                     } else {
                         noticeTips(this, 'unCompleteTips');
@@ -1138,7 +1137,7 @@
                     "preProcessName": this.pathProcessList[this.current].preProcessName,
                     "bomProductList": this.formDynamic.productModuleList
                 };
-                return this.$api.manufacture.saveBomChild(paramsData).then(res => {
+                return this.$api.manufacture.bomProcessSave(paramsData).then(res => {
                     if (res.data.status === 200) {
                         let responseMaterialList = res.data.res;
                         this.formDynamic.productModuleList = [];
@@ -1159,7 +1158,7 @@
             },
             // 保存主表请求
             saveBomHttp () {
-                return this.$api.manufacture.saveHttp({
+                return this.$api.manufacture.bomSaveRequest({
                     "id": this.saveBomId,
                     "date": formatDate(this.formValidate.billDateValue),
                     "workshopId": this.formValidate.workshopId,

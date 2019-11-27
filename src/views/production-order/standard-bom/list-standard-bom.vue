@@ -39,12 +39,8 @@
                             </Row>
                             <Row type="flex" justify="end" v-show="showMore">
                                 <Col class="flexAlignCenter margin-bottom-10">
-                                    <!--<p class="labelWidth">BOM单号:</p>-->
-                                    <Input type="text" v-model="queryBarBomCodeValue" placeholder="请输入BOM单号" class="searchHurdles queryBarMarginRight" @on-enter="queryBarWorkOrderEnterEvent"/>
-                                </Col>
-                                <Col class="flexAlignCenter margin-bottom-10">
                                     <!--<p class="labelWidth">生产单号:</p>-->
-                                    <Input type="text" v-model="queryBarOrderCodeValue" placeholder="请输入生产单号" class="searchHurdles queryBarMarginRight" @on-enter="queryBarOrderCodeEnterEvent"/>
+                                    <Input type="text" v-model.trim="queryBarOrderCodeValue" placeholder="请输入生产单号" class="searchHurdles queryBarMarginRight" @on-enter="queryBarOrderCodeEnterEvent"/>
                                 </Col>
                                 <Col class="flexAlignCenter margin-bottom-10">
                                     <!--<p class="labelWidth">引用状态:</p>-->
@@ -54,7 +50,7 @@
                                 </Col>
                                 <Col class="flexAlignCenter margin-bottom-10">
                                     <!--<p class="labelWidth">所属产品:</p>-->
-                                    <Input type="text" v-model="queryBarProductValue" placeholder="请输入产品编号或名称" class="searchHurdles"/>
+                                    <Input type="text" v-model.trim="queryBarProductValue" placeholder="请输入产品编号或名称" class="searchHurdles"/>
                                 </Col>
                             </Row>
                         </Col>
@@ -223,7 +219,6 @@
                 pageIndex: 1,
                 queryBarOrderCodeValue: '',
                 queryBarProductValue: '',
-                queryBarBomCodeValue: '',
                 tableLoading: false,
                 tableHeight: 0
             };
@@ -246,7 +241,6 @@
                 this.pageTotal = 1;
                 this.activeMenuAuditSate = menuData.id;
                 this.queryBarOrderSate = menuData.id + '';
-                this.queryBarBomCodeValue = '';
                 this.queryBarOrderCodeValue = '';
                 this.queryBarIsQuote = null;
                 this.queryBarProductValue = '';
@@ -255,7 +249,7 @@
                 this.getListHttp();
             },
             getMenuHttp () {
-                return this.$call('prd.bom.stateCount', {
+                return this.$call('bom.stateCount', {
                     workshopId: this.queryBarWorkshopValue
                 }).then(res => {
                     if (res.data.status === 200) {
@@ -297,12 +291,6 @@
                     noticeTips(this, 'unCheckTips');
                 };
             },
-            // 获取查询栏的物料
-            queryBarWorkOrderEnterEvent () {
-                this.pageIndex = 1;
-                this.pageTotal = 1;
-                this.getListHttp();
-            },
             // 获取查询栏的订单编号
             queryBarOrderCodeEnterEvent () {
                 this.pageIndex = 1;
@@ -323,19 +311,15 @@
             // 查询栏的请求
             getListHttp () {
                 this.tableLoading = true;
-                this.queryBarBomCodeValue = clearSpace(this.queryBarBomCodeValue);
-                this.queryBarOrderCodeValue = clearSpace(this.queryBarOrderCodeValue);
                 this.queryBarWorkshopValue = this.queryBarWorkshopValue || '';
                 this.queryBarOrderSate = this.queryBarOrderSate || '';
                 this.queryBarIsQuote = this.queryBarIsQuote || '';
-                this.queryBarProductValue = clearSpace(this.queryBarProductValue) || '';
                 this.billFromDate ? this.billFromDate = formatDate(this.billFromDate).split(' ')[0] : this.billFromDate = '';
                 this.billToDate ? this.billToDate = formatDate(this.billToDate).split(' ')[0] : this.billToDate = '';
-                return this.$call('prd.bom.list', {
+                return this.$call('bom.list', {
                     dateFrom: this.billFromDate,
                     dateTo: this.billToDate,
                     prdOrderCode: this.queryBarOrderCodeValue,
-                    code: this.queryBarBomCodeValue,
                     product: this.queryBarProductValue,
                     auditState: this.queryBarOrderSate,
                     workshopId: this.queryBarWorkshopValue,

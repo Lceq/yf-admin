@@ -15,6 +15,13 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                        <FormItem label="生产车间:" class="formItemMargin" prop="workshopId">
+                            <Select v-model="formValidate.workshopId">
+                                <Option v-for="item in workshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
+                            </Select>
+                        </FormItem>
+                    </Col>
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="产品:" prop="productionOrderValue" class="formItemMargin">
                             <div class="flex-left">
                                 <Select
@@ -23,22 +30,17 @@
                                         placeholder="请输入产品"
                                         remote
                                         v-model="formValidate.productionOrderValue"
-                                        @on-change="getSelectProductionEvent"
+                                        @on-change="onSelectHasProcessProductionEvent"
                                 >
-                                    <Option v-for="(option, index) in productionList" :value="option.code" :key="index">{{`${option.name}(${option.code})`}}</Option>
+                                    <Option v-for="(option, index) in hasProcessProductionList" :value="option.code" :key="index">{{`${option.name}(${option.code})`}}</Option>
                                 </Select>
-                                <Button @click="clickMainProductionEvent" class="remoteSearchButton" size="small" icon="ios-search"></Button>
+                                <Button @click="onSearchHasProcessProductBtnEvent" class="remoteSearchButton" size="small" icon="ios-search"></Button>
                             </div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
-                        <FormItem label="生产车间:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.workshopValue}}</div>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
                         <FormItem label="规格:" class="formItemMargin">
-                            <div class="read-only-item">{{selectOrderObj.productModels}}</div>
+                            <div class="read-only-item">{{selectHasProcessProductObj.models}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
@@ -274,9 +276,14 @@
                 @select-batch-modal-confirm-event="selectBatchModalConfirmEvent"
         ></select-batch-modal>
         <select-product-modal
-            :select-material-modal-state="selectProductModalState"
-            @on-visible-change="onSelectProductModalVisibleChange"
-            @confirm-event="selectProductConfirmEvent"
+                :spin-show="selectHasProcessProductModalSpinShow"
+                :select-material-page-total="selectHasProcessProductModalPageTotal"
+                :select-material-modal-state="selectProductModalState"
+                :select-materiel-modal-table-data="hasProcessProductData"
+                @on-visible-change="onSelectProductModalVisibleChange"
+                @confirm-event="selectHasProcessProductModalConfirmEvent"
+                @select-material-modal-search-event="onSelectProcessProductModalSearchEvent"
+                @on-change-page="onSelectProcessProductModalPageChangeEvent"
         ></select-product-modal>
     </card>
 </template>
@@ -301,9 +308,14 @@
             const validateBillDate = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateProductOrder = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateSpecPath = (rule, value, callback) => value ? callback() : callback(new Error());
+            const validateWorkshop = (rule, value, callback) => value ? callback() : callback(new Error());
             return {
+                workshopList: [],
+                selectHasProcessProductModalPageTotal: 0,
+                selectHasProcessProductModalSpinShow: false,
                 selectProductModalState: false,
-                productionList: [],
+                hasProcessProductionList: [],
+                hasProcessProductData: [],
 
                 globalLoadingShow: false,
                 backButtonLoading: false,
@@ -340,7 +352,7 @@
                     bomOrderValue: '自动生成BOM单号',
                     billDateValue: toDay(),
                     productionOrderValue: '',
-                    workshopValue: '',
+                    workshopId: '',
                     unitValue: '',
                     orderCountValue: 1,
                     specPathValue: null,
@@ -350,7 +362,8 @@
                 ruleValidate: {
                     billDateValue: [{required: true, validator: validateBillDate, trigger: 'change'}],
                     productionOrderValue: [{required: true, validator: validateProductOrder, trigger: 'change'}],
-                    specPathValue: [{required: true, validator: validateSpecPath, trigger: 'change'}]
+                    specPathValue: [{required: true, validator: validateSpecPath, trigger: 'change'}],
+                    workshopId: [{required: true, validator: validateWorkshop, trigger: 'change'}],
                 },
                 specModalContentSpinShow: false,
                 materialModalContentSpinShow: false,
@@ -424,7 +437,7 @@
                 specProductObj: {},
                 selectSpecPageTotal: 0,
                 editId: null,
-                selectOrderObj: {},
+                selectHasProcessProductObj: {},
                 bomMaterialData: [{
                     mproductId: null,
                     mproductCode: '',
@@ -467,20 +480,62 @@
             };
         },
         methods: {
-            getSelectProductionEvent (e) {
-                console.log(e)
+            // 选择有工序的产品modal的确认选择事件
+            selectHasProcessProductModalConfirmEvent (e) {
+                console.log('返回', e)
+                this.setProductMethod(e);
+                this.selectHasProcessProductObj = e;
+                this.selectProductModalState = false;
+            },
+            onSelectProcessProductModalPageChangeEvent (e) {
+                this.getHasProcessProductHttp('', e.name, '', e.pageIndex).then(res => {
+                    if (res.data.status === 200) {
+                        this.hasProcessProductData = res.data.res;
+                        this.selectHasProcessProductModalSpinShow = false;
+                        this.selectHasProcessProductModalPageTotal = res.data.count;
+                    };
+                });
+            },
+            onSelectProcessProductModalSearchEvent (e) {
+                this.selectHasProcessProductModalPageTotal = 1;
+                this.getHasProcessProductHttp('', e.name, '').then(res => {
+                    if (res.data.status === 200) {
+                        this.hasProcessProductData = res.data.res;
+                        this.selectHasProcessProductModalSpinShow = false;
+                        this.selectHasProcessProductModalPageTotal = res.data.count;
+                    };
+                });
+            },
+            // 获取带有工序的产品
+            getHasProcessProductHttp (preProcessId = '', name = '', productId = '', pageIndex = 1) {
+                return this.$api.product.productList2({
+                    processId: preProcessId,
+                    pageIndex: pageIndex,
+                    pageSize: setPage.pageSize,
+                    name: name,
+                    productId: productId
+                });
+            },
+            onSelectHasProcessProductionEvent (e) {
                 if (e) {
-                    this.productionList.forEach(item => {
+                    this.hasProcessProductionList.forEach(item => {
                         if (item.code === e) {
                             this.setProductMethod(item);
                         };
                     });
                 };
             },
-            // 产品按钮的事件
-            clickMainProductionEvent () {
+            // 搜索有工序的产品按钮的事件
+            onSearchHasProcessProductBtnEvent () {
+                this.selectHasProcessProductModalSpinShow = true;
                 this.selectProductModalState = true;
-                this.getMainOrderListHttp();
+                this.getHasProcessProductHttp().then(res => {
+                    if (res.data.status === 200) {
+                        this.hasProcessProductData = res.data.res;
+                        this.selectHasProcessProductModalSpinShow = false;
+                        this.selectHasProcessProductModalPageTotal = res.data.count;
+                    };
+                });
             },
             // 产品的"确认选择"事件
             selectProductConfirmEvent (e) {
@@ -1107,18 +1162,16 @@
                 return this.$api.manufacture.saveHttp({
                     "id": this.saveBomId,
                     "date": formatDate(this.formValidate.billDateValue),
-                    "prdOrderId": this.selectOrderObj.id,
-                    "prdOrderCode": this.selectOrderObj.code,
-                    "workshopId": this.selectOrderObj.workshopId,
-                    "workshopName": this.selectOrderObj.workshopName,
-                    "productId": this.selectOrderObj.productId,
-                    "productName": this.selectOrderObj.productName,
-                    "productCode": this.selectOrderObj.productCode,
-                    "productModels": this.selectOrderObj.productModels,
-                    "unitId": this.selectOrderObj.unitId,
-                    "unitCode": this.selectOrderObj.unitCode,
-                    "unitName": this.selectOrderObj.unitName,
-                    "productionQty": this.selectOrderObj.productionQty,
+                    "workshopId": this.formValidate.workshopId,
+                    "workshopName": this.formValidate.workshopName,
+                    "productId": this.selectHasProcessProductObj.id,
+                    "productName": this.selectHasProcessProductObj.name,
+                    "productCode": this.selectHasProcessProductObj.code,
+                    "productModels": this.selectHasProcessProductObj.models,
+                    "unitId": this.selectHasProcessProductObj.unitId,
+                    "unitCode": this.selectHasProcessProductObj.unitCode,
+                    "unitName": this.selectHasProcessProductObj.unitName,
+                    "productionQty": this.selectHasProcessProductObj.productionQty,
                     "specPathId": this.formValidate.specPathValue,
                     "specPathName": this.formValidate.specPathNameValue,
                     "purposeId": this.formValidate.purposeId,
@@ -1172,7 +1225,7 @@
                 this.selectSpecModalState = e;
             },
             setProductMethod (e) {
-                this.selectOrderObj = e;
+                this.selectHasProcessProductObj = e;
                 this.formDynamic.productModuleList = JSON.parse(JSON.stringify(this.initProductModuleList));
                 this.$set(this.formDynamic.productModuleList[0], 'productId', e.id);
                 this.$set(this.formDynamic.productModuleList[0], 'productCode', e.code);
@@ -1184,9 +1237,8 @@
                 this.$set(this.formDynamic.productModuleList[0], 'productionQty', 1);
                 this.$set(this.formValidate, 'productionOrderValue','');
                 setTimeout(()=>{ this.$set(this.formValidate, 'productionOrderValue',e.code); },500);
-                this.formValidate.workshopValue = e.workshopName;
                 this.formValidate.unitValue = e.unitName + '(' + e.unitCode + ')';
-                this.formValidate.orderCountValue = e.productionQty;
+                this.formValidate.orderCountValue = 1;
                 this.formValidate.purposeId = e.purposeId;
                 this.formValidate.twistDirectionId = e.twistDirectionId;
                 this.formDynamic.productModuleList[0].bomMaterielList[0].remoteProductList = this.remoteProductList;
@@ -1213,21 +1265,6 @@
                 // 插入当前
                 this.formDynamic.productModuleList[event.dataIndex].bomMaterielList.splice(event.index + 1, 0, JSON.parse(JSON.stringify(...this.bomMaterialData)));
             },
-            // 获取主产品
-            getMainOrderListHttp (resolve, reject) {
-                return this.$call('product.list2', {
-                    auditState: 3,
-                    pageSize: setPage.pageSize,
-                    isQuote: false
-                }).then(res => {
-                    resolve ? resolve(res) : false;
-                    if (res.data.status === 200) {
-                        this.productionList = res.data.res;
-                    };
-                }).catch(err => {
-                    reject ? reject(err) : false;
-                });
-            },
             // 工艺路线对应的工序
             getSpecPathProcessListHttp (id) {
                 this.$api.path.detailHttp({id: id}).then(res => {
@@ -1241,7 +1278,7 @@
                                 this.selectMaterielModalTableData = res.data.res;
                                 this.remoteProductList = res.data.res;
                                 this.bomMaterialData[0].remoteProductList = res.data.res;
-                                this.setProductMethod(this.selectOrderObj); // 初始化产品模块
+                                this.setProductMethod(this.selectHasProcessProductObj); // 初始化产品模块
                                 // 上级准备时间和前道提前时间(首道工序-取工艺路线上的时间，后面根据isHistory判断)
                                 this.$set(this.formDynamic.productModuleList[0], 'preparationHours', this.pathProcessList[this.current].preparationHours);
                                 this.$set(this.formDynamic.productModuleList[0], 'feedingHours', this.pathProcessList[this.current].feedingHours);
@@ -1296,19 +1333,29 @@
                     };
                 });
             },
-            // 获取依赖的数据
-            getDependencyData () {
-                let orderList = new Promise((resolve, reject) => {
-                    this.getMainOrderListHttp(resolve, reject);
-                });
-                Promise.all([orderList]).then(res => {
-                    // 判断路由是否携带"生产单号"参数
-                    if (this.$route.query.orderCode) {
-                        let selectOrderObj = {};
-                        this.formValidate.productionOrderValue = this.$route.query.orderCode;
+            getWorkshopListData () {
+                return this.$api.common.userWorkshopRequest().then(res => {
+                    if (res.data.status === 200) {
+                        this.formValidate.workshopId = res.data.res.defaultDeptId;
+                        this.formValidate.workshopName = res.data.res.defaultDeptName;
+                        this.workshopList = res.data.res.userData;
                     };
-                    this.globalLoadingShow = false;
+                })
+            },
+            // 获取依赖的数据
+            async getDependencyData () {
+                await this.getHasProcessProductHttp().then(res => {
+                    if (res.data.status === 200) {
+                        this.hasProcessProductionList = res.data.res;
+                        // 判断路由是否携带"生产单号"参数
+                        if (this.$route.query.orderCode) {
+                            let selectHasProcessProductObj = {};
+                            this.formValidate.productionOrderValue = this.$route.query.orderCode;
+                        };
+                        this.globalLoadingShow = false;
+                    };
                 });
+                await this.getWorkshopListData();
             }
         },
         created () {

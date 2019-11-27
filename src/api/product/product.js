@@ -40,5 +40,9 @@ export default {
     // 制造BOM获取产品
     productListByProcess (params) {
         return post('product/listByProcess', params);
-    }
+    },
+    // 获取有工序的产品
+    productList2 (params) {
+        return proxy.call('product.list2', params);
+    },
 };

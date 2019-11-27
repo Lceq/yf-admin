@@ -431,7 +431,7 @@
             },
             newAddClick () {
                 this.$router.push({
-                    path: 'addManufactureBOM',
+                    path: 'add-standard-bom',
                     query: {
                         activated: true
                     }
@@ -494,16 +494,13 @@
             },
             // 下一步
             nextEvent () {
-                console.log(111111)
                 this.$refs['formDynamic'].validate((valid) => {
                     if (valid) {
-                        console.log(66666, this.formDynamic.productModuleList)
                         this.formDynamic.productModuleList.forEach((item)=>{ //删除id
                             this.$delete(item, 'id');
                             // item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
                             item.bomMaterielList.forEach(bomMaterialItem => this.$delete(bomMaterialItem, 'id'));
                         });
-                        console.log(99999)
                         this.asyncSaveFun();
                     } else {
                         noticeTips(this, 'unCompleteTips');
@@ -871,7 +868,6 @@
                         this.bomProcessId = res.data.res.id;
                         let responseMaterialList = res.data.res.bomProductList;
                         this.formDynamic.productModuleList = [];
-                        console.log('发挥', res.data.res)
                         this.getBackDataMethod(responseMaterialList, processId);
                     };
                 });
@@ -928,9 +924,7 @@
             },
             asyncSaveFun () {
                 let isCheckProduct = true;
-                console.log(222222)
                 if (this.pathProcessList[this.current].isIntegration === false) {
-                    console.log(3333333)
                     // 判断投料是否选择产品
                     this.formDynamic.productModuleList.forEach((item) => {
                         item.bomMaterielList.forEach((materialItem) => {
@@ -941,7 +935,6 @@
                     });
                 } else {
                     // 工序是梳棉不存投料
-                    console.log(4444444)
                     this.formDynamic.productModuleList.forEach((item)=>{ // 移除id
                         this.$delete(item, 'id');
                         item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});

@@ -440,6 +440,11 @@
         methods: {
             // 选择有工序的产品modal的确认选择事件
             selectHasProcessProductModalConfirmEvent (e) {
+                this.formValidate.specPathValue = '';
+                this.formValidate.specPathNameValue = null;
+                this.current = 0;
+                this.pathProcessList = [];
+                this.setProductMethod(e);
                 this.setProductMethod(e);
                 this.selectHasProcessProductObj = e;
                 this.selectProductModalState = false;
@@ -477,6 +482,11 @@
                 if (e) {
                     this.hasProcessProductionList.forEach(item => {
                         if (item.code === e) {
+                            this.formValidate.specPathValue = '';
+                            this.formValidate.specPathNameValue = null;
+                            this.current = 0;
+                            this.pathProcessList = [];
+                            this.setProductMethod(e);
                             this.setProductMethod(item);
                         };
                     });
@@ -493,13 +503,6 @@
                         this.selectHasProcessProductModalPageTotal = res.data.count;
                     };
                 });
-            },
-            // 产品的"确认选择"事件
-            selectProductConfirmEvent (e) {
-                this.current = 0;
-                this.formValidate.specPathValue = '';
-                this.pathProcessList = [];
-                this.setProductMethod(e);
             },
             // 主表选择产品modal
             onSelectProductModalVisibleChange (e) {
@@ -1188,6 +1191,7 @@
             },
             // 选择的工艺路线
             getSelectSpecPathEvent (event) {
+                console.log('工艺路线', event)
                 if (event) {
                     this.current = 0;
                     this.formValidate.specPathNameValue = event.label;

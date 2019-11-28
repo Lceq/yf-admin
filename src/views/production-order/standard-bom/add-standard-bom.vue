@@ -23,14 +23,15 @@
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="版本号:" class="formItemMargin" prop="code">
-                            <Input v-model.trim="formValidate.code"></Input>
+                            <Input v-model.trim="formValidate.code" placeholder="请输入版本号"></Input>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                        <FormItem label="产品:" prop="productionOrderValue" class="formItemMargin">
+                        <FormItem label="产品:" prop="productionOrderValue" class="formItemMargin" >
                             <div class="flex-left">
                                 <Select
                                         class="remoteSearchSelect"
+                                        clearable
                                         filterable
                                         placeholder="请输入产品"
                                         remote

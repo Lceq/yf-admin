@@ -193,12 +193,12 @@
                             });
                         }
                     },
-                    {
-                        title: '批号',
-                        key: 'mbatchCode',
-                        align: 'center',
-                        minWidth: 80
-                    },
+                    // {
+                    //     title: '批号',
+                    //     key: 'mbatchCode',
+                    //     align: 'center',
+                    //     minWidth: 80
+                    // },
                     {
                         title: '占比%',
                         key: 'mmixtureRatio',

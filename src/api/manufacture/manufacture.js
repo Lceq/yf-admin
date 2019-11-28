@@ -1,4 +1,4 @@
-import { post, proxy } from '../../ajax/http';
+import { proxy } from '../../ajax/http';
 // BOM
 export default {
     // 标准bom接口
@@ -41,45 +41,45 @@ export default {
 
     // 制造bom接口
     listHttp (params) {
-        return post('prd/bom/list', params);
+        return proxy.call('prd.bom.list', params);
     },
     saveHttp (params) {
-        return post('prd/bom/save', params);
+        return proxy.call('prd.bom.save', params);
     },
     saveBomChild (params) {
-        return post('prd/bom/process/save', params);
+        return proxy.call('prd.bom.process.save', params);
     },
     leftMenuListHttp (params) {
-        return post('prd/bom/stateCount', params);
+        return proxy.call('prd.bom.stateCount', params);
     },
     unapproveHttp (params) {
-        return post('prd/bom/unapprove', params);
+        return proxy.call('prd.bom.unapprove', params);
     },
     approveHttp (params) {
-        return post('prd/bom/approve', params);
+        return proxy.call('prd.bom.approve', params);
     },
     submitHttp (params) {
-        return post('prd/bom/submit', params);
+        return proxy.call('prd.bom.submit', params);
     },
     cancelHttp (params) {
-        return post('prd/bom/cancel', params);
+        return proxy.call('prd.bom.cancel', params);
     },
     closeHttp (params) {
-        return post('prd/bom/close', params);
+        return proxy.call('prd.bom.close', params);
     },
     uncloseHttp (params) {
-        return post('prd/bom/unclose', params);
+        return proxy.call('prd.bom.unclose', params);
     },
     deleteHttp (params) {
-        return post('prd/bom/delete', params);
+        return proxy.call('prd.bom.delete', params);
     },
     bomDetailHttp (params) {
-        return post('prd/bom/detail', params);
+        return proxy.call('prd.bom.detail', params);
     },
     bomProcessDetailHttp (params) {
-        return post('prd/bom/process/detail', params);
+        return proxy.call('prd.bom.process.detail', params);
     },
     previousStepDetailHttp (params) {
-        return post('prd/bom/process/previousStep', params);
+        return proxy.call('prd.bom.process.previousStep', params);
     }
 };

@@ -475,7 +475,6 @@
                 });
             },
             onSelectProcessProductModalSearchEvent (e) {
-                console.log('参数', e)
                 this.selectHasProcessProductModalPageTotal = 1;
                 this.getHasProcessProductHttp('', e.name, '', e.pageIndex, setPage.pageSize, e.categoryIdArr[e.categoryIdArr.length - 1]).then(res => {
                     if (res.data.status === 200) {

@@ -427,7 +427,7 @@
             },
             // 反审核
             unAuditHttp () {
-                this.$api.manufacture.unapproveHttp(this.getAllIdMethods(this.checkArr)).then(res => {
+                this.$api.manufacture.bomUnapproveRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                     if (res.data.status === 200) {
                         this.getMenuHttp();
                         this.getListHttp();

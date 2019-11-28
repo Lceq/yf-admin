@@ -35,6 +35,9 @@ export default {
     bomSubmitRequest (params) {
         return proxy.call('bom.submit', params);
     },
+    bomUnapproveRequest (params) {
+        return proxy.call('bom.unapprove', params);
+    },
 
     // 制造bom接口
     listHttp (params) {

@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- dd -->
     <Modal
       v-model="showModal"
       :title="title"

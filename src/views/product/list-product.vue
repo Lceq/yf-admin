@@ -192,12 +192,12 @@
                             </Col>
                             <Col span="12" v-show="showBasicTabYarnCountMax">
                                 <Row>
-                                    <Col span="15">
+                                    <Col span="15" v-show="showBasicTabYarnCountMax">
                                         <FormItem label="细纱支数范围： " prop="yarnCountMin" class="formItemMargin" v-if="showBasicTabYarnCountMax">
                                             <InputNumber v-model="formValidate.yarnCountMin"  v-if="showBasicTabYarnCountMin" :min="1" class="widthPercentage" placeholder="支数下限" @on-blur="getYarnMinEvent"></InputNumber>
                                         </FormItem>
                                     </Col>
-                                    <Col span="9">
+                                    <Col span="9" v-show="showBasicTabYarnCountMax">
                                         <FormItem :label-width="10" label="" prop="yarnCountMax" class="formItemMargin" v-if="showBasicTabYarnCountMax">
                                             <InputNumber v-model="formValidate.yarnCountMax" v-if="showBasicTabYarnCountMax" :min="1" class="widthPercentage" placeholder="支数上限" @on-blur="getYarnMaxEvent"></InputNumber>
                                         </FormItem>
@@ -683,6 +683,8 @@
                             this.formValidate.processId = item.id;
                             this.formValidate.processCode = item.code;
                             this.formValidate.processName = item.name;
+                            this.formValidate.technologyId = null;
+                            this.showTabsIpt(this.formValidate.typeName);
                         };
                     });
                 };
@@ -899,6 +901,13 @@
             },
             // 初始化基本信息的数据
             initBasicData () {
+                this.formValidate.isCovering = 'true';
+                this.formValidate.isSlub = 'true';
+                this.formValidate.technologyId = null;
+                this.formValidate.componentId = null;
+                this.formValidate.materialRatio = '';
+                this.formValidate.yarnCountMin = null;
+                this.formValidate.yarnCountMax = null;
                 this.formValidate.colorId = null;
                 this.formValidate.colorCode = '';
                 this.formValidate.colorName = '';

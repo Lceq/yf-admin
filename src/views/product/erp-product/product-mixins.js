@@ -2,9 +2,11 @@ import { getOperationData, noticeTips, setPage, clearSpace, compClientHeight, de
 export default {
     methods: {
         showTabsIpt (typeName) {
-            console.log('类型', typeName)
             if (typeName) {
                 if (typeName === '成品') {
+                    this.formValidate.isCovering = 'false';
+                    this.formValidate.isSlub = 'false';
+                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
                     this.showBarCode = true;
                     this.showColor = true;
                     this.requiredPacketWeight = true;
@@ -25,6 +27,13 @@ export default {
                     this.showBasicTabIsReused = false;
                     this.showPacketWeight = false;
                 } else if (typeName === '半成品') {
+                    // 生产工序为细纱，显示"纺纱工艺"
+                    this.formValidate.processCode.toUpperCase() === 'XS' ? this.showBasicTabSpinningProcess = true : this.showBasicTabSpinningProcess = false;
+                    // 半成品时，原料成分默认第一个
+                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
+                    this.formValidate.materialRatio = 100;
+                    this.showBasicTabYarnCountMin = false;
+                    this.showBasicTabYarnCountMax = false;
                     this.showBarCode = true;
                     this.showColor = true;
                     this.requiredPacketWeight = true;
@@ -34,13 +43,10 @@ export default {
                     this.showBasicTabMaterial = true;
                     this.showBasicTabYarnUse = false;
                     this.showBasicTabCount = false;
-                    this.showBasicTabSpinningProcess = true;
                     this.showBasicTabCore = false;
                     this.showBasicTabSlubYarn = false;
                     this.showBasicTabMachineModel = false;
                     this.showBasicTabMaterialRatio = true;
-                    this.showBasicTabYarnCountMax = true;
-                    this.showBasicTabYarnCountMin = true;
                     this.showBasicTabSupplier = false;
                     this.showBasicTabIsReused = false;
                     this.showPacketWeight = false;

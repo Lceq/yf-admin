@@ -182,7 +182,6 @@
                                                     @remoteSelectPrdIconSearchBtnEvent="remoteSelectPrdIconSearchBtnEvent($event, item.productId)"
                                                     @getSelectProductEvent="getSelectProductEvent"
                                                     @getSelectBatchCodeEvent="getSelectBatchCodeEvent"
-                                                    @remoteSelectBatchSearchIconBtnEvent="remoteSelectBatchSearchIconBtnEvent"
                                                     @addBatchCodeSearchButtonEvent="addBatchCodeSearchButtonEvent"
                                             ></bom-table>
                                         </Col>
@@ -249,22 +248,6 @@
                 @confirm-event="tipsModalConfirmEvent"
                 @cancel-event="tipsModalCancelEvent"
         ></tips-modal>
-        <add-batch-code-modal
-                :add-batch-modal-state="addBatchModalState"
-                :add-batch-modal-product-code-item="addBatchModalProductCodeItem"
-                @on-visible-change="addBatchCodeModalVisibleChangeEvent"
-                @add-batch-code-modal-confirm-event="addBatchCodeModalConfirmEvent"
-        ></add-batch-code-modal>
-        <select-batch-modal
-                :spin-show="selectBatchModalSpinShow"
-                :select-batch-page-total="selectBatchPageTotal"
-                :select-batch-modal-state="selectBatchModalState"
-                :select-batch-modal-table-data="selectBatchModalTableData"
-                @on-visible-change="selectBatchModalStateChangeEvent"
-                @on-change-page="getSelectBatchModalPageCodeEvent"
-                @select-batch-modal-search-event="selectBatchModalSearchBtnEvent"
-                @select-batch-modal-confirm-event="selectBatchModalConfirmEvent"
-        ></select-batch-modal>
         <select-product-modal
                 :spin-show="selectHasProcessProductModalSpinShow"
                 :select-material-page-total="selectHasProcessProductModalPageTotal"
@@ -286,13 +269,10 @@
     import { noticeTips, formatDate, toDay, setPage, compClientHeight, emptyTips, addNum } from '../../../libs/common';
     import tipsClear from '../../public/deleteWarning';
     import tipsModal from '../../components/tips-modal';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
     import addBatchCodeModal from '../manufacture/components/add-batch-modal';
     export default {
         name: 'add-manufacture',
-        components: {
-            selectProductModal, bomTable, seeSpecSheet, selectMaterialModal, selectSpecSheetModal, tipsClear, tipsModal, selectBatchModal, addBatchCodeModal
-        },
+        components: { selectProductModal, bomTable, seeSpecSheet, selectMaterialModal, selectSpecSheetModal, tipsClear, tipsModal },
         data () {
             const validateBillDate = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateProductOrder = (rule, value, callback) => value ? callback() : callback(new Error());
@@ -311,15 +291,7 @@
                 nextButtonLoading: false,
                 submitButtonLoading: false,
                 showFeeding: true,
-                selectBatchModalTableData: [],
-                selectBatchModalPageIndex: 1,
-                selectBatchPageTotal: 0,
-                selectBatchModalPageSize: setPage.pageSize,
-                selectBatchModalSpinShow: false,
-                selectBatchModalState: false,
-                addBatchModalProductCodeItem: {},
                 addBatchCodeModalConfirmBtnLoading: false,
-                addBatchModalState: false,
                 tipsModalState: false,
                 tipsModalIcon: '',
                 tipsModalMessage: '',
@@ -343,7 +315,7 @@
                     productionOrderValue: '',
                     workshopId: '',
                     unitValue: '',
-                    productionQty: 1,
+                    productionQty: 1000,
                     specPathValue: null,
                     specPathNameValue: '',
                     dynamicColorValue: null
@@ -390,7 +362,6 @@
                                 mproductModels: '',
                                 mbatchCode: '',
                                 mbatchCodeList: [],
-                                batchList: [],
                                 munitId: null,
                                 munitCode: '',
                                 munitName: '',
@@ -434,7 +405,6 @@
                     mproductModels: '',
                     mbatchCode: '',
                     mbatchCodeList: [],
-                    batchList: [],
                     munitId: null,
                     munitCode: '',
                     munitName: '',
@@ -455,7 +425,6 @@
                         mproductModels: '',
                         mbatchCode: '',
                         mbatchCodeList: [],
-                        batchList: [],
                         munitId: null,
                         munitCode: '',
                         munitName: '',
@@ -536,90 +505,14 @@
             onSelectProductModalVisibleChange (e) {
                 this.selectProductModalState = e;
             },
-
-            getProductToBatchCodeListHttp (productCode, batchCode = '') {
-                return this.$call('product.batch.list',{
-                    productNameCode: productCode,
-                    batchCode: batchCode,
-                    auditState: 3,
-                    pageIndex: this.selectBatchModalPageIndex,
-                    pageSize: setPage.pageSize
-                });
-            },
             // 获取选中的批次
             getSelectBatchCodeEvent (event) {
                 this.formDynamic.productModuleList[event.dataIndex].bomMaterielList[event.rowIndex] = event.row;
-            },
-            // 选择批次的modal
-            selectBatchModalConfirmEvent (event) {
-                this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', '');
-                setTimeout(()=>{
-                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCodeList', [{ batchCode: event.batchCode}]);
-                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', event.batchCode);
-                    this.selectBatchModalState = false;
-                },500);
-            },
-            selectBatchModalSearchBtnEvent (event) {
-                // 获取投料对应的所有批次
-                this.selectBatchModalPageIndex = 1;
-                this.selectBatchPageTotal = 1;
-                this.getProductToBatchCodeListHttp(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex].mproductCode, event.name).then(res => {
-                    if (res.data.status === 200) {
-                        this.selectBatchModalSpinShow = false;
-                        this.selectBatchModalTableData = res.data.res;
-                        this.selectBatchPageTotal = res.data.count;
-                    };
-                });
-            },
-            getSelectBatchModalPageCodeEvent (event) {
-                this.selectBatchModalPageIndex = event.pageIndex;
-                // 获取投料对应的所有批次
-                this.getProductToBatchCodeListHttp(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex].mproductCode, event.name).then(res => {
-                    if (res.data.status === 200) {
-                        this.selectBatchModalSpinShow = false;
-                        this.selectBatchModalTableData = res.data.res;
-                        this.selectBatchPageTotal = res.data.count;
-                    };
-                });
-            },
-            remoteSelectBatchSearchIconBtnEvent (event) {
-                this.selectBatchModalState = true;
-                this.productModuleIndex = event.dataIndex;
-                this.bomMaterialTableRowIndex = event.rowIndex;
-                this.selectBatchModalPageSize = setPage.pageSize;
-                this.selectBatchModalPageIndex = 1;
-                this.selectBatchPageTotal = 1;
-                this.selectBatchModalSpinShow = true;
-                // 获取投料对应的所有批次
-                this.getProductToBatchCodeListHttp(event.mproductCode).then(res => {
-                    if (res.data.status === 200) {
-                        this.selectBatchModalSpinShow = false;
-                        this.selectBatchModalTableData = res.data.res;
-                        this.selectBatchPageTotal = res.data.count;
-                    };
-                });
-            },
-            selectBatchModalStateChangeEvent (e) {
-                this.selectBatchModalState = e;
-            },
-            // 新增批次modal
-            addBatchCodeModalConfirmEvent (batchCode) {
-                this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', '');
-                setTimeout(()=>{
-                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', batchCode);
-                    this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex].batchList.push({batchCode: batchCode});
-                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCodeList', [{batchCode: batchCode}]);
-                },500);
-            },
-            addBatchCodeModalVisibleChangeEvent (e) {
-                this.addBatchModalState = e;
             },
             // 新增批次的按钮事件
             addBatchCodeSearchButtonEvent (event) {
                 this.productModuleIndex = event.dataIndex;
                 this.bomMaterialTableRowIndex = event.rowIndex;
-                this.addBatchModalState = true;
-                this.addBatchModalProductCodeItem = this.formDynamic.productModuleList[event.dataIndex].bomMaterielList[event.rowIndex];
             },
             // 创建成功提示modal确认事件
             tipsModalConfirmEvent () {
@@ -699,23 +592,18 @@
             },
             selectMaterialConfirmEvent (event) {
                 if (event.code !== '') {
-                    this.getProductToBatchCodeListHttp(event.code).then(res => {
-                        if (res.data.status === 200) {
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'batchList', res.data.res);
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'productList', this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex].remoteProductList.filter(item => item.code.toLowerCase().indexOf(event.code.toLowerCase()) > -1));
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductId', event.id);
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductCode', '');
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', '');
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCodeList', []);
-                            setTimeout(() => { this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductCode', event.code); },500);
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductName', event.name);
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductModels', event.models);
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'munitId', event.unitId);
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'munitCode', event.unitCode);
-                            this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'munitName', event.unitName);
-                            this.selectMaterialModalState = false;
-                        };
-                    });
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'productList', this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex].remoteProductList.filter(item => item.code.toLowerCase().indexOf(event.code.toLowerCase()) > -1));
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductId', event.id);
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductCode', '');
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', '');
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCodeList', []);
+                    setTimeout(() => { this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductCode', event.code); },500);
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductName', event.name);
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'mproductModels', event.models);
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'munitId', event.unitId);
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'munitCode', event.unitCode);
+                    this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'munitName', event.unitName);
+                    this.selectMaterialModalState = false;
                 } else {
                     this.$set(this.formDynamic.productModuleList[this.productModuleIndex].bomMaterielList[this.bomMaterialTableRowIndex], 'productList', []);
                 };
@@ -742,7 +630,7 @@
                     if (valid) {
                         this.formDynamic.productModuleList.forEach((item)=>{
                             this.$delete(item, 'id');
-                            item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});
+                            // item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});
                             item.bomMaterielList.forEach((bomMaterialItem)=>{this.$delete(bomMaterialItem, 'id');});
                         });
                         this.submitButtonLoading = true;
@@ -911,11 +799,6 @@
                                 label: `${bomMaterialItem.mproductName}(${bomMaterialItem.mproductCode})`
                             }]);
                             this.$set(bomMaterialItem, 'mbatchCodeList', [{batchCode: bomMaterialItem.mbatchCode}]);
-                            await this.getProductToBatchCodeListHttp(bomMaterialItem.mproductCode).then(res => { // 获取每个投料对应所有已审核的批次
-                                if (res.data.status === 200) {
-                                    this.$set(bomMaterialItem, 'batchList', res.data.res);
-                                };
-                            });
                             // 赋值前置工序对应的产品
                             this.$set(bomMaterialItem, 'remoteProductList', this.preProcessProductList);
                         }
@@ -947,7 +830,7 @@
                     if (valid) {
                         this.formDynamic.productModuleList.forEach((item)=>{ //删除id
                             this.$delete(item, 'id');
-                            item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
+                            // item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
                             item.bomMaterielList.forEach(bomMaterialItem => this.$delete(bomMaterialItem, 'id'));
                         });
                         this.asyncSaveFun();
@@ -970,7 +853,7 @@
                 } else { // 工序是梳棉不存投料
                     this.formDynamic.productModuleList.forEach((item)=>{// 移除id
                         this.$delete(item, 'id');
-                        item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});
+                        // item.specSheetParamList.forEach((paramListItem)=>{this.$delete(paramListItem, 'id');});
                         item.bomMaterielList = [];
                     });
                 };
@@ -981,7 +864,7 @@
                             this.current === 0 ? this.saveBomId = await this.saveBomHttp() : false;  // 主表
                             this.formDynamic.productModuleList.forEach(item => {
                                 this.$delete(item, 'id');
-                                item.specSheetParamList.forEach((paramsItem)=>{this.$delete(paramsItem, 'id');});
+                                // item.specSheetParamList.forEach((paramsItem)=>{this.$delete(paramsItem, 'id');});
                             });
                             if (this.pathProcessList[this.current + 1]) {
                                 this.productModalPageSize = null;
@@ -1114,14 +997,13 @@
             saveBomChildHttp (bomId) {
                 let that = this;
                 this.globalLoadingShow = true;
-                // 移除冗余字段
+                // 初始化冗余字段
                 this.formDynamic.productModuleList.forEach(item => {
-                    this.$delete(item, 'specSheetParamList');
-                    this.$delete(item, 'specSheetList');
-                    this.$delete(item, 'remoteSpecSheetList');
+                    item.specSheetParamList = [];
+                    item.specSheetList = [];
+                    item.remoteSpecSheetList = [];
                     item.bomMaterielList.forEach(batchItem => {
-                        this.$delete(batchItem, 'batchList');
-                        this.$delete(batchItem, 'remoteProductList');
+                        batchItem.remoteProductList = [];
                     });
                 });
                 let paramsData = {
@@ -1234,11 +1116,11 @@
                 this.$set(this.formDynamic.productModuleList[0], 'unitId', e.unitId);
                 this.$set(this.formDynamic.productModuleList[0], 'unitCode', e.unitCode);
                 this.$set(this.formDynamic.productModuleList[0], 'unitName', e.unitName);
-                this.$set(this.formDynamic.productModuleList[0], 'productionQty', 1);
+                this.$set(this.formDynamic.productModuleList[0], 'productionQty', 1000);
                 this.$set(this.formValidate, 'productionOrderValue','');
                 setTimeout(()=>{ this.$set(this.formValidate, 'productionOrderValue',e.code); },500);
                 this.formValidate.unitValue = e.unitName + '(' + e.unitCode + ')';
-                this.formValidate.productionQty = 1;
+                this.formValidate.productionQty = 1000;
                 this.formValidate.purposeId = e.purposeId;
                 this.formValidate.twistDirectionId = e.twistDirectionId;
                 this.formDynamic.productModuleList[0].bomMaterielList[0].remoteProductList = this.remoteProductList;

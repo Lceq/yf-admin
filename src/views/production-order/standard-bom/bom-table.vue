@@ -117,27 +117,22 @@
                                                 params.row.mproductCode = e;
                                                 params.row.mbatchCode = '';
                                                 params.row.mbatchCodeList = [];
-                                                this.$call('product.batch.list', { productNameCode: e, auditState: 3 }).then(res => {
-                                                    if (res.data.status === 200) {
-                                                        params.row.batchList = res.data.res;
-                                                        params.row.remoteProductList.forEach((item) => {
-                                                            if (item.code === e) {
-                                                                params.row.mproductId = item.id;
-                                                                params.row.mproductCode = item.code;
-                                                                params.row.mproductName = item.name;
-                                                                params.row.mproductModels = item.models;
-                                                                params.row.munitId = item.unitId;
-                                                                params.row.munitCode = item.unitCode;
-                                                                params.row.munitName = item.unitName;
-                                                            };
-                                                        });
-                                                        this.tableData[params.index] = params.row;
-                                                        this.$emit('getSelectProductEvent', {
-                                                            dataIndex: this.dataIndex,
-                                                            rowIndex: params.index,
-                                                            row: this.tableData[params.index]
-                                                        });
+                                                params.row.remoteProductList.forEach((item) => {
+                                                    if (item.code === e) {
+                                                        params.row.mproductId = item.id;
+                                                        params.row.mproductCode = item.code;
+                                                        params.row.mproductName = item.name;
+                                                        params.row.mproductModels = item.models;
+                                                        params.row.munitId = item.unitId;
+                                                        params.row.munitCode = item.unitCode;
+                                                        params.row.munitName = item.unitName;
                                                     };
+                                                });
+                                                this.tableData[params.index] = params.row;
+                                                this.$emit('getSelectProductEvent', {
+                                                    dataIndex: this.dataIndex,
+                                                    rowIndex: params.index,
+                                                    row: this.tableData[params.index]
                                                 });
                                             }
                                         }

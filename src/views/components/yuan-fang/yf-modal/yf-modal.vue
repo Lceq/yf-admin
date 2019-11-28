@@ -12,7 +12,10 @@
                 @on-visible-change="visibleChangeEvent"
 
         >
-            <slot name="content"></slot>
+            <div>
+                <modal-content-loading :spinShow="modalContentLoading"></modal-content-loading>
+                <slot name="content"></slot>
+            </div>
             <div slot="footer">
                 <Button
                         :disabled="disableConfirmBtn"
@@ -41,9 +44,16 @@
 </template>
 <script>
     /* 对iview modal组件的二次封装 */
+    import modalContentLoading from '../../modal-content-loading';
+
     export default {
         name: 'yf-modal',
+        components: { modalContentLoading },
         props: {
+            modalContentLoading: {
+                type: Boolean,
+                default: false
+            },
             modalState: { // modal的状态
                 type: Boolean,
                 default: false

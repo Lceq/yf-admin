@@ -503,7 +503,6 @@
                             } else {
                                 this.formDynamic.productModuleList[this.productModuleIndex].specSheetList = [];
                             };
-                            this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
                         };
                     });
                 };
@@ -525,7 +524,6 @@
                 } else {
                     this.formDynamic.productModuleList[this.productModuleIndex].specSheetList = [];
                 };
-                this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
             },
             selectSpecModalSearchBtnEvent (event) {
                 this.getSpecListHttp(this.formDynamic.productModuleList[this.productModuleIndex].productId, this.pathProcessList[this.current].processId, 1, event.code).then(res => {
@@ -648,9 +646,6 @@
                         if (responseMaterialList[i].isHistory === true) {
                             this.$set(responseMaterialList[i], 'specSheetList', [{ code: responseMaterialList[i].specSheetCode }]);
                             Object.assign(responseMaterialList[i], JSON.parse(JSON.stringify(responseMaterialList[i].specSheetProcessModel)));
-                            this.$set(responseMaterialList[i], 'disableSetSpecButton', false);
-                        } else {
-                            this.$set(responseMaterialList[i], 'disableSetSpecButton', true);
                         };
                         this.$set(responseMaterialList[i], 'preparationHours', that.pathProcessList[that.current].preparationHours);
                         this.$set(responseMaterialList[i], 'feedingHours', that.pathProcessList[that.current].feedingHours);
@@ -780,7 +775,6 @@
                             };
                         });
                         this.$set(responseMaterialList[i], 'productList', []);
-                        this.$set(responseMaterialList[i], 'disableSetSpecButton', false);
                         let bomMaterialItemList = responseMaterialList[i].bomMaterielList;
                         for await (let bomMaterialItem of bomMaterialItemList) {
                             this.$set(bomMaterialItem, 'productList', [{
@@ -923,7 +917,6 @@
             },
             clearSpecSheetEvent (event, index) {
                 this.productModuleIndex = index;
-                this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'disableSetSpecButton', true);
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetId', '');
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetCode', '');
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'machineModelId', null);

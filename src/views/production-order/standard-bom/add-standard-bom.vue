@@ -157,7 +157,7 @@
                                                     <Option v-for="(option, index) in item.remoteSpecSheetList" :value="option.code" :key="option.id">{{option.code}}</Option>
                                                 </Select>
                                                 <Button @click="clickSpecSheetButtonEvent($event, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
-                                                <Button :disabled="!item.specSheetCode" type="success" @click="setProcessEvent($event, index)">查看工艺信息</Button>
+                                                <Button :disabled="!item.specSheetCode" type="success" @click="setProcessEvent($event, item.specSheetCode, index)">查看工艺信息</Button>
                                             </div>
                                         </FormItem>
                                     </Col>
@@ -201,6 +201,7 @@
             </div>
         </Form>
         <see-spec-sheet
+                :spin-show="setSpecModalSpinShow"
                 :set-process-modal-state="setProcessModalState"
                 :set-process-modal-btn-loading="setProcessModalBtnLoading"
                 :spec-product-obj="specProductObj"
@@ -279,6 +280,7 @@
             const validateSpecPath = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateWorkshop = (rule, value, callback) => value ? callback() : callback(new Error());
             return {
+                setSpecModalSpinShow: false,
                 workshopList: [],
                 selectHasProcessProductModalPageTotal: 0,
                 selectHasProcessProductModalSpinShow: false,
@@ -351,7 +353,6 @@
                         machineModelId: null,
                         specSheetList: [],
                         remoteSpecSheetList: [],
-                        disableSetSpecButton: true,
                         preparationHours: 2,
                         pullRate: null,
                         bomMaterielList: [
@@ -669,7 +670,6 @@
                                         this.$delete(res.data.res, 'id');
                                         specParamsData = res.data.res;
                                         Object.assign(this.formDynamic.productModuleList[this.productModuleIndex], JSON.parse(JSON.stringify(specParamsData.specSheetProcessModel)));
-                                        this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
                                     };
                                 });
                             })();
@@ -698,7 +698,6 @@
                             this.$delete(res.data.res, 'id');
                             specParamsData = res.data.res;
                             Object.assign(this.formDynamic.productModuleList[this.productModuleIndex], JSON.parse(JSON.stringify(specParamsData.specSheetProcessModel)));
-                            this.formDynamic.productModuleList[this.productModuleIndex].disableSetSpecButton = false;
                         };
                     });
                 })()
@@ -793,7 +792,6 @@
                             };
                         });
                         this.$set(responseMaterialList[i], 'productList', []);
-                        this.$set(responseMaterialList[i], 'disableSetSpecButton', false);
                         let bomMaterialItemList = responseMaterialList[i].bomMaterielList;
                         for await (let bomMaterialItem of bomMaterialItemList) {
                             this.$set(bomMaterialItem, 'productList', [{
@@ -968,9 +966,6 @@
                         if (responseMaterialList[i].isHistory === true) {
                             this.$set(responseMaterialList[i], 'specSheetList', [{ code: responseMaterialList[i].specSheetCode }]);
                             Object.assign(responseMaterialList[i], JSON.parse(JSON.stringify(responseMaterialList[i].specSheetProcessModel)));
-                            this.$set(responseMaterialList[i], 'disableSetSpecButton', false);
-                        } else {
-                            this.$set(responseMaterialList[i], 'disableSetSpecButton', true);
                         };
                         this.$set(responseMaterialList[i], 'preparationHours', that.pathProcessList[that.current].preparationHours);
                         this.$set(responseMaterialList[i], 'feedingHours', that.pathProcessList[that.current].feedingHours);
@@ -1086,7 +1081,6 @@
             },
             clearSpecSheetEvent (event, index) {
                 this.productModuleIndex = index;
-                this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'disableSetSpecButton', true);
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetId', '');
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetCode', '');
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'machineModelId', null);
@@ -1094,13 +1088,21 @@
                 this.$set(this.formDynamic.productModuleList[this.productModuleIndex], 'specSheetParamList', []);
             },
             // 设置工艺的事件
-            setProcessEvent (e, index) {
+            setProcessEvent (e, code, index) {
                 this.productModuleIndex = index;
-                this.specProductObj = {};
-                setTimeout(()=>{
-                    this.specProductObj = JSON.parse(JSON.stringify(this.formDynamic.productModuleList[index]));
-                    this.setProcessModalState = true;
-                },500)
+                this.setProcessModalState = true;
+                this.formDynamic.productModuleList[this.productModuleIndex].remoteSpecSheetList.forEach((item)=>{
+                    if (item.code === code) {
+                        // 请求工艺单的参数
+                        this.setSpecModalSpinShow = true;
+                        this.getSpecDetailHttp(item.id).then(res => {
+                            if (res.data.status === 200) {
+                                this.specProductObj = res.data.res.specSheetProcessModel;
+                                this.setSpecModalSpinShow = false;
+                            };
+                        });
+                    };
+                });
             },
             // 获取工艺参数和设备
             getSpecDetailHttp (id) {

@@ -28,7 +28,9 @@ export default {
                     this.showPacketWeight = false;
                 } else if (typeName === '半成品') {
                     // 生产工序为细纱，显示"纺纱工艺"
-                    this.formValidate.processCode.toUpperCase() === 'XS' ? this.showBasicTabSpinningProcess = true : this.showBasicTabSpinningProcess = false;
+                    if (this.formValidate.processCode) {
+                        this.formValidate.processCode.toUpperCase() === 'XS' ? this.showBasicTabSpinningProcess = true : this.showBasicTabSpinningProcess = false;
+                    };
                     // 半成品时，原料成分默认第一个
                     this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
                     this.formValidate.materialRatio = 100;

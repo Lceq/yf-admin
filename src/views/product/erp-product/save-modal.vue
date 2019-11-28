@@ -29,13 +29,20 @@
                 </Row>
                 <Row>
                     <Col span="12">
-                        <FormItem label="规格型号：" prop="models" class="formItemMargin">
-                            <Input type="text" v-model="formValidate.models" placeholder="请输入规格型号" class="inputLength"/>
-                        </FormItem>
+                        <div v-show="requiredModels">
+                            <FormItem v-if="requiredModels" label="规格型号：" prop="models" class="formItemMargin">
+                                <Input type="text" v-model="formValidate.models" placeholder="请输入规格型号" class="inputLength"/>
+                            </FormItem>
+                        </div>
+                        <div v-show="!requiredModels">
+                            <FormItem v-if="!requiredModels" label="规格型号：" class="formItemMargin">
+                                <Input type="text" v-model="formValidate.models" placeholder="请输入规格型号" class="inputLength"/>
+                            </FormItem>
+                        </div>
                     </Col>
-                    <Col span="12">
-                        <FormItem label="色号：" class="formItemMargin">
-                            <Select v-model="formValidate.materialColor" placeholder="请选择色号" class="inputLength" @on-change="getColorEvent">
+                    <Col span="12" v-show="showColor">
+                        <FormItem v-if="showColor" label="色号：" class="formItemMargin">
+                            <Select v-if="showColor" v-model="formValidate.colorId" placeholder="请选择色号" class="inputLength" @on-change="getColorEvent">
                                 <Option v-for="item in colorList" :value="item.id" :key="item.id">{{ item.label }}</Option>
                             </Select>
                         </FormItem>
@@ -112,12 +119,12 @@
                             </Col>
                             <Col span="12" v-show="showBasicTabYarnCountMax">
                                 <Row>
-                                    <Col span="15">
+                                    <Col span="15" v-show="showBasicTabYarnCountMax">
                                         <FormItem label="细纱支数范围： " prop="yarnCountMin" class="formItemMargin" v-if="showBasicTabYarnCountMax">
                                             <InputNumber v-model="formValidate.yarnCountMin"  v-if="showBasicTabYarnCountMin" :min="1" class="widthPercentage" placeholder="支数下限" @on-blur="getYarnMinEvent"></InputNumber>
                                         </FormItem>
                                     </Col>
-                                    <Col span="9">
+                                    <Col span="9" v-show="showBasicTabYarnCountMax">
                                         <FormItem :label-width="10" label="" prop="yarnCountMax" class="formItemMargin" v-if="showBasicTabYarnCountMax">
                                             <InputNumber v-model="formValidate.yarnCountMax" v-if="showBasicTabYarnCountMax" :min="1" class="widthPercentage" placeholder="支数上限" @on-blur="getYarnMaxEvent"></InputNumber>
                                         </FormItem>
@@ -125,16 +132,23 @@
                                 </Row>
                             </Col>
                             <Col v-show="showBasicTabSupplier">
-                                <FormItem label="供应商：" prop="supplierId" class="formItemMargin" v-if="showBasicTabSupplier">
+                                <FormItem label="供应商：" class="formItemMargin" v-if="showBasicTabSupplier">
                                     <Select transfer v-if="showBasicTabSupplier" v-model="formValidate.supplierId" class="inputLength" placeholder="请选择供应商">
                                         <Option v-for="item in basicTabSupplierList" :value="item.id" :key="item.id">{{ item.shortName }}</Option>
                                     </Select>
                                 </FormItem>
                             </Col>
                             <Col v-if="showPacketWeight">
-                                <FormItem label="平均包重(KG)：" class="formItemMargin" prop="packetWeight">
-                                    <InputNumber v-model="formValidate.packetWeight" class="inputLength" :min="0"></InputNumber>
-                                </FormItem>
+                                <div v-show="requiredPacketWeight">
+                                    <FormItem v-if="requiredPacketWeight" label="平均包重(KG)：" class="formItemMargin" prop="packetWeight">
+                                        <InputNumber v-model="formValidate.packetWeight" class="inputLength" :min="0"></InputNumber>
+                                    </FormItem>
+                                </div>
+                                <div v-show="!requiredPacketWeight">
+                                    <FormItem v-if="!requiredPacketWeight" label="平均包重(KG)：" class="formItemMargin">
+                                        <InputNumber v-model="formValidate.packetWeight" class="inputLength" :min="0"></InputNumber>
+                                    </FormItem>
+                                </div>
                             </Col>
                         </Row>
                         <Row v-show="showBasicTabCore">
@@ -309,6 +323,9 @@
             const validateYarnCount = (rule, value, callback) => { value ? callback() : callback(new Error()); };
             const validateTwist = (rule, value, callback) => { this.formValidate.twist ? callback() : callback(new Error()); };
             return {
+                showColor: false,
+                requiredModels: true,
+                requiredPacketWeight: false,
                 visible: false,
                 defaultList: [{'name': 'a42', 'url': defaultImgPath}],
                 uploadHeader: { 'auth-token': Cookies.get('token') },
@@ -467,6 +484,8 @@
                             this.formValidate.processId = item.id;
                             this.formValidate.processCode = item.code;
                             this.formValidate.processName = item.name;
+                            this.formValidate.technologyId = null;
+                            this.showTabsIpt(this.formValidate.typeName);
                         };
                     });
                 };

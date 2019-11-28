@@ -9,19 +9,19 @@
         <Form :label-width="90" ref="formValidate" :model="formValidate" :rules="ruleValidate" :show-message="false">
             <div>
                 <Row type="flex">
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="单据日期:" prop="billDateValue" class="formItemMargin">
                             <DatePicker :editable="false" class="widthPercentage" v-model="formValidate.billDateValue" type="date" placeholder="请选择日期"></DatePicker>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="生产车间:" class="formItemMargin" prop="workshopId">
                             <Select v-model="formValidate.workshopId">
                                 <Option v-for="item in workshopList" :value="item.deptId" :key="item.deptId">{{ item.deptName }}</Option>
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="产品:" prop="productionOrderValue" class="formItemMargin">
                             <div class="flex-left">
                                 <Select
@@ -1193,7 +1193,6 @@
             },
             // 选择的工艺路线
             getSelectSpecPathEvent (event) {
-                console.log('工艺路线', event)
                 if (event) {
                     this.current = 0;
                     this.formValidate.specPathNameValue = event.label;

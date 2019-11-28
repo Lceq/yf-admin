@@ -36,11 +36,6 @@
                             </Row>
                             <Row type="flex" justify="end" v-show="showMore">
                                 <Col class="flexAlignCenter margin-bottom-10">
-                                    <Select clearable v-model="queryBarIsQuote" placeholder="请选择引用状态" class="searchHurdles queryBarMarginRight">
-                                        <Option v-for="item in isQuoteList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                                    </Select>
-                                </Col>
-                                <Col class="flexAlignCenter margin-bottom-10">
                                     <Input type="text" v-model.trim="queryBarProductValue" placeholder="请输入产品编号或名称" class="searchHurdles"/>
                                 </Col>
                             </Row>
@@ -84,11 +79,6 @@
         data () {
             return {
                 toCreated: false,
-                queryBarIsQuote: null,
-                isQuoteList: [
-                    {id: 'true', name: '已引用'},
-                    {id: 'false', name: '未引用'}
-                ],
                 contentLoadingSpinShow: false,
                 menuArr: [],
                 activeMenuAuditSate: 1,
@@ -186,8 +176,7 @@
                         }
                     },
                     {title: '生产数量', key: 'productionQty', align: 'right', minWidth: 110, sortable: true},
-                    {title: '单据状态', key: 'auditStateName', minWidth: 110, align: 'center', sortable: true},
-                    {title: '引用状态', key: 'isQuoteName', align: 'center', minWidth: 110, sortable: true},
+                    {title: '单据状态', key: 'auditStateName', minWidth: 110, align: 'center', sortable: true}
                 ],
                 tableData: [],
                 queryBarOrderSate: '1',
@@ -223,7 +212,6 @@
                 this.pageTotal = 1;
                 this.activeMenuAuditSate = menuData.id;
                 this.queryBarOrderSate = menuData.id + '';
-                this.queryBarIsQuote = null;
                 this.queryBarProductValue = '';
                 this.billFromDate = '';
                 this.billToDate = '';
@@ -294,7 +282,6 @@
                 this.tableLoading = true;
                 this.queryBarWorkshopValue = this.queryBarWorkshopValue || '';
                 this.queryBarOrderSate = this.queryBarOrderSate || '';
-                this.queryBarIsQuote = this.queryBarIsQuote || '';
                 this.billFromDate ? this.billFromDate = formatDate(this.billFromDate).split(' ')[0] : this.billFromDate = '';
                 this.billToDate ? this.billToDate = formatDate(this.billToDate).split(' ')[0] : this.billToDate = '';
                 return this.$call('bom.list', {
@@ -303,7 +290,6 @@
                     product: this.queryBarProductValue,
                     auditState: this.queryBarOrderSate,
                     workshopId: this.queryBarWorkshopValue,
-                    isQuote: this.queryBarIsQuote,
                     pageSize: this.pageSize,
                     pageIndex: this.pageIndex
                 }).then((res) => {

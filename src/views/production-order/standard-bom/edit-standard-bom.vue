@@ -14,42 +14,42 @@
         <Form :label-width="90" ref="formValidate" :model="formValidate" :rules="ruleValidate" :show-message="false">
             <div>
                 <Row>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="单据日期:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.date}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="生产车间:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.workshopName}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="产品:" prop="materielCodeIpt" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.productCode ? `${formValidate.productName}(${formValidate.productCode})` : ''}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="规格:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.productModels}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="计量单位:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.unitValue}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="标准数量:" prop="specUserIpt" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.productionQty}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="工艺路线:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.specPathName}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="4">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="单据状态:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.auditStateName}}</div>
                         </FormItem>

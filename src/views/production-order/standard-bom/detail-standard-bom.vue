@@ -84,8 +84,6 @@
                                                 <div class="read-only-item">{{productItem.unitName ? `${productItem.unitName}(${productItem.unitCode})` : ''}}</div>
                                             </FormItem>
                                         </Col>
-                                    </Row>
-                                    <Row>
                                         <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                                             <FormItem label="生产数量:" prop="specUserIpt" class="formItemMargin">
                                                 <div class="read-only-item">{{productItem.productionQty}}</div>

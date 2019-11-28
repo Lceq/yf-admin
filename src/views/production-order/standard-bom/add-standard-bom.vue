@@ -50,13 +50,6 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                        <FormItem label="工艺路线:" class="formItemMargin" prop="specPathValue">
-                            <Select label-in-value :disabled="formValidate.productionOrderValue ? false : true" v-model="formValidate.specPathValue" placeholder="请选择工艺路线" @on-change="getSelectSpecPathEvent">
-                                <Option v-for="item in specPathList" :value="item.id" :key="item.id">{{ item.name }}</Option>
-                            </Select>
-                        </FormItem>
-                    </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="计量单位:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.unitValue}}</div>
                         </FormItem>
@@ -64,6 +57,13 @@
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="标准数量:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.productionQty}}</div>
+                        </FormItem>
+                    </Col>
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
+                        <FormItem label="工艺路线:" class="formItemMargin" prop="specPathValue">
+                            <Select label-in-value :disabled="formValidate.productionOrderValue ? false : true" v-model="formValidate.specPathValue" placeholder="请选择工艺路线" @on-change="getSelectSpecPathEvent">
+                                <Option v-for="item in specPathList" :value="item.id" :key="item.id">{{ item.name }}</Option>
+                            </Select>
                         </FormItem>
                     </Col>
                 </Row>

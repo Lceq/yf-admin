@@ -164,6 +164,8 @@
                         }
                     },
                     {title: '生产车间', key: 'workshopName', align: 'left', minWidth: 110, sortable: true},
+                    {title: '工艺路线', key: 'specPathName', minWidth: 140, align: 'center', sortable: true},
+                    {title: '版本号', key: 'code', align: 'left', minWidth: 140, sortable: true},
                     {title: '规格', key: 'productModels', align: 'left', minWidth: 140, sortable: true},
                     {title: '单位', key: 'unitName', align: 'left', minWidth: 110,
                         sortable: true,

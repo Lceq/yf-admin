@@ -25,8 +25,6 @@
                         <div class="read-only-item">{{bomDetailData.workshopName}}</div>
                     </FormItem>
                 </Col>
-            </Row>
-            <Row>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="产出物料:" prop="materielCodeIpt" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.productCode ? `${bomDetailData.productName}(${bomDetailData.productCode})` : ''}}</div>

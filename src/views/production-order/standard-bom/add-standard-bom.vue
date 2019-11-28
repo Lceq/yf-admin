@@ -22,6 +22,11 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
+                        <FormItem label="版本号:" class="formItemMargin" prop="code">
+                            <Input v-model.trim="formValidate.code"></Input>
+                        </FormItem>
+                    </Col>
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="产品:" prop="productionOrderValue" class="formItemMargin">
                             <div class="flex-left">
                                 <Select
@@ -38,26 +43,33 @@
                             </div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="规格:" class="formItemMargin">
                             <div class="read-only-item">{{selectHasProcessProductObj.models}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="工艺路线:" class="formItemMargin" prop="specPathValue">
                             <Select label-in-value :disabled="formValidate.productionOrderValue ? false : true" v-model="formValidate.specPathValue" placeholder="请选择工艺路线" @on-change="getSelectSpecPathEvent">
                                 <Option v-for="item in specPathList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="计量单位:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.unitValue}}</div>
                         </FormItem>
                     </Col>
-                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="8">
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="标准数量:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.productionQty}}</div>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col :sm="24" :md="24" :lg="18" :xl="18" :xxl="18">
+                        <FormItem label="备注:" class="formItemMargin">
+                            <Input :autosize="{minRows: 2,maxRows: 2}" v-model="formValidate.remark" type="textarea" placeholder="请输入..." />
                         </FormItem>
                     </Col>
                 </Row>
@@ -279,6 +291,7 @@
             const validateProductOrder = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateSpecPath = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateWorkshop = (rule, value, callback) => value ? callback() : callback(new Error());
+            const validateCode = (rule, value, callback) => value ? callback() : callback(new Error());
             return {
                 setSpecModalSpinShow: false,
                 workshopList: [],
@@ -320,13 +333,15 @@
                     productionQty: 1000,
                     specPathValue: null,
                     specPathNameValue: '',
-                    dynamicColorValue: null
+                    dynamicColorValue: null,
+                    code: ''
                 },
                 ruleValidate: {
                     billDateValue: [{required: true, validator: validateBillDate, trigger: 'change'}],
                     productionOrderValue: [{required: true, validator: validateProductOrder, trigger: 'change'}],
                     specPathValue: [{required: true, validator: validateSpecPath, trigger: 'change'}],
                     workshopId: [{required: true, validator: validateWorkshop, trigger: 'change'}],
+                    code: [{required: true, validator: validateCode, trigger: 'change'}],
                 },
                 specModalContentSpinShow: false,
                 materialModalContentSpinShow: false,
@@ -1040,6 +1055,8 @@
                     "id": this.saveBomId,
                     "date": formatDate(this.formValidate.billDateValue),
                     "workshopId": this.formValidate.workshopId,
+                    "code": this.formValidate.code,
+                    "remark": this.formValidate.remark,
                     "workshopName": this.formValidate.workshopName,
                     "productId": this.selectHasProcessProductObj.id,
                     "productName": this.selectHasProcessProductObj.name,

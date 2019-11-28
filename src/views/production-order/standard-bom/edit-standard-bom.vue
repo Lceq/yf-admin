@@ -25,6 +25,11 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
+                        <FormItem label="版本号:" class="formItemMargin">
+                            <div class="read-only-item">{{formValidate.code}}</div>
+                        </FormItem>
+                    </Col>
+                    <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="产品:" prop="materielCodeIpt" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.productCode ? `${formValidate.productName}(${formValidate.productCode})` : ''}}</div>
                         </FormItem>
@@ -52,6 +57,13 @@
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                         <FormItem label="单据状态:" class="formItemMargin">
                             <div class="read-only-item">{{formValidate.auditStateName}}</div>
+                        </FormItem>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col :sm="24" :md="24" :lg="18" :xl="18" :xxl="18">
+                        <FormItem label="备注:" class="formItemMargin">
+                            <Input :autosize="{minRows: 2,maxRows: 2}" disabled v-model="formValidate.remark" type="textarea" placeholder="请输入..." />
                         </FormItem>
                     </Col>
                 </Row>
@@ -877,6 +889,8 @@
                     "id": this.saveBomId,
                     "date": formatDate(this.formValidate.date),
                     "prdOrderId": this.selectOrderObj.id,
+                    "remark": this.formValidate.remark,
+                    "code": this.formValidate.code,
                     "prdOrderCode": this.selectOrderObj.code,
                     "workshopId": this.selectOrderObj.workshopId,
                     "workshopName": this.selectOrderObj.workshopName,

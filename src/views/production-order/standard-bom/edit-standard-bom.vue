@@ -50,13 +50,13 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                        <FormItem label="工艺路线:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.specPathName}}</div>
+                        <FormItem label="单据状态:" class="formItemMargin">
+                            <div class="read-only-item">{{formValidate.auditStateName}}</div>
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                        <FormItem label="单据状态:" class="formItemMargin">
-                            <div class="read-only-item">{{formValidate.auditStateName}}</div>
+                        <FormItem label="工艺路线:" class="formItemMargin">
+                            <div class="read-only-item">{{formValidate.specPathName}}</div>
                         </FormItem>
                     </Col>
                 </Row>

@@ -462,7 +462,6 @@
                 this.current = 0;
                 this.pathProcessList = [];
                 this.setProductMethod(e);
-                this.setProductMethod(e);
                 this.selectHasProcessProductObj = e;
                 this.selectProductModalState = false;
             },
@@ -476,8 +475,9 @@
                 });
             },
             onSelectProcessProductModalSearchEvent (e) {
+                console.log('参数', e)
                 this.selectHasProcessProductModalPageTotal = 1;
-                this.getHasProcessProductHttp('', e.name, '').then(res => {
+                this.getHasProcessProductHttp('', e.name, '', e.pageIndex, setPage.pageSize, e.categoryIdArr[e.categoryIdArr.length - 1]).then(res => {
                     if (res.data.status === 200) {
                         this.hasProcessProductData = res.data.res;
                         this.selectHasProcessProductModalSpinShow = false;
@@ -486,13 +486,14 @@
                 });
             },
             // 获取带有工序的产品
-            getHasProcessProductHttp (preProcessId = '', name = '', productId = '', pageIndex = 1) {
+            getHasProcessProductHttp (preProcessId = '', name = '', productId = '', pageIndex = 1, pageSize = setPage.pageSize, categoryIdArr = '') {
                 return this.$api.product.productList2({
                     processId: preProcessId,
                     pageIndex: pageIndex,
-                    pageSize: setPage.pageSize,
+                    pageSize: pageSize,
                     name: name,
-                    productId: productId
+                    productId: productId,
+                    categoryId: categoryIdArr
                 });
             },
             onSelectHasProcessProductionEvent (e) {
@@ -513,6 +514,7 @@
             onSearchHasProcessProductBtnEvent () {
                 this.selectHasProcessProductModalSpinShow = true;
                 this.selectProductModalState = true;
+                this.selectHasProcessProductModalPageTotal = 1;
                 this.getHasProcessProductHttp().then(res => {
                     if (res.data.status === 200) {
                         this.hasProcessProductData = res.data.res;
@@ -1249,7 +1251,7 @@
             },
             // 获取依赖的数据
             async getDependencyData () {
-                await this.getHasProcessProductHttp().then(res => {
+                await this.getHasProcessProductHttp('', '', '', '', '').then(res => {
                     if (res.data.status === 200) {
                         this.hasProcessProductionList = res.data.res;
                         // 判断路由是否携带"生产单号"参数

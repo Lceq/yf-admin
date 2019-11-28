@@ -376,7 +376,7 @@ export default {
                         faultSubclassName: this.faultSubList.find(x => x.id === this.FaultCallItem.faultSubclassId).name
                     };
                     this.FaultCallMachineModalLoading = true;
-                    this.$post('repair/order/save', params).then(res => {
+                    this.$call('repair.order.save', params).then(res => {
                         this.isFaultCall = true;
                         this.FaultCallMachineModalLoading = false;
                         let content = res.data;

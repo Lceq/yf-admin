@@ -157,7 +157,7 @@
                                                     <Option v-for="(option, index) in item.remoteSpecSheetList" :value="option.code" :key="option.id">{{option.code}}</Option>
                                                 </Select>
                                                 <Button @click="clickSpecSheetButtonEvent($event, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
-                                                <Button :disabled="item.disableSetSpecButton" type="success" @click="setProcessEvent($event, index)">查看工艺信息</Button>
+                                                <Button :disabled="!item.specSheetCode" type="success" @click="setProcessEvent($event, index)">查看工艺信息</Button>
                                             </div>
                                         </FormItem>
                                     </Col>

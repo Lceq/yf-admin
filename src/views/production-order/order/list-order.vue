@@ -109,24 +109,12 @@
                 queryBarIsQuote: null,
                 queryBarIsReport: null,
                 isReportList: [
-                    {
-                        id: 'true',
-                        name: '已报工'
-                    },
-                    {
-                        id: 'false',
-                        name: '未报工'
-                    }
+                    {id: 'true', name: '已报工'},
+                    {id: 'false', name: '未报工'}
                 ],
                 isQuoteList: [
-                    {
-                        id: 'true',
-                        name: '已引用'
-                    },
-                    {
-                        id: 'false',
-                        name: '未引用'
-                    }
+                    {id: 'true', name: '已引用'},
+                    {id: 'false', name: '未引用'}
                 ],
                 globalLoadingShow: false,
                 menuArr: [],
@@ -137,20 +125,8 @@
                 deleteMsg: '',
                 deleteButtonLoading: false,
                 tableHeader: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        fixed: 'left',
-                        align: 'center'
-                    },
-                    {
-                        title: '订单日期',
-                        key: 'orderDate',
-                        align: 'left',
-                        fixed: 'left',
-                        sortable: true,
-                        minWidth: 110
-                    },
+                    {type: 'selection', width: 60, fixed: 'left', align: 'center'},
+                    {title: '订单日期', key: 'orderDate', align: 'left', fixed: 'left', sortable: true, minWidth: 110},
                     {
                         title: '订单编号',
                         key: 'code',
@@ -215,20 +191,8 @@
                             };
                         }
                     },
-                    {
-                        title: '订单类型',
-                        key: 'typeName',
-                        align: 'left',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '生产车间',
-                        key: 'workshopName',
-                        align: 'left',
-                        minWidth: 110,
-                        sortable: true
-                    },
+                    {title: '订单类型', key: 'typeName', align: 'left', minWidth: 110, sortable: true},
+                    {title: '生产车间', key: 'workshopName', align: 'left', minWidth: 110, sortable: true},
                     {
                         title: '产品',
                         key: 'productCode',
@@ -243,18 +207,8 @@
                             })
                         }
                     },
-                    {
-                        title: '批号',
-                        key: 'batchCode',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '工序',
-                        key: 'processName',
-                        minWidth: 110,
-                        sortable: true
-                    },
+                    {title: '批号', key: 'batchCode', minWidth: 110, sortable: true},
+                    {title: '工序', key: 'processName', minWidth: 110, sortable: true},
                     {
                         title: '计量单位',
                         key: 'unitCode',
@@ -269,34 +223,10 @@
                             })
                         }
                     },
-                    {
-                        title: '生产数量',
-                        key: 'productionQty',
-                        align: 'right',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '订单优先级',
-                        key: 'priorityName',
-                        align: 'left',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '单据状态',
-                        key: 'auditStateName',
-                        align: 'center',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '引用状态',
-                        key: 'isQuoteName',
-                        align: 'center',
-                        minWidth: 110,
-                        sortable: true
-                    },
+                    {title: '生产数量', key: 'productionQty', align: 'right', minWidth: 110, sortable: true},
+                    {title: '订单优先级', key: 'priorityName', align: 'left', minWidth: 110, sortable: true},
+                    {title: '单据状态', key: 'auditStateName', align: 'center', minWidth: 110, sortable: true},
+                    {title: '引用状态', key: 'isQuoteName', align: 'center', minWidth: 110, sortable: true},
                     {
                         title: '报工状态',
                         key: 'isReport',
@@ -311,13 +241,7 @@
                             })
                         }
                     },
-                    {
-                        title: '计划员',
-                        key: 'plannerName',
-                        minWidth: 110,
-                        align: 'left',
-                        sortable: true
-                    }
+                    {title: '计划员', key: 'plannerName', minWidth: 110, align: 'left', sortable: true}
                 ],
                 tableData: [],
                 queryBarOrderSate: '1',

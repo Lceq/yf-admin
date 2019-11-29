@@ -844,14 +844,20 @@
             },
             // 下一步
             nextEvent () {
-                this.$refs['formDynamic'].validate((valid) => {
+                this.$refs['formValidate'].validate((valid) => {
                     if (valid) {
-                        this.formDynamic.productModuleList.forEach((item)=>{ //删除id
-                            this.$delete(item, 'id');
-                            // item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
-                            item.bomMaterielList.forEach(bomMaterialItem => this.$delete(bomMaterialItem, 'id'));
+                        this.$refs['formDynamic'].validate((valid) => {
+                            if (valid) {
+                                this.formDynamic.productModuleList.forEach((item)=>{ //删除id
+                                    this.$delete(item, 'id');
+                                    // item.specSheetParamList.forEach(paramListItem => this.$delete(paramListItem, 'id'));
+                                    item.bomMaterielList.forEach(bomMaterialItem => this.$delete(bomMaterialItem, 'id'));
+                                });
+                                this.asyncSaveFun();
+                            } else {
+                                noticeTips(this, 'unCompleteTips');
+                            };
                         });
-                        this.asyncSaveFun();
                     } else {
                         noticeTips(this, 'unCompleteTips');
                     };

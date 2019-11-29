@@ -5,7 +5,6 @@ export default {
         showTabsIpt (typeName) {
             if (typeName) {
                 if (typeName === '成品') {
-                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
                     this.showBarCode = true;
                     this.showColor = true;
                     this.requiredPacketWeight = true;
@@ -32,9 +31,6 @@ export default {
                     } else {
                         this.showBasicTabSpinningProcess = false;
                     };
-                    // 半成品时，原料成分默认第一个
-                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
-                    this.formValidate.materialRatio = 100;
                     this.showBasicTabYarnCountMin = false;
                     this.showBasicTabYarnCountMax = false;
                     this.showBarCode = true;

@@ -232,7 +232,7 @@
             // 新增的事件
             addClickEvent () {
                 this.$router.push({
-                    path: 'addManufactureBOM',
+                    path: 'add-bom',
                     query: {activated: true}
                 });
             },

@@ -2,7 +2,7 @@
     <div>
         <Modal
                 v-model="showModal"
-                title="erp物料同步"
+                title="SAP物料同步"
                 @on-visible-change="saveModalChangeEvent"
                 :mask-closable="false"
                 :width="800"
@@ -56,9 +56,9 @@
                             </Select>
                         </FormItem>
                     </Col>
-                    <Col span="12">
-                        <FormItem label="条码：" class="formItemMargin">
-                            <Input type="text" v-model="formValidate.barCode" placeholder="请输入条码" class="inputLength"/>
+                    <Col span="12" v-show="showBarCode">
+                        <FormItem v-if="showBarCode" label="条码：" class="formItemMargin">
+                            <Input v-if="showBarCode" type="text" v-model="formValidate.barCode" placeholder="请输入条码" class="inputLength"/>
                         </FormItem>
                     </Col>
                 </Row>
@@ -69,8 +69,8 @@
                         </FormItem>
                     </Col>
                     <Col span="12" v-show="showMachiningProcess">
-                        <FormItem label="生产工序：" class="formItemMargin" prop="machiningProcessValue" v-if="showMachiningProcess">
-                            <Select v-if="showMachiningProcess" v-model="formValidate.machiningProcessValue" placeholder="请选择生产工序" class="inputLength" @on-change="getMachiningProcessValueEvent">
+                        <FormItem label="生产工序：" class="formItemMargin" prop="processId" v-if="showMachiningProcess">
+                            <Select v-if="showMachiningProcess" v-model="formValidate.processId" placeholder="请选择生产工序" class="inputLength" @on-change="getMachiningProcessValueEvent">
                                 <Option v-for="item in workingProcessList" :style="item.style" :value="item.id" :key="item.id">{{ item.name }}</Option>
                             </Select>
                         </FormItem>
@@ -316,13 +316,14 @@
             const validateSupplier = (rule, value, callback) => { value ? callback() : callback(new Error()); };
             const validateMaterialRatio = (rule, value, callback) => { value ? callback() : callback(new Error()); };
             const validateUnit = (rule, value, callback) => { value ? callback() : callback(new Error()); };
-            const validateMachiningProcess = (rule, value, callback) => { value ? callback() : callback(new Error()); };
+            const validateMachiningProcess = (rule, value, callback) => { this.formValidate.processId ? callback() : callback(new Error()); };
             const validatePacketWeight = (rule, value, callback) => { value || value === 0 ? callback() : callback(new Error()); };
             const validateYarnCountMax = (rule, value, callback) => { value || value === 0 ? callback() : callback(new Error()); };
             const validateYarnCountMin = (rule, value, callback) => { value || value === 0 ? callback() : callback(new Error()); };
             const validateYarnCount = (rule, value, callback) => { value ? callback() : callback(new Error()); };
             const validateTwist = (rule, value, callback) => { this.formValidate.twist ? callback() : callback(new Error()); };
             return {
+                showBarCode: false,
                 showColor: false,
                 requiredModels: true,
                 requiredPacketWeight: false,
@@ -419,7 +420,7 @@
                     technologyId: [{ required: true, validator: validateSpinningProcess, trigger: 'change' }],
                     materialRatio: [{ required: true, validator: validateMaterialRatio, trigger: 'change' }],
                     supplierId: [{ required: true, validator: validateSupplier, trigger: 'change' }],
-                    machiningProcessValue: [{ required: true, validator: validateMachiningProcess, trigger: 'change' }],
+                    processId: [{ required: true, validator: validateMachiningProcess, trigger: 'change' }],
                     twist: [{ required: true, validator: validateTwist, trigger: 'change' }]
                 },
                 buttonLoading: false,
@@ -476,7 +477,7 @@
                     };
                 });
             },
-            // 获取加工工序事件
+            // 获取生产工序事件
             getMachiningProcessValueEvent (e) {
                 if (e) {
                     this.workingProcessList.forEach((item) => {
@@ -505,6 +506,23 @@
             },
             // 初始化基本信息的数据
             initBasicData () {
+                this.formValidate.processId = '';
+                this.formValidate.processCode = '';
+                this.formValidate.processName = '';
+                this.formValidate.isCovering = 'true';
+                this.formValidate.isSlub = 'true';
+                this.formValidate.technologyId = null;
+                this.formValidate.componentId = null;
+                this.formValidate.materialRatio = '';
+                this.formValidate.yarnCountMin = null;
+                this.formValidate.yarnCountMax = null;
+                this.formValidate.colorId = null;
+                this.formValidate.colorCode = '';
+                this.formValidate.colorName = '';
+                this.formValidate.barCode = '';
+                this.formValidate.packetWeight = null;
+                this.formValidate.models = '';
+
                 this.formValidate.componentId = null;
                 this.formValidate.yarnCount = null;
                 this.formValidate.purposeId = '';
@@ -596,6 +614,11 @@
                 this.selectValues = [];
                 // 获取物料属性的数据
                 this.getAddAttrTable(selectedData[selectedData.length - 1].id);
+                // 存货类型为成品"是否包芯"和"是否竹节纱"为否
+                if (this.formValidate.typeName === '成品') {
+                    this.formValidate.isCovering = 'false';
+                    this.formValidate.isSlub = 'false';
+                };
                 // 根据物料类别展示基本信息
                 this.showTabsIpt(selectedData[selectedData.length - 1].typeName);
                 this.formValidate.typeName = selectedData[selectedData.length - 1].typeName;

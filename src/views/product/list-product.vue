@@ -683,8 +683,8 @@
                             this.formValidate.processId = item.id;
                             this.formValidate.processCode = item.code;
                             this.formValidate.processName = item.name;
-                            this.formValidate.technologyId = null;
                             this.showTabsIpt(this.formValidate.typeName);
+                            this.formValidate.technologyId = null;
                         };
                     });
                 };
@@ -901,10 +901,12 @@
             },
             // 初始化基本信息的数据
             initBasicData () {
+                this.formValidate.processId = '';
+                this.formValidate.processCode = '';
+                this.formValidate.processName = '';
                 this.formValidate.isCovering = 'true';
                 this.formValidate.isSlub = 'true';
                 this.formValidate.technologyId = null;
-                this.formValidate.componentId = null;
                 this.formValidate.materialRatio = '';
                 this.formValidate.yarnCountMin = null;
                 this.formValidate.yarnCountMax = null;
@@ -923,8 +925,6 @@
                 this.formValidate.yarnCountMax = null;
                 this.formValidate.yarnCountMin = null;
                 this.formValidate.supplierId = null;
-                this.formValidate.isCovering = 'true';
-                this.formValidate.isSlub = 'true';
                 this.formValidate.machineModelId = null;
                 this.formValidate.basicTabProcessIpt = null;
                 this.formValidate.isReused = true;
@@ -950,6 +950,19 @@
                 this.showBasicTabTwist = false;
                 this.showBasicTabGramWeight = false;
                 this.showBasicTabMeters = false;
+                // 存货类型为成品"是否包芯"和"是否竹节纱"为否
+                if (this.formValidate.typeName === '成品') {
+                    this.formValidate.isCovering = 'false';
+                    this.formValidate.isSlub = 'false';
+                };
+                // 成品时，原料成分默认第一个
+                if (selectedData[selectedData.length - 1].typeName === '成品') {
+                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
+                } else if (selectedData[selectedData.length - 1].typeName === '半成品') {
+                    // 半成品时，原料成分默认第一个, 配比默认100
+                    this.formValidate.materialRatio = 100;
+                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
+                }
                 this.showTabsIpt(selectedData[selectedData.length - 1].typeName);
                 this.formValidate.typeName = selectedData[selectedData.length - 1].typeName;
             },
@@ -1278,6 +1291,14 @@
                     this.showBasicTabTwist = false;
                     this.showBasicTabGramWeight = false;
                     this.showBasicTabMeters = false;
+                    // 成品时，原料成分默认第一个
+                    if (e[0].typeName === '成品') {
+                        this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
+                    } else if (e[0].typeName === '半成品') {
+                        // 半成品时，原料成分默认第一个, 配比默认100
+                        this.formValidate.materialRatio = 100;
+                        this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
+                    };
                     this.showTabsIpt(e[0].typeName);
                     !e[0].children ? this.formValidate.materialType = this.getFatherPath(this.treeObj[0].path, this.treeObj[0].id) : this.formValidate.materialType = [];
                     this.pageIndex = 1;

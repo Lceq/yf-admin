@@ -16,7 +16,7 @@
                             <Col>
                                 <Row type="flex" justify="space-between">
                                     <Col class="padding-left-4 margin-bottom-10">
-                                        <Input type="text" v-model="queryBarErpCode" placeholder="请输入ERP编号" class="inputLength"/>
+                                        <Input type="text" v-model="queryBarErpCode" placeholder="请输入SAP订单编号" class="inputLength"/>
                                     </Col>
                                 </Row>
                             </Col>
@@ -101,7 +101,7 @@
                         minWidth: 110
                     },
                     {
-                        title: 'ERP编号',
+                        title: 'SAP编号',
                         key: 'erpCode',
                         fixed: 'left',
                         sortable: true,

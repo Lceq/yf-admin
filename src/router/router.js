@@ -64,7 +64,7 @@ export const otherRouter = {
         { path: 'ownspace', title: '个人中心', name: 'ownspace_index', component: () => import('@/views/own-space/own-space.vue') },
         { path: 'message', title: '消息中心', name: 'message_index', component: () => import('@/views/message/message.vue') },
         { meta: { keepAlive: true }, path:'addOrder',title:'新增生产订单',name:'addOrder',icon:'person-add', component: () => import('@/views/production-order/order/add-order.vue')},
-        { meta: { keepAlive: true }, path:'add-erp-order',title:'ERP订单同步',name:'add-erp-order',icon:'person-add', component: () => import('@/views/production-order/erp-order/add-erp-order.vue')},
+        { meta: { keepAlive: true }, path:'add-erp-order',title:'SAP订单同步',name:'add-erp-order',icon:'person-add', component: () => import('@/views/production-order/erp-order/add-erp-order.vue')},
         { meta: { keepAlive: true }, path:'editOrder',title:'编辑生产订单',name:'editOrder',icon:'person-add', component: () => import('@/views/production-order/order/edit-order.vue')},
         { meta: { keepAlive: true }, path:'addProSheet',title:'新增品种工艺单',name:'addProSheet', component: () => import('@/views/spec/process-sheet/xw-add-processSheet.vue')},
         { meta: { keepAlive: true }, path:'editProSheet',title:'编辑品种工艺单',name:'editProSheet', component: () => import('@/views/spec/process-sheet/xw-edit-processSheet.vue')},
@@ -83,6 +83,7 @@ export const otherRouter = {
         { meta: { keepAlive: true }, path:'detail-standard-bom',title:'标准BOM详情',name:'detail-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/detail-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'edit-standard-bom',title:'编辑标准BOM',name:'edit-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/edit-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'add-standard-bom',title:'新增标准BOM',name:'add-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/add-standard-bom.vue') },
+        { path:'add-bom',title:'新增BOM',name:'add-bom',icon:'ios-paper', component: () => import('@/views/production-order/bom/add-bom.vue') },
 
         { meta: { keepAlive: true }, path:'orderDetail',title:'生产订单详情',name:'orderDetail',icon:'ios-paper', component: () => import('@/views/production-order/order/detail-order.vue') },
         { meta: { keepAlive: true }, path:'add-blend',title:'新增配棉档案',name:'add-blend',icon:'ios-paper', component: () => import('@/views/cotton-blend/archives/add-blend-archives.vue') },

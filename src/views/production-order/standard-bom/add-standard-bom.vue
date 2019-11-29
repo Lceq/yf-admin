@@ -31,7 +31,6 @@
                             <div class="flex-left">
                                 <Select
                                         class="remoteSearchSelect"
-                                        clearable
                                         filterable
                                         placeholder="请输入产品"
                                         remote

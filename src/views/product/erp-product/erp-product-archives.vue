@@ -18,7 +18,7 @@
                             <Col>
                                 <Row type="flex" justify="space-between">
                                     <Col class="padding-left-4 margin-bottom-10">
-                                        <Input type="text" v-model="queryBarProduct" placeholder="请输入ERP物料编号或名称" class="inputLength"/>
+                                        <Input type="text" v-model="queryBarProduct" placeholder="请输入SAP物料编号或名称" class="inputLength"/>
                                     </Col>
                                 </Row>
                             </Col>
@@ -118,14 +118,14 @@
                         minWidth: 160
                     },
                     {
-                        title: 'ERP物料编号',
+                        title: 'SAP物料编号',
                         key: 'code',
                         align: 'left',
                         minWidth: 110,
                         sortable: true
                     },
                     {
-                        title: 'ERP物料名称',
+                        title: 'SAP物料名称',
                         key: 'name',
                         align: 'left',
                         minWidth: 110,

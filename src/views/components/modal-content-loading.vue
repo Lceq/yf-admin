@@ -2,7 +2,7 @@
     <div>
         <div class="modal-content-loading-active" v-if="spinShow">
             <div class="demo-spin-article">
-                <Spin size="large" fix style="z-index: 999;"></Spin>
+                <Spin size="large" fix style="z-index: 998;"></Spin>
             </div>
         </div>
     </div>

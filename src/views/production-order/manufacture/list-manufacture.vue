@@ -232,7 +232,7 @@
             // 新增的事件
             addClickEvent () {
                 this.$router.push({
-                    path: 'add-bom',
+                    path: 'edit-bom',
                     query: {activated: true}
                 });
             },
@@ -366,11 +366,10 @@
             },
             // 编辑的事件
             editClickEvent (id) {
-                this.$router.push({
-                    path: 'editManufactureBOM',
+                 this.$router.push({
+                    path: 'edit-bom',
                     query: {
                         id: id,
-                        edit: true,
                         activated: true
                     }
                 });

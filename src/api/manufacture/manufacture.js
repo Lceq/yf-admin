@@ -73,10 +73,10 @@ export default {
     deleteHttp (params) {
         return proxy.call('prd.bom.delete', params);
     },
-    bomDetailHttp (params) {
+    prdBomDetailRequest (params) {
         return proxy.call('prd.bom.detail', params);
     },
-    bomProcessDetailHttp (params) {
+    prdBomProcessDetailRequest (params) {
         return proxy.call('prd.bom.process.detail', params);
     },
     previousStepDetailHttp (params) {

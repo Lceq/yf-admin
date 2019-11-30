@@ -230,17 +230,48 @@
                 @on-visible-change="seeProcessModalStateChangeEvent"
                 @see-process-modal-cancel-event="seeProcessModalCancelEvent"
         ></see-spec-sheet>
+        <select-spec-sheet-modal
+                :spin-show="specModalContentSpinShow"
+                :select-bill-modal-state="selectSpecModalState"
+                :select-bill-modal-title="selectSpecModalTitle"
+                :select-bill-table-header="selectSpecTableHeader"
+                :select-bill-modal-table-data="selectSpecModalTableData"
+                :select-bill-table-loading="selectSpecTableLoading"
+                :select-bill-page-total="selectSpecPageTotal"
+                :select-bill-modal-show-material-input="false"
+                @on-visible-change="selectSpecModalStateChangeEvent"
+                @select-bill-modal-search-event="selectSpecModalSearchBtnEvent"
+                @on-change-page="getSelectSpecModalPageCodeEvent"
+                @confirm-event="selectSpecModalConfirmEvent"
+        ></select-spec-sheet-modal>
     </card>
 </template>
 <script>
+    import selectSpecSheetModal from '../../components/select-bill-modal';
     import seeSpecSheet from '../manufacture/components/see-spec-sheet';
     import contentLoading from '../../components/modal-content-loading';
     import { noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, addNum } from '../../../libs/common';
     export default {
         name: 'add-bom',
-        components: { contentLoading, seeSpecSheet },
+        components: { contentLoading, seeSpecSheet, selectSpecSheetModal },
         data () {
             return {
+                specModalContentSpinShow: false,
+                selectSpecModalState: false,
+                selectSpecModalTitle: '',
+                selectSpecModalTableData: [],
+                selectSpecTableHeader: [
+                    {title: '单据日期', key: 'specDate', align: 'center'},
+                    {title: '工艺单号', key: 'code', align: 'center'},
+                    {title: '产品编号', key: 'productCode', align: 'center'},
+                    {title: '产品名称', key: 'productName', align: 'center'},
+                    {title: '工序', key: 'processName', align: 'center'},
+                    {title: '工艺员', key: 'specUserName', align: 'center'}
+                ],
+                selectSpecTableLoading: false,
+                selectSpecPageTotal: 0,
+
+
                 seeSpecModalSpinShow: false,
                 specProductObj: {},
                 seeProcessModalState: false,
@@ -478,10 +509,76 @@
                 ],
                 activeProcessId: null,
                 allBatchCodeList: [],
-                allSpecSheetList: []
+                allSpecSheetList: [],
+                productModuleIndex: 0
             };
         },
         methods: {
+            // 根据产品获取工艺单
+            getSpecListHttp (productId = null, processId = '', pageIndex = 1, code = '') {
+                return this.$api.specSheet.listHttp({
+                    auditState: 3,
+                    productId: productId,
+                    processId: processId,
+                    pageIndex:pageIndex,
+                    code: code,
+                    enableState: 1,
+                    pageSize: setPage.pageSize,
+                })
+            },
+            selectSpecModalConfirmEvent (e) {
+                let specParamsData = null;
+                this.selectSpecModalState = false;
+                this.formDynamic.prdBomProductList[this.productModuleIndex].specSheetId = e.id;
+                this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex], 'specSheetCode', '');
+                setTimeout(() => {
+                    this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex], 'specSheetCode', e.code);
+                }, 200);
+                (async () => {
+                    await this.getSpecDetailHttp(e.id).then(res => {
+                        if (res.data.status === 200) {
+                            this.$delete(res.data.res, 'id');
+                            specParamsData = res.data.res;
+                            Object.assign(this.formDynamic.prdBomProductList[this.productModuleIndex], JSON.parse(JSON.stringify(specParamsData.specSheetProcessModel)));
+                        }
+                    })
+                })()
+            },
+
+            // 工艺modal的分页
+            getSelectSpecModalPageCodeEvent (pageIndex) {
+                this.getSpecListHttp(this.formDynamic.prdBomProductList[this.productModuleIndex].productId, this.pathProcessList[this.current].processId, pageIndex).then(res => {
+                    if (res.data.status === 200) {
+                        this.selectSpecPageTotal = res.data.count;
+                        this.selectSpecModalTableData = res.data.res;
+                    };
+                });
+            },
+            selectSpecModalSearchBtnEvent (event) {
+                this.getSpecListHttp(this.formDynamic.prdBomProductList[this.productModuleIndex].productId, this.pathProcessList[this.current].processId, 1, event.code).then(res => {
+                    if (res.data.status === 200) {
+                        this.selectSpecPageTotal = res.data.count;
+                        this.selectSpecModalTableData = res.data.res;
+                    };
+                });
+            },
+            selectSpecModalStateChangeEvent (e) {
+                this.selectSpecModalState = e;
+            },
+            // 工艺单的icon搜索按钮事件
+            clickSpecSheetButtonEvent (event, index) {
+                this.selectSpecModalTitle = '选择工艺单';
+                this.specModalContentSpinShow = true;
+                this.selectSpecModalState = true;
+                this.productModuleIndex = index;
+                this.getSpecListHttp(this.formDynamic.prdBomProductList[index].productId, this.activeProcessId).then(res => {
+                    if (res.data.status === 200) {
+                        this.selectSpecPageTotal = res.data.count;
+                        this.selectSpecModalTableData = res.data.res;
+                        this.specModalContentSpinShow = false;
+                    };
+                });
+            },
             // 上级工艺modal事件
             seeProcessModalCancelEvent () {
                 this.seeProcessModalState = false;
@@ -509,7 +606,6 @@
                     };
                 });
             },
-            clickSpecSheetButtonEvent () {},
             clearSpecSheetEvent () {},
             getSelectSpecSheetChangeEvent () {},
             getPlanStartDateEvent (dateFrom, dateTo, index) {
@@ -517,8 +613,8 @@
                     emptyTips(this, '计划开台时间应在交货日期范围内!');
                 } else {
                     if (new Date(dateFrom + ' 00:00:00').valueOf() > new Date(formatDate(dateTo)).valueOf()) {
-                        this.formDynamic.productModuleList[index].planStartDate = '';
-                        this.$set(this.formDynamic.productModuleList[index], 'planStartDate', '');
+                        this.formDynamic.prdBomProductList[index].planStartDate = '';
+                        this.$set(this.formDynamic.prdBomProductList[index], 'planStartDate', '');
                         emptyTips(this, '计划开台时间不能大于计划完工时间!');
                     };
                 };
@@ -528,7 +624,7 @@
                     emptyTips(this, '计划完工时间应在交货日期范围内!');
                 } else {
                     if (new Date(formatDate(dateFrom)).valueOf() > new Date(dateTo + ' 00:00:00').valueOf()) {
-                        this.$set(this.formDynamic.productModuleList[index], 'planFinishDate', '');
+                        this.$set(this.formDynamic.prdBomProductList[index], 'planFinishDate', '');
                         emptyTips(this, '计划完工时间不能小于计划开台时间!');
                     };
                 };
@@ -538,6 +634,24 @@
             unAuditClickEvent () {},
             closeClickEvent () {},
             openClickEvent () {},
+            // 获取产品和工序对应的工艺单列表
+            getSpecSheetListRequest (productId) {
+                return this.$api.specSheet.listHttp({
+                    auditState: 3,
+                    productId: productId,
+                    processId: this.activeProcessId,
+                    enableState: 1,
+                    productIds: this.formValidate.productIds
+                });
+            },
+            // 获取投料对应的批号列表
+            getMaterialBatchCodeRequest (productCode) {
+                return this.$call('product.batch.list',{
+                    productNameCode: productCode,
+                    auditState: 3,
+                    productIds: this.formValidate.productIds
+                });
+            },
             // bom主表的详情
             getBomDetailData () {
                 return this.$api.manufacture.prdBomDetailRequest({ id: this.editId }).then(res => {
@@ -546,74 +660,50 @@
                         this.formValidate.auditStateName = translateState(res.data.res.auditState);
                         this.formValidate.isQuoteName = res.data.res.isQuote ? '引用' : '未引用';
                         this.processPathList = res.data.res.prdBomProcessList;
+                    }
+                })
+            },
+            // 子表产出物的详情
+            getBomProcessDetailData () {
+                this.showTabLoading = true;
+                return this.$api.manufacture.prdBomProcessDetailRequest({ prdBomProcessId: this.tabProcessId }).then(res => {
+                    if (res.data.status === 200) {
+                        let responseData = res.data.res.prdBomProductList;
+                        this.activeProcessId = res.data.res.processId;
+                        // 赋值各个产品下的工艺单和批号列表
+                        for (let productItem of responseData) {
+                            productItem.remoteSpecSheetList = [];
+                            // 工序和产品相同的工艺单列表
+                            productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.processId === this.activeProcessId && item.productId === productItem.productId);
+                            // productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.productId === productItem.productId);
+                            // console.log('过滤1', this.allSpecSheetList)
+                            // console.log('过滤2', productItem.productId)
+                            // console.log('过滤3', this.allSpecSheetList.filter(item => item.productId === productItem.productId))
+                            for (let materialItem of productItem.prdBomMaterielList) {
+                                materialItem.remoteBatchList = [];
+                                // 产品相同的批号列表
+                                materialItem.remoteBatchList  = this.allBatchCodeList.filter(item =>  item.productCode === materialItem.mproductCode);
+                            }
+                        };
+                        this.formDynamic.prdBomProductList = responseData;
+                        this.showTabLoading = false;
                         this.globalLoadingShow = false;
-                        this.tabProcessId = res.data.res.prdBomProcessList[0].id;
-                    }
-                })
-            },
-            // 获取产品和工序对应的工艺单列表
-            getSpecSheetListRequest (productId) {
-                return this.$api.specSheet.listHttp({
-                    auditState: 3,
-                    productId: productId,
-                    processId: this.activeProcessId,
-                    enableState: 1,
-                });
-            },
-            // 获取投料对应的批号列表
-            getMaterialBatchCodeRequest (productCode) {
-                return this.$call('product.batch.list',{
-                    productNameCode: productCode,
-                    auditState: 3
-                });
-            },
-            // 子表产出物的详情
-            getBomProcessDetailData () {
-                this.showTabLoading = true;
-                return this.$api.manufacture.prdBomProcessDetailRequest({ prdBomProcessId: this.tabProcessId }).then(res => {
-                    if (res.data.status === 200) {
-                        let responseData = res.data.res.prdBomProductList;
-                        this.activeProcessId = res.data.res.processId;
-                        this.getSubDependentDataRequest(responseData);
-                    }
-                })
-            },
-            // 获取各个产品下的工艺单和批号列表
-            getSubDependentDataRequest (responseData) {
-                for (let productItem of responseData) {
-                    productItem.remoteSpecSheetList = [];
-                    // 工序和产品相同的工艺单列表
-                    productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.processId === this.activeProcessId && item.productId === productItem.productId);
-                    for (let materialItem of productItem.prdBomMaterielList) {
-                        materialItem.remoteBatchList = [];
-                        // 产品相同的批号列表
-                        materialItem.remoteBatchList  = this.allBatchCodeList.filter(item =>  item.productCode === materialItem.mproductCode);
-                    }
-                };
-                this.formDynamic.prdBomProductList = responseData;
-                this.showTabLoading = false;
-            },
-            // 子表产出物的详情
-            getBomProcessDetailData () {
-                this.showTabLoading = true;
-                return this.$api.manufacture.prdBomProcessDetailRequest({ prdBomProcessId: this.tabProcessId }).then(res => {
-                    if (res.data.status === 200) {
-                        let responseData = res.data.res.prdBomProductList;
-                        this.activeProcessId = res.data.res.processId;
-                        this.getSubDependentDataRequest(responseData);
                     }
                 })
             },
             async getDependentDataRequest () {
-                // 获取所有已审核的工艺单列表
-                await this.getSpecSheetListRequest().then(res => {
-                    if (res.data.status === 200) this.allSpecSheetList = res.data.res;
-                });
-                // 获取所有已审核的批号列表
+                await this.getBomDetailData();
+                // 获取当前bom产品下可用，且已审核的批号列表
                 await this.getMaterialBatchCodeRequest().then(res => {
                     if (res.data.status === 200) this.allBatchCodeList = res.data.res;
                 });
-                await this.getBomDetailData();
+                // 获取当前bom产品下可用，且已审核的工艺单列表
+                await this.getSpecSheetListRequest().then(res => {
+                    if (res.data.status === 200) {
+                        this.allSpecSheetList = res.data.res;
+                        this.tabProcessId = this.processPathList[0].id;
+                    }
+                });
             }
         },
         created () {

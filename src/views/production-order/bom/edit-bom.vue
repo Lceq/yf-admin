@@ -547,7 +547,7 @@
 
             // 工艺modal的分页
             getSelectSpecModalPageCodeEvent (pageIndex) {
-                this.getSpecListHttp(this.formDynamic.prdBomProductList[this.productModuleIndex].productId, this.pathProcessList[this.current].processId, pageIndex).then(res => {
+                this.getSpecListHttp(this.formDynamic.prdBomProductList[this.productModuleIndex].productId, this.activeProcessId, pageIndex).then(res => {
                     if (res.data.status === 200) {
                         this.selectSpecPageTotal = res.data.count;
                         this.selectSpecModalTableData = res.data.res;
@@ -555,11 +555,11 @@
                 });
             },
             selectSpecModalSearchBtnEvent (event) {
-                this.getSpecListHttp(this.formDynamic.prdBomProductList[this.productModuleIndex].productId, this.pathProcessList[this.current].processId, 1, event.code).then(res => {
+                this.getSpecListHttp(this.formDynamic.prdBomProductList[this.productModuleIndex].productId, this.activeProcessId, 1, event.code).then(res => {
                     if (res.data.status === 200) {
                         this.selectSpecPageTotal = res.data.count;
                         this.selectSpecModalTableData = res.data.res;
-                    };
+                    }
                 });
             },
             selectSpecModalStateChangeEvent (e) {
@@ -676,9 +676,6 @@
                             // 工序和产品相同的工艺单列表
                             productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.processId === this.activeProcessId && item.productId === productItem.productId);
                             // productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.productId === productItem.productId);
-                            // console.log('过滤1', this.allSpecSheetList)
-                            // console.log('过滤2', productItem.productId)
-                            // console.log('过滤3', this.allSpecSheetList.filter(item => item.productId === productItem.productId))
                             for (let materialItem of productItem.prdBomMaterielList) {
                                 materialItem.remoteBatchList = [];
                                 // 产品相同的批号列表

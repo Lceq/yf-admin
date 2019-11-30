@@ -102,28 +102,58 @@
                 </Row>
             </div>
         </Form>
-        <Tabs>
-            <TabPane label="标签一"></TabPane>
-            <TabPane label="标签二" disabled></TabPane>
-            <TabPane label="标签三"></TabPane>
+        <Tabs @on-click="getTabEvent" type="card">
+            <TabPane v-for="(item, index) in tabList" :key="index" :label="item.label" :name="index+''" :disabled="item.disabled"></TabPane>
         </Tabs>
+        <article style="height: 500px;overflow: hidden;position: relative;">
+            <div>
+                <content-loading
+                    :spinShow="true"
+                ></content-loading>
+            </div>
+        </article>
     </card>
 </template>
 <script>
+    import contentLoading from '../../components/modal-content-loading';
     import { noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, addNum } from '../../../libs/common';
     export default {
         name: 'add-bom',
         components: {
+            contentLoading
         },
         data () {
             return {
                 formValidate: {},
                 ruleValidate: {},
-                globalLoadingShow: false
-
+                globalLoadingShow: false,
+                tabList: [
+                    {
+                        label: '清花',
+                        disabled: false
+                    },
+                    {
+                        label: '梳棉',
+                        disabled: false
+                    },
+                    {
+                        label: '并条',
+                        disabled: false
+                    }
+                ]
             };
         },
         methods: {
+            getTabEvent (e) {
+                console.log(e)
+                this.tabList.forEach((item, index) => {
+                    if (index + '' === e) {
+                        // item.disabled = false;
+                    } else {
+                        // item.disabled = true;
+                    };
+                });
+            },
             newAddClick () {},
             cancelClickEvent () {},
             auditClickEvent () {},

@@ -469,6 +469,8 @@
                     }
                 ],
                 activeProcessId: null,
+                allBatchCodeList: [],
+                allSpecSheetList: []
             };
         },
         methods: {
@@ -520,7 +522,7 @@
                 })
             },
             // 获取产品和工序对应的工艺单列表
-            getSpecSheetListRequest (productId, processId) {
+            getSpecSheetListRequest (productId) {
                 return this.$api.specSheet.listHttp({
                     auditState: 3,
                     productId: productId,
@@ -536,9 +538,9 @@
                 });
             },
             // 获取各个产品下的工艺单和批号列表
-            async getSubDependentDataRequest (responseData) {
+            /*async getSubDependentDataRequest (responseData) {
                 for (let productItem of responseData) {
-                    await this.getSpecSheetListRequest(productItem.productId, productItem.productId).then(res => {
+                    await this.getSpecSheetListRequest(productItem.productId).then(res => {
                         if (res.data.status === 200) {
                             productItem.remoteSpecSheetList = res.data.res;
                         }
@@ -550,6 +552,32 @@
                                 materialItem.remoteBatchList = res.data.res;
                             }
                         })
+                    }
+                };
+                this.formDynamic.prdBomProductList = responseData;
+                this.showTabLoading = false;
+            },*/
+            // 子表产出物的详情
+            getBomProcessDetailData () {
+                this.showTabLoading = true;
+                return this.$api.manufacture.prdBomProcessDetailRequest({ prdBomProcessId: this.tabProcessId }).then(res => {
+                    if (res.data.status === 200) {
+                        let responseData = res.data.res.prdBomProductList;
+                        this.activeProcessId = res.data.res.processId;
+                        this.getSubDependentDataRequest(responseData);
+                    }
+                })
+            },
+            // 获取各个产品下的工艺单和批号列表
+            getSubDependentDataRequest (responseData) {
+                for (let productItem of responseData) {
+                    productItem.remoteSpecSheetList = [];
+                    // 工序和产品相同的工艺单列表
+                    productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.processId === this.activeProcessId && item.productId === productItem.productId);
+                    for (let materialItem of productItem.prdBomMaterielList) {
+                        materialItem.remoteBatchList = [];
+                        // 产品相同的批号列表
+                        materialItem.remoteBatchList  = this.allBatchCodeList.filter(item =>  item.productCode === materialItem.mproductCode);
                     }
                 };
                 this.formDynamic.prdBomProductList = responseData;
@@ -567,8 +595,15 @@
                 })
             },
             async getDependentDataRequest () {
+                // 获取所有已审核的工艺单列表
+                await this.getSpecSheetListRequest().then(res => {
+                    if (res.data.status === 200) this.allSpecSheetList = res.data.res;
+                });
+                // 获取所有已审核的批号列表
+                await this.getMaterialBatchCodeRequest().then(res => {
+                    if (res.data.status === 200) this.allBatchCodeList = res.data.res;
+                });
                 await this.getBomDetailData();
-                // await this.getBomProcessDetailData();
             }
         },
         created () {

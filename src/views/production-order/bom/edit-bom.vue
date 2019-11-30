@@ -104,8 +104,7 @@
         <RadioGroup v-model="tabProcessId" type="button">
             <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
         </RadioGroup>
-        <div class="view-bar">
-
+        <div class="view-bar margin-top-10">
             <!--<Tabs @on-click="getTabEvent">
                 <TabPane v-for="(item, index) in processPathList" :key="index" :label="item.processName" :name="item.id+''"></TabPane>
             </Tabs>-->
@@ -217,14 +216,13 @@
                                     </Row>
                                     <Row>
                                         <Col>
-
+                                            <Table border size="small" :columns="tableHeader" :data="item.prdBomMaterielList"></Table>
                                         </Col>
                                     </Row>
                                 </div>
                             </TabPane>
                         </Tabs>
                     </Form>
-
                 </div>
             </article>
         </div>
@@ -249,10 +247,234 @@
                     prdBomProductList: []
                 },
                 activeTabPane: '0',
-                showFeeding: true
+                showFeeding: true,
+                tableHeader: [
+                    {title: '序号', type: 'index', width: 60, align: 'center'},
+                    {title: '投入物料', key: 'mproductCode', minWidth: 200},
+                    {title: '规格', key: 'mproductModels', align: 'center', minWidth: 100},
+                    {
+                        title: '计量单位',
+                        key: 'munitCode',
+                        align: 'center',
+                        minWidth: 100,
+                        render: (h, params) => {
+                            return h('div', {
+                                domProps: {
+                                    innerHTML: params.row.munitCode ? `${params.row.munitName}(${params.row.munitCode})` : ''
+                                }
+                            });
+                        }
+                    },
+                    {
+                        title: '批号',
+                        key: 'mbatchCode',
+                        minWidth: 200,
+                        render: (h, params) => {
+                            return h('div', {
+                                style: {
+                                    display: 'flex',
+                                    paddingTop: '2px'
+                                }
+                            }, [
+                                h('Select', {
+                                    props: {
+                                        value: params.row.mbatchCode,
+                                        icon: 'ios-search',
+                                        filterable: true,
+                                        transfer: true,
+                                        placeholder: '请输入批号',
+                                        disabled: !params.row.mproductCode
+                                    },
+                                    on: {
+                                        'on-change': (e) => {
+                                            if (e) {
+                                                params.row.mbatchCode = e;
+                                                this.tableData[params.index] = params.row;
+                                                this.$emit('getSelectBatchCodeEvent', {
+                                                    dataIndex: this.dataIndex,
+                                                    rowIndex: params.index,
+                                                    row: this.tableData[params.index]
+                                                });
+                                            }
+                                        }
+                                    }
+                                }, params.row.remoteBatchList.map((item) => {
+                                    return h('Option', {
+                                        props: {
+                                            value: item.batchCode,
+                                            label: item.batchCode
+                                        }
+                                    });
+                                })),
+                                h('Button', {
+                                    props: {
+                                        icon: 'ios-search',
+                                        size: 'small',
+                                        disabled: !params.row.mproductCode
+                                    },
+                                    style: {
+                                        marginLeft: '-2px',
+                                        zIndex: '2'
+                                    },
+                                    on: {
+                                        'click': () => {
+                                            this.$emit('remoteSelectBatchSearchIconBtnEvent', {
+                                                dataIndex: this.dataIndex,
+                                                rowIndex: params.index,
+                                                mproductCode: params.row.mproductCode
+                                            });
+                                        }
+                                    }
+                                }),
+                                h('Tooltip', {
+                                    props: {
+                                        transfer: true,
+                                        content: '点击新增批号'
+                                    },
+                                    style: {
+                                        display: 'flex'
+                                    }
+                                }, [
+                                    h('Button', {
+                                        props: {
+                                            icon: 'ios-create',
+                                            size: 'small',
+                                            disabled: !params.row.mproductCode
+                                        },
+                                        style: {
+                                            height: '32px',
+                                            marginLeft: '4px'
+                                        },
+                                        on: {
+                                            click: () => {
+                                                this.$emit('addBatchCodeSearchButtonEvent', {
+                                                    dataIndex: this.dataIndex,
+                                                    rowIndex: params.index
+                                                });
+                                            }
+                                        }
+                                    })
+                                ])
+                            ]);
+                        }
+                    },
+                    {
+                        title: '占比%',
+                        key: 'mmixtureRatio',
+                        fixed: 'right',
+                        align: 'center',
+                        width: 100,
+                        render: (h, params) => {
+                            return h('div', [
+                                h('InputNumber', {
+                                    props: {
+                                        value: params.row.mmixtureRatio,
+                                        min: 0,
+                                        max: 100
+                                    },
+                                    style: {
+                                        width: '100%'
+                                    },
+                                    on: {
+                                        'on-change': (e) => {
+                                            if (e === 0 || e) {
+                                                if (params.row.mattritionRate === 0 || params.row.mattritionRate) {
+                                                    let putinQtyNum = accMul(this.productionQty, e);
+                                                    if (params.row.mattritionRate === 100) {
+                                                        params.row.mputinQty = 0;
+                                                    } else {
+                                                        params.row.mputinQty = parseInt(accDivision(putinQtyNum, accSub(100, params.row.mattritionRate)));
+                                                    };
+                                                };
+                                                this.mMixtureRatioChangeEvent(e, params.index);
+                                                params.row.mmixtureRatio = e;
+                                                this.tableData[params.index] = params.row;
+                                                this.calculationTotalPutinQty();
+                                            };
+                                        }
+                                    }
+                                })
+                            ]);
+                        }
+                    },
+                    {
+                        title: '损耗率%',
+                        key: 'mattritionRate',
+                        fixed: 'right',
+                        align: 'center',
+                        width: 100,
+                        render: (h, params) => {
+                            return h('div', [
+                                h('InputNumber', {
+                                    props: {
+                                        value: params.row.mattritionRate,
+                                        min: 0,
+                                        max: 100
+                                    },
+                                    style: {
+                                        width: '100%'
+                                    },
+                                    on: {
+                                        'on-change': (e) => {
+                                            if (e === 0 || e) {
+                                                if (params.row.mmixtureRatio === 0 || params.row.mmixtureRatio) {
+                                                    let putinQtyNum = accMul(this.productionQty, params.row.mmixtureRatio);
+                                                    if (e === 100) {
+                                                        params.row.mputinQty = 0;
+                                                    } else {
+                                                        params.row.mputinQty = parseInt(accDivision(putinQtyNum, accSub(100, e)));
+                                                    };
+                                                };
+                                                this.mAttritionRateChangeEvent(e, params.index);
+                                                params.row.mattritionRate = e;
+                                                this.tableData[params.index] = params.row;
+                                                this.calculationTotalPutinQty();
+                                            };
+                                        }
+                                    }
+                                })
+                            ]);
+                        }
+                    },
+                    {
+                        title: '投料数量',
+                        key: 'mputinQty',
+                        align: 'center',
+                        fixed: 'right',
+                        width: 160,
+                        render: (h, params) => {
+                            return h('div', [
+                                h('InputNumber', {
+                                    props: {
+                                        value: params.row.mputinQty,
+                                        min: 0,
+                                        precision: 0
+                                    },
+                                    style: {
+                                        width: '100%'
+                                    },
+                                    on: {
+                                        'on-change': (e) => {
+                                            if (e === 0 || e) {
+                                                this.mPutinQtyChangeEvent(e, params.index);
+                                                params.row.mputinQty = e;
+                                                this.tableData[params.index] = params.row;
+                                                this.calculationTotalPutinQty();
+                                            };
+                                        }
+                                    }
+                                })
+                            ]);
+                        }
+                    }
+                ],
+                activeProcessId: null,
             };
         },
         methods: {
+            clickSpecSheetButtonEvent () {},
+            clearSpecSheetEvent () {},
+            getSelectSpecSheetChangeEvent () {},
             getPlanStartDateEvent (dateFrom, dateTo, index) {
                 if (new Date(dateFrom + ' 00:00:00').valueOf() > new Date(this.formValidate.deliveryDateTo + ' 00:00:00').valueOf() || new Date(dateFrom + ' 00:00:00').valueOf() < new Date(this.formValidate.deliveryDateFrom + ' 00:00:00').valueOf()) {
                     emptyTips(this, '计划开台时间应在交货日期范围内!');
@@ -297,19 +519,56 @@
                     }
                 })
             },
+            // 获取产品和工序对应的工艺单列表
+            getSpecSheetListRequest (productId, processId) {
+                return this.$api.specSheet.listHttp({
+                    auditState: 3,
+                    productId: productId,
+                    processId: this.activeProcessId,
+                    enableState: 1,
+                });
+            },
+            // 获取投料对应的批号列表
+            getMaterialBatchCodeRequest (productCode) {
+                return this.$call('product.batch.list',{
+                    productNameCode: productCode,
+                    auditState: 3
+                });
+            },
+            // 获取各个产品下的工艺单和批号列表
+            async getSubDependentDataRequest (responseData) {
+                for (let productItem of responseData) {
+                    await this.getSpecSheetListRequest(productItem.productId, productItem.productId).then(res => {
+                        if (res.data.status === 200) {
+                            productItem.remoteSpecSheetList = res.data.res;
+                        }
+                    });
+                    for (let materialItem of productItem.prdBomMaterielList) {
+                        materialItem.remoteBatchList = [];
+                        await this.getMaterialBatchCodeRequest(materialItem.mproductCode).then(res => {
+                            if (res.data.status === 200) {
+                                materialItem.remoteBatchList = res.data.res;
+                            }
+                        })
+                    }
+                };
+                this.formDynamic.prdBomProductList = responseData;
+                this.showTabLoading = false;
+            },
             // 子表产出物的详情
             getBomProcessDetailData () {
                 this.showTabLoading = true;
                 return this.$api.manufacture.prdBomProcessDetailRequest({ prdBomProcessId: this.tabProcessId }).then(res => {
                     if (res.data.status === 200) {
-                        this.formDynamic.prdBomProductList = res.data.res.prdBomProductList;
-                        this.showTabLoading = false;
+                        let responseData = res.data.res.prdBomProductList;
+                        this.activeProcessId = res.data.res.processId;
+                        this.getSubDependentDataRequest(responseData);
                     }
                 })
             },
             async getDependentDataRequest () {
                 await this.getBomDetailData();
-                await this.getBomProcessDetailData();
+                // await this.getBomProcessDetailData();
             }
         },
         created () {
@@ -322,8 +581,8 @@
         },
         watch: {
             tabProcessId (newVal) {
-                console.log('监听', newVal)
                 if (newVal) {
+                    this.activeTabPane = '0';
                     this.getBomProcessDetailData();
                 }
             }

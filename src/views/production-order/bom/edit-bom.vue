@@ -105,9 +105,6 @@
             <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
         </RadioGroup>
         <div class="view-bar margin-top-10">
-            <!--<Tabs @on-click="getTabEvent">
-                <TabPane v-for="(item, index) in processPathList" :key="index" :label="item.processName" :name="item.id+''"></TabPane>
-            </Tabs>-->
             <article style="overflow: hidden;position: relative;padding: 10px 10px;">
                 <div>
                     <content-loading :spinShow="showTabLoading"></content-loading>
@@ -205,7 +202,7 @@
                                                     <Option v-for="(option, index) in item.remoteSpecSheetList" :value="option.code" :key="option.id">{{option.code}}</Option>
                                                 </Select>
                                                 <Button @click="clickSpecSheetButtonEvent($event, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
-                                                <Button size="small" :disabled="item.disableSetSpecButton" type="success" @click="setProcessEvent($event, index)">查看工艺信息</Button>
+                                                <Button :disabled="!item.specSheetCode" type="success" @click="setProcessEvent($event, item.specSheetCode, index)">查看工艺信息</Button>
                                             </div>
                                         </FormItem>
                                     </Col>
@@ -226,16 +223,27 @@
                 </div>
             </article>
         </div>
+        <see-spec-sheet
+                :spin-show="seeSpecModalSpinShow"
+                :set-process-modal-state="seeProcessModalState"
+                :spec-product-obj="specProductObj"
+                @on-visible-change="seeProcessModalStateChangeEvent"
+                @see-process-modal-cancel-event="seeProcessModalCancelEvent"
+        ></see-spec-sheet>
     </card>
 </template>
 <script>
+    import seeSpecSheet from '../manufacture/components/see-spec-sheet';
     import contentLoading from '../../components/modal-content-loading';
     import { noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, addNum } from '../../../libs/common';
     export default {
         name: 'add-bom',
-        components: { contentLoading },
+        components: { contentLoading, seeSpecSheet },
         data () {
             return {
+                seeSpecModalSpinShow: false,
+                specProductObj: {},
+                seeProcessModalState: false,
                 tabProcessId: null,
                 editId: null,
                 formValidate: {},
@@ -474,6 +482,33 @@
             };
         },
         methods: {
+            // 上级工艺modal事件
+            seeProcessModalCancelEvent () {
+                this.seeProcessModalState = false;
+            },
+            // 获取工艺参数和设备
+            getSpecDetailHttp (id) {
+                return this.$call('spec.sheet.detail', {id: id});
+            },
+            seeProcessModalStateChangeEvent (e) {
+                this.seeProcessModalState = e;
+            },
+            // 设置工艺的事件
+            setProcessEvent (e, code, index) {
+                this.seeProcessModalState = true;
+                this.formDynamic.prdBomProductList[index].remoteSpecSheetList.forEach((item)=>{
+                    if (item.code === code) {
+                        // 请求工艺单的参数
+                        this.seeSpecModalSpinShow = true;
+                        this.getSpecDetailHttp(item.id).then(res => {
+                            if (res.data.status === 200) {
+                                this.specProductObj = res.data.res.specSheetProcessModel;
+                                this.seeSpecModalSpinShow = false;
+                            };
+                        });
+                    };
+                });
+            },
             clickSpecSheetButtonEvent () {},
             clearSpecSheetEvent () {},
             getSelectSpecSheetChangeEvent () {},
@@ -497,11 +532,6 @@
                         emptyTips(this, '计划完工时间不能小于计划开台时间!');
                     };
                 };
-            },
-            getTabEvent (e) {
-                console.log(e)
-                this.tabProcessId = e;
-                this.getBomProcessDetailData();
             },
             cancelClickEvent () {},
             auditClickEvent () {},
@@ -537,26 +567,6 @@
                     auditState: 3
                 });
             },
-            // 获取各个产品下的工艺单和批号列表
-            /*async getSubDependentDataRequest (responseData) {
-                for (let productItem of responseData) {
-                    await this.getSpecSheetListRequest(productItem.productId).then(res => {
-                        if (res.data.status === 200) {
-                            productItem.remoteSpecSheetList = res.data.res;
-                        }
-                    });
-                    for (let materialItem of productItem.prdBomMaterielList) {
-                        materialItem.remoteBatchList = [];
-                        await this.getMaterialBatchCodeRequest(materialItem.mproductCode).then(res => {
-                            if (res.data.status === 200) {
-                                materialItem.remoteBatchList = res.data.res;
-                            }
-                        })
-                    }
-                };
-                this.formDynamic.prdBomProductList = responseData;
-                this.showTabLoading = false;
-            },*/
             // 子表产出物的详情
             getBomProcessDetailData () {
                 this.showTabLoading = true;

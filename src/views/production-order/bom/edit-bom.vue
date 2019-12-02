@@ -3,11 +3,12 @@
         <global-loading v-show="globalLoadingShow"></global-loading>
         <Row type="flex" justify="space-between">
             <Col class="flex-between-center">
-                <Button v-show="formValidate.auditState===2" icon="ios-undo" class="queryBarMarginLeft margin-bottom-10" type="warning" @click="cancelClickEvent">撤销提交</Button>
-                <Button v-show="formValidate.auditState===2" icon="md-done-all" class="queryBarMarginLeft margin-bottom-10" type="primary" @click="auditClickEvent">审核</Button>
-                <Button v-show="formValidate.auditState===3&&formValidate.isQuote===false" type="warning" icon="md-refresh" class="queryBarMarginLeft margin-bottom-10" @click="unAuditClickEvent">撤销审核</Button>
-                <Button v-show="formValidate.auditState===3" icon="md-close" class="queryBarMarginLeft margin-bottom-10" type="error" @click="closeClickEvent">关闭单据</Button>
-                <Button v-show="formValidate.auditState===4" icon="md-swap" class="queryBarMarginLeft margin-bottom-10" type="warning" @click="openClickEvent">撤销关闭</Button>
+                <Button icon="ios-create" type="primary" v-show="formValidate.auditState <= 1" class="queryBarMarginRight" @click="onSubmitEvent">提交</Button>
+                <Button v-show="formValidate.auditState===2" icon="ios-undo" class="queryBarMarginLeft margin-bottom-10" type="warning" @click="onCancelClickEvent">撤销提交</Button>
+                <Button v-show="formValidate.auditState===2" icon="md-done-all" class="queryBarMarginLeft margin-bottom-10" type="primary" @click="onAuditClickEvent">审核</Button>
+                <Button v-show="formValidate.auditState===3&&formValidate.isQuote===false" type="warning" icon="md-refresh" class="queryBarMarginLeft margin-bottom-10" @click="onUnAuditClickEvent">撤销审核</Button>
+                <Button v-show="formValidate.auditState===3" icon="md-close" class="queryBarMarginLeft margin-bottom-10" type="error" @click="onCloseClickEvent">关闭单据</Button>
+                <Button v-show="formValidate.auditState===4" icon="md-swap" class="queryBarMarginLeft margin-bottom-10" type="warning" @click="onOpenClickEvent">撤销关闭</Button>
             </Col>
         </Row>
         <Form :label-width="90" ref="formValidate" :model="formValidate" :rules="ruleValidate" :show-message="false">
@@ -390,6 +391,73 @@
             };
         },
         methods: {
+            onCancelClickEvent () {
+                this.globalLoadingShow = true;
+                this.$api.manufacture.cancelHttp([this.formValidate.id]).then(res => {
+                    if (res.data.status === 200) {
+                        this.getDependentDataRequest();
+                        noticeTips(this, 'cancelTips');
+                    }
+                });
+            },
+            onAuditClickEvent () {
+                this.globalLoadingShow = true;
+                this.$api.manufacture.approveHttp([this.formValidate.id]).then(res => {
+                    if (res.data.status === 200) {
+                        this.getDependentDataRequest();
+                        noticeTips(this, 'auditTips');
+                    }
+                });
+            },
+            onUnAuditClickEvent () {
+                this.globalLoadingShow = true;
+                this.$api.manufacture.unapproveHttp([this.formValidate.id]).then(res => {
+                    if (res.data.status === 200) {
+                        this.getDependentDataRequest();
+                        noticeTips(this, 'unAuditTips');
+                    }
+                });
+            },
+            onCloseClickEvent () {
+                this.globalLoadingShow = true;
+                this.$api.manufacture.closeHttp([this.formValidate.id]).then(res => {
+                    if (res.data.status === 200) {
+                        this.getDependentDataRequest();
+                        noticeTips(this, 'closeTips');
+                    }
+                });
+            },
+            onOpenClickEvent () {
+                this.globalLoadingShow = true;
+                this.$api.manufacture.uncloseHttp([this.formValidate.id]).then(res => {
+                    if (res.data.status === 200) {
+                        this.getDependentDataRequest();
+                        noticeTips(this, 'unCloseTips');
+                    }
+                });
+            },
+            // 保存并提交
+            async saveAndSubmitRequest () {
+                this.globalLoadingShow = true;
+                await this.saveRequest();
+                await this.$api.manufacture.submitHttp([this.formValidate.id]).then(res => {
+                    if (res.data.status === 200) {
+                        this.submitButtonLoading = false;
+                        noticeTips(this, 'submitTips');
+                        this.getDependentDataRequest();
+                    }
+                });
+            },
+            onSubmitEvent () {
+                this.$refs['formDynamic'].validate((valid) => {
+                    if (valid) {
+                        this.$Message.success('Success!');
+                        this.saveAndSubmitRequest();
+                    } else {
+                        this.$Message.error('Fail!');
+                    }
+                });
+            },
             onCreatedBatchCodeButtonEvent (mproductCode, moduleIndex, index) {
                 this.bomMaterialTableRowProduct = mproductCode;
                 this.productModuleIndex = moduleIndex;
@@ -405,7 +473,7 @@
                     this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex].remoteBatchList.push({batchCode: batchCode});
                     this.allBatchCodeList.push({batchCode: batchCode, productCode: this.addBatchModalProductCodeItem.productCode});
                     this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCodeList', [{batchCode: batchCode}]);
-                },500);
+                }, 500);
             },
             addBatchCodeModalVisibleChangeEvent (e) {
                 this.addBatchModalState = e;
@@ -437,7 +505,7 @@
                         this.selectBatchModalSpinShow = false;
                         this.selectBatchModalTableData = res.data.res;
                         this.selectBatchPageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             onSelectBatchModalPageCodeEvent (event) {
@@ -448,7 +516,7 @@
                         this.selectBatchModalSpinShow = false;
                         this.selectBatchModalTableData = res.data.res;
                         this.selectBatchPageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             selectBatchModalStateChangeEvent (e) {
@@ -474,7 +542,7 @@
                         this.selectBatchModalSpinShow = false;
                         this.selectBatchModalTableData = res.data.res;
                         this.selectBatchPageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             // 保存的请求
@@ -484,18 +552,18 @@
                     item.planStartDate = formatDay(item.planStartDate);
                     item.planFinishDate = formatDay(item.planFinishDate);
                 });
-                this.$api.manufacture.prdBomProcessSaveRequest({
+                return this.$api.manufacture.prdBomProcessSaveRequest({
                     ...this.formDynamic
-                }).then(res => {
+                });
+            },
+            onSelectProcessEvent (e) {
+                this.saveRequest().then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'saveTips');
                         this.activeTabPane = '0';
                         this.getBomProcessDetailData();
                     }
-                })
-            },
-            onSelectProcessEvent (e) {
-                this.saveRequest();
+                });
             },
             // 投料
             mPutinQtyChangeEvent (event) {
@@ -558,7 +626,7 @@
                     if (res.data.status === 200) {
                         this.selectSpecPageTotal = res.data.count;
                         this.selectSpecModalTableData = res.data.res;
-                    };
+                    }
                 });
             },
             selectSpecModalSearchBtnEvent (event) {
@@ -583,7 +651,7 @@
                         this.selectSpecPageTotal = res.data.count;
                         this.selectSpecModalTableData = res.data.res;
                         this.specModalContentSpinShow = false;
-                    };
+                    }
                 });
             },
             // 上级工艺modal事件
@@ -608,9 +676,9 @@
                             if (res.data.status === 200) {
                                 this.specProductObj = res.data.res.specSheetProcessModel;
                                 this.seeSpecModalSpinShow = false;
-                            };
+                            }
                         });
-                    };
+                    }
                 });
             },
             clearSpecSheetEvent () {},
@@ -623,8 +691,8 @@
                         this.formDynamic.prdBomProductList[index].planStartDate = '';
                         this.$set(this.formDynamic.prdBomProductList[index], 'planStartDate', '');
                         emptyTips(this, '计划开台时间不能大于计划完工时间!');
-                    };
-                };
+                    }
+                }
             },
             getPlanFinishDateEvent (dateTo, dateFrom, index) {
                 if (new Date(dateTo + ' 00:00:00').valueOf() > new Date(this.formValidate.deliveryDateTo + ' 00:00:00').valueOf() || new Date(dateTo + ' 00:00:00').valueOf() < new Date(this.formValidate.deliveryDateFrom + ' 00:00:00').valueOf()) {
@@ -633,14 +701,9 @@
                     if (new Date(formatDate(dateFrom)).valueOf() > new Date(dateTo + ' 00:00:00').valueOf()) {
                         this.$set(this.formDynamic.prdBomProductList[index], 'planFinishDate', '');
                         emptyTips(this, '计划完工时间不能小于计划开台时间!');
-                    };
-                };
+                    }
+                }
             },
-            cancelClickEvent () {},
-            auditClickEvent () {},
-            unAuditClickEvent () {},
-            closeClickEvent () {},
-            openClickEvent () {},
             // 获取产品和工序对应的工艺单列表
             getSpecSheetListRequest (productId) {
                 return this.$api.specSheet.listHttp({
@@ -661,6 +724,7 @@
             },
             // bom主表的详情
             getBomDetailData () {
+                this.globalLoadingShow = true;
                 return this.$api.manufacture.prdBomDetailRequest({ id: this.editId }).then(res => {
                     if (res.data.status === 200) {
                         this.formValidate = res.data.res;
@@ -714,11 +778,10 @@
         },
         created () {
             this.editId = this.$route.query.id;
-            this.globalLoadingShow = true;
+            this.getDependentDataRequest();
         },
         mounted () {
             this.editId = this.$route.query.id;
-            this.getDependentDataRequest();
         }
     };
 </script>

@@ -83,7 +83,7 @@ export const otherRouter = {
         { meta: { keepAlive: true }, path:'detail-standard-bom',title:'标准BOM详情',name:'detail-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/detail-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'edit-standard-bom',title:'编辑标准BOM',name:'edit-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/edit-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'add-standard-bom',title:'新增标准BOM',name:'add-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/add-standard-bom.vue') },
-        { meta: { keepAlive: true }, path:'edit-bom',title:'编辑制造BOM',name:'edit-bom',icon:'ios-paper', component: () => import('@/views/production-order/bom/edit-bom.vue') },
+        { path:'edit-bom',title:'编辑制造BOM',name:'edit-bom',icon:'ios-paper', component: () => import('@/views/production-order/bom/edit-bom.vue') },
 
         { meta: { keepAlive: true }, path:'orderDetail',title:'生产订单详情',name:'orderDetail',icon:'ios-paper', component: () => import('@/views/production-order/order/detail-order.vue') },
         { meta: { keepAlive: true }, path:'add-blend',title:'新增配棉档案',name:'add-blend',icon:'ios-paper', component: () => import('@/views/cotton-blend/archives/add-blend-archives.vue') },

@@ -17,7 +17,7 @@ export default({
         return proxy.call('prd.order.submit', params);
     },
     cancelHttp (params) {
-        return post('prd/order/cancel', params);
+        return proxy.call('prd.order.cancel', params);
     },
     approveHttp (params) {
         return proxy.call('prd.order.approve', params);

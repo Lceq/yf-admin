@@ -3,6 +3,7 @@
         <global-loading v-show="globalLoadingShow"></global-loading>
         <Row type="flex" justify="space-between">
             <Col class="flex-between-center">
+                <Button @click="testEvent">测试</Button>
                 <Button v-show="formValidate.auditState===2" icon="ios-undo" class="queryBarMarginLeft margin-bottom-10" type="warning" @click="cancelClickEvent">撤销提交</Button>
                 <Button v-show="formValidate.auditState===2" icon="md-done-all" class="queryBarMarginLeft margin-bottom-10" type="primary" @click="auditClickEvent">审核</Button>
                 <Button v-show="formValidate.auditState===3&&formValidate.isQuote===false" type="warning" icon="md-refresh" class="queryBarMarginLeft margin-bottom-10" @click="unAuditClickEvent">撤销审核</Button>
@@ -101,7 +102,7 @@
                 </Row>
             </div>
         </Form>
-        <RadioGroup v-model="tabProcessId" type="button">
+        <RadioGroup v-model="tabProcessId" type="button" @on-change="onSelectProcessEvent">
             <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
         </RadioGroup>
         <div class="view-bar margin-top-10">
@@ -110,7 +111,7 @@
                     <content-loading :spinShow="showTabLoading"></content-loading>
                     <Form :style="{'overflow-y': 'auto'}" ref="formDynamic" :model="formDynamic" :label-width="90" :show-message="false">
                         <Tabs v-model="activeTabPane" type="card">
-                            <TabPane :label="item.productName" :name="index + ''"  v-for="(item, index) in formDynamic.prdBomProductList" :key="index" class="product-module" :class="index >= 1 ? 'product-module-border' : ''">
+                            <TabPane :label="item.productName" :name="moduleIndex + ''"  v-for="(item, moduleIndex) in formDynamic.prdBomProductList" :key="moduleIndex" class="product-module" :class="moduleIndex >= 1 ? 'product-module-border' : ''">
                                 <Row class="margin-bottom-10">
                                     <Col><Icon type="logo-buffer" /><span class="margin-left-10">产出物料</span></Col>
                                 </Row>
@@ -144,14 +145,14 @@
                                         <FormItem label="计划开工时间:" class="formItemMargin" :label-width="110"
 
                                         >
-                                            <DatePicker @on-change="getPlanStartDateEvent($event, item.planFinishDate, index)" :clearable="false" transfer v-model="item.planStartDate" type="date" placeholder="请选择计划开工时间" class="widthPercentage"></DatePicker>
+                                            <DatePicker @on-change="getPlanStartDateEvent($event, item.planFinishDate, moduleIndex)" :clearable="false" transfer v-model="item.planStartDate" type="date" placeholder="请选择计划开工时间" class="widthPercentage"></DatePicker>
                                         </FormItem>
                                     </Col>
                                     <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                         <FormItem label="计划完工时间:" class="formItemMargin" :label-width="110"
 
                                         >
-                                            <DatePicker @on-change="getPlanFinishDateEvent($event, item.planStartDate, index)" :clearable="false" transfer v-model="item.planFinishDate" type="date" placeholder="请选择计划完工时间" class="widthPercentage"></DatePicker>
+                                            <DatePicker @on-change="getPlanFinishDateEvent($event, item.planStartDate, moduleIndex)" :clearable="false" transfer v-model="item.planFinishDate" type="date" placeholder="请选择计划完工时间" class="widthPercentage"></DatePicker>
                                         </FormItem>
                                     </Col>
                                 </Row>
@@ -162,8 +163,8 @@
                                     <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                         <FormItem label="上机准备时间(小时):" class="formItemMargin"
                                                   :label-width="140"
-                                                  :key="index"
-                                                  :prop="'prdBomProductList.' + index + '.preparationHours'"
+                                                  :key="moduleIndex"
+                                                  :prop="'prdBomProductList.' + moduleIndex + '.preparationHours'"
                                                   :rules="{required: true, type: 'number', trigger: 'change'}"
                                         >
                                             <InputNumber :precision="0" :min="1" v-model="item.preparationHours" class="widthPercentage"></InputNumber>
@@ -172,8 +173,8 @@
                                     <Col :sm="12" :md="12" :lg="12" :xl="8" :xxl="6">
                                         <FormItem label="前道提前时间(小时):" class="formItemMargin"
                                                   :label-width="140"
-                                                  :key="index"
-                                                  :prop="'prdBomProductList.' + index + '.feedingHours'"
+                                                  :key="moduleIndex"
+                                                  :prop="'prdBomProductList.' + moduleIndex + '.feedingHours'"
                                                   :rules="{required: true, type: 'number', trigger: 'change'}"
                                         >
                                             <InputNumber :precision="0" :min="1" v-model="item.feedingHours" class="widthPercentage"></InputNumber>
@@ -184,8 +185,8 @@
                                                 :label-width="110"
                                                 label="工艺单号:"
                                                 class="formItemMargin"
-                                                :key="index"
-                                                :prop="'prdBomProductList.' + index + '.specSheetCode'"
+                                                :key="moduleIndex"
+                                                :prop="'prdBomProductList.' + moduleIndex + '.specSheetCode'"
                                                 :rules="{required: true, type: 'string', trigger: 'change'}"
                                         >
                                             <div class="flex-left">
@@ -196,13 +197,13 @@
                                                         placeholder="请输入工艺单号"
                                                         transfer
                                                         v-model="item.specSheetCode"
-                                                        @on-change="getSelectSpecSheetChangeEvent($event, index)"
-                                                        @on-clear="clearSpecSheetEvent($event, index)"
+                                                        @on-change="getSelectSpecSheetChangeEvent($event, moduleIndex)"
+                                                        @on-clear="clearSpecSheetEvent($event, moduleIndex)"
                                                 >
-                                                    <Option v-for="(option, index) in item.remoteSpecSheetList" :value="option.code" :key="option.id">{{option.code}}</Option>
+                                                    <Option v-for="(option) in item.remoteSpecSheetList" :value="option.code" :key="option.id">{{option.code}}</Option>
                                                 </Select>
-                                                <Button @click="clickSpecSheetButtonEvent($event, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
-                                                <Button :disabled="!item.specSheetCode" type="success" @click="setProcessEvent($event, item.specSheetCode, index)">查看工艺信息</Button>
+                                                <Button @click="clickSpecSheetButtonEvent($event, moduleIndex)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
+                                                <Button :disabled="!item.specSheetCode" type="success" @click="setProcessEvent($event, item.specSheetCode, moduleIndex)">查看工艺信息</Button>
                                             </div>
                                         </FormItem>
                                     </Col>
@@ -213,8 +214,44 @@
                                     </Row>
                                     <Row>
                                         <Col>
-                                            <Table border size="small" :columns="tableHeader" :data="item.prdBomMaterielList"></Table>
+                                            <Table border size="small" :columns="tableHeader" :data="item.prdBomMaterielList">
+                                                <template slot-scope="{ row, index }" slot="mmixtureRatioAction">
+                                                    <Select
+                                                            class="remoteSearchSelect"
+                                                            filterable
+                                                            clearable
+                                                            placeholder="请输入批号"
+                                                            transfer
+                                                            v-model="row.mbatchCode"
+                                                            @on-change="onSelectBatchCodeChangeEvent($event, moduleIndex)"
+                                                    >
+                                                        <Option v-for="(option) in item.remoteBatchList" :value="option.code" :key="option.id">{{option.code}}</Option>
+                                                    </Select>
+                                                    <Button @click="onClickBatchCodeButtonEvent($event, moduleIndex, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
+                                                </template>
+                                                <template slot-scope="{ row, index }" slot="mmixtureRatioAction">
+                                                    <InputNumber v-model="row.mmixtureRatio" type="error" @on-change="onMmixtureRatioChangeEvent($event, row, moduleIndex, index, item.productionQty)" :min="0" :max="100"></InputNumber>
+                                                </template>
+                                                <template slot-scope="{ row, index }" slot="mattritionRateAction">
+                                                    <InputNumber v-model="row.mattritionRate" type="error" @on-change="onMattritionRateChangeEvent($event, row, moduleIndex, index, item.productionQty)" :min="0" :max="100"></InputNumber>
+                                                </template>
+                                                <template slot-scope="{ row, index }" slot="mputinQtyAction">
+                                                    <InputNumber v-model="row.mputinQty" type="error" class="width-percentage" @on-change="onMputinQtyChangeEvent($event, row, moduleIndex, index, item.productionQty)" :min="0" :max="100"></InputNumber>
+                                                </template>
+                                            </Table>
                                         </Col>
+                                    </Row>
+                                    <Row type="flex" justify="end" class="total-num-big-box">
+                                        合计：
+                                        <div class="total-num-box total-MixtureRatio-width">
+                                            <div>{{ totalMixtureRatioNum }}%</div>
+                                        </div>
+                                        <div class="total-num-box total-MixtureRatio-width">
+                                            <!--<div>{{ totalMattritionRateNum }}%</div>-->
+                                        </div>
+                                        <div class="total-num-box total-num-box-width">
+                                            <div>{{ totalPutinQty }}</div>
+                                        </div>
                                     </Row>
                                 </div>
                             </TabPane>
@@ -250,7 +287,7 @@
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import seeSpecSheet from '../manufacture/components/see-spec-sheet';
     import contentLoading from '../../components/modal-content-loading';
-    import { noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, addNum } from '../../../libs/common';
+    import { formatDay, noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul } from '../../../libs/common';
     export default {
         name: 'add-bom',
         components: { contentLoading, seeSpecSheet, selectSpecSheetModal },
@@ -270,7 +307,9 @@
                 ],
                 selectSpecTableLoading: false,
                 selectSpecPageTotal: 0,
-
+                totalPutinQty: 0,
+                totalMixtureRatioNum: 0,
+                totalMattritionRateNum: 0,
 
                 seeSpecModalSpinShow: false,
                 specProductObj: {},
@@ -403,6 +442,7 @@
                         fixed: 'right',
                         align: 'center',
                         width: 100,
+                        slot: 'mmixtureRatioAction'/*,
                         render: (h, params) => {
                             return h('div', [
                                 h('InputNumber', {
@@ -418,11 +458,11 @@
                                         'on-change': (e) => {
                                             if (e === 0 || e) {
                                                 if (params.row.mattritionRate === 0 || params.row.mattritionRate) {
-                                                    let putinQtyNum = accMul(this.productionQty, e);
+                                                    let putinQtyNum = mathJsMul(this.productionQty, e);
                                                     if (params.row.mattritionRate === 100) {
                                                         params.row.mputinQty = 0;
                                                     } else {
-                                                        params.row.mputinQty = parseInt(accDivision(putinQtyNum, accSub(100, params.row.mattritionRate)));
+                                                        params.row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, params.row.mattritionRate)));
                                                     };
                                                 };
                                                 this.mMixtureRatioChangeEvent(e, params.index);
@@ -434,7 +474,7 @@
                                     }
                                 })
                             ]);
-                        }
+                        }*/
                     },
                     {
                         title: '损耗率%',
@@ -442,7 +482,8 @@
                         fixed: 'right',
                         align: 'center',
                         width: 100,
-                        render: (h, params) => {
+                        slot: 'mattritionRateAction',
+                        /*render: (h, params) => {
                             return h('div', [
                                 h('InputNumber', {
                                     props: {
@@ -457,11 +498,11 @@
                                         'on-change': (e) => {
                                             if (e === 0 || e) {
                                                 if (params.row.mmixtureRatio === 0 || params.row.mmixtureRatio) {
-                                                    let putinQtyNum = accMul(this.productionQty, params.row.mmixtureRatio);
+                                                    let putinQtyNum = mathJsMul(this.productionQty, params.row.mmixtureRatio);
                                                     if (e === 100) {
                                                         params.row.mputinQty = 0;
                                                     } else {
-                                                        params.row.mputinQty = parseInt(accDivision(putinQtyNum, accSub(100, e)));
+                                                        params.row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, e)));
                                                     };
                                                 };
                                                 this.mAttritionRateChangeEvent(e, params.index);
@@ -473,7 +514,7 @@
                                     }
                                 })
                             ]);
-                        }
+                        }*/
                     },
                     {
                         title: '投料数量',
@@ -481,6 +522,7 @@
                         align: 'center',
                         fixed: 'right',
                         width: 160,
+                        slot: 'mputinQtyAction'/*,
                         render: (h, params) => {
                             return h('div', [
                                 h('InputNumber', {
@@ -504,7 +546,7 @@
                                     }
                                 })
                             ]);
-                        }
+                        }*/
                     }
                 ],
                 activeProcessId: null,
@@ -514,6 +556,108 @@
             };
         },
         methods: {
+            // 获取选择的批号
+            onSelectBatchCodeChangeEvent () {
+
+            },
+            // 点击搜索的批号按钮事件
+            onClickBatchCodeButtonEvent () {
+
+            },
+            // 保存的请求
+            saveRequest () {
+                this.showTabLoading = true;
+                this.formDynamic.prdBomProductList.forEach(item => {
+                    item.planStartDate = formatDay(item.planStartDate);
+                    item.planFinishDate = formatDay(item.planFinishDate);
+                });
+                this.$api.manufacture.prdBomProcessSaveRequest({
+                    ...this.formDynamic
+                }).then(res => {
+                    if (res.data.status === 200) {
+                        noticeTips(this, 'saveTips');
+                        this.activeTabPane = '0';
+                        this.getBomProcessDetailData();
+                    }
+                })
+            },
+            onSelectProcessEvent (e) {
+                // alert(e)
+                this.saveRequest();
+            },
+            testEvent () {
+                console.log('测试', this.formDynamic)
+            },
+            onMputinQtyChangeEvent (e, row, moduleIndex, index, mattritionRate) {
+                // console.log('数量1', e, row, moduleIndex, index, mattritionRate)
+                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mputinQty = e;
+                /*if (e === 0 || e) {
+                    this.mPutinQtyChangeEvent(e, index);
+                    row.mputinQty = e;
+                    this.tableData[index] = row;
+                    this.calculationTotalPutinQty();
+                };*/
+            },
+            // 投料
+            mPutinQtyChangeEvent (event) {
+                this.formDynamic.productModuleList[event.dataIndex].bomMaterielList[event.moduleIndex] = event.materialData;
+            },
+            onMattritionRateChangeEvent (e, row, moduleIndex, index, mattritionRate) {
+                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mattritionRate = e;
+
+                /*if (e === 0 || e) {
+                    if (params.row.mmixtureRatio === 0 || params.row.mmixtureRatio) {
+                        let putinQtyNum = mathJsMul(this.productionQty, params.row.mmixtureRatio);
+                        if (e === 100) {
+                            params.row.mputinQty = 0;
+                        } else {
+                            params.row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, e)));
+                        };
+                    };
+                    this.mAttritionRateChangeEvent(e, params.index);
+                    params.row.mattritionRate = e;
+                    this.tableData[params.index] = params.row;
+                    this.calculationTotalPutinQty();
+                };*/
+            },
+            onMmixtureRatioChangeEvent (e, row, moduleIndex, index, mattritionRate) {
+                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mmixtureRatio = e;
+
+                /*if (e === 0 || e) {
+                    if (row.mattritionRate === 0 || mattritionRate) {
+                        let putinQtyNum = mathJsMul(this.productionQty, e);
+                        if (row.mattritionRate === 100) {
+                            row.mputinQty = 0;
+                        } else {
+                            row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, row.mattritionRate)));
+                        };
+                    };
+                    this.mMixtureRatioChangeEvent(e, index);
+                    row.mmixtureRatio = e;
+                    this.tableData[index] = row;
+                    this.calculationTotalPutinQty();
+                };*/
+            },
+            // 合计
+            calculationTotalPutinQty () {
+                let totalNum = 0;
+                let totalMixtureRatio = 0;
+                let totalMattritionRate = 0;
+                this.tableData.forEach((item) => {
+                    if (item.mputinQty) {
+                        totalNum = mathJsAdd(item.mputinQty, totalNum);
+                    };
+                    if (item.mmixtureRatio) {
+                        totalMixtureRatio = mathJsAdd(item.mmixtureRatio, totalMixtureRatio);
+                    };
+                    if (item.mattritionRate) {
+                        totalMattritionRate = mathJsAdd(item.mattritionRate, totalMattritionRate);
+                    };
+                });
+                this.totalPutinQty = totalNum;
+                this.totalMixtureRatioNum = totalMixtureRatio;
+                this.totalMattritionRateNum = totalMattritionRate;
+            },
             // 根据产品获取工艺单
             getSpecListHttp (productId = null, processId = '', pageIndex = 1, code = '') {
                 return this.$api.specSheet.listHttp({
@@ -665,7 +809,6 @@
             },
             // 子表产出物的详情
             getBomProcessDetailData () {
-                this.showTabLoading = true;
                 return this.$api.manufacture.prdBomProcessDetailRequest({ prdBomProcessId: this.tabProcessId }).then(res => {
                     if (res.data.status === 200) {
                         let responseData = res.data.res.prdBomProductList;
@@ -674,14 +817,15 @@
                         for (let productItem of responseData) {
                             productItem.remoteSpecSheetList = [];
                             // 工序和产品相同的工艺单列表
-                            productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.processId === this.activeProcessId && item.productId === productItem.productId);
-                            // productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.productId === productItem.productId);
+                            // productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.processId === this.activeProcessId && item.productId === productItem.productId);
+                            productItem.remoteSpecSheetList  = this.allSpecSheetList.filter(item => item.productId === productItem.productId);
                             for (let materialItem of productItem.prdBomMaterielList) {
                                 materialItem.remoteBatchList = [];
                                 // 产品相同的批号列表
                                 materialItem.remoteBatchList  = this.allBatchCodeList.filter(item =>  item.productCode === materialItem.mproductCode);
                             }
-                        };
+                        }
+                        this.formDynamic = res.data.res;
                         this.formDynamic.prdBomProductList = responseData;
                         this.showTabLoading = false;
                         this.globalLoadingShow = false;
@@ -699,6 +843,8 @@
                     if (res.data.status === 200) {
                         this.allSpecSheetList = res.data.res;
                         this.tabProcessId = this.processPathList[0].id;
+                        this.activeTabPane = '0';
+                        this.getBomProcessDetailData();
                     }
                 });
             }
@@ -714,8 +860,8 @@
         watch: {
             tabProcessId (newVal) {
                 if (newVal) {
-                    this.activeTabPane = '0';
-                    this.getBomProcessDetailData();
+                    /*this.activeTabPane = '0';
+                    this.getBomProcessDetailData();*/
                 }
             }
         }
@@ -725,5 +871,9 @@
     .view-bar {
         background: #f3f3f3;
         border-radius: 8px;
+    }
+    .total-MixtureRatio-width{
+        width: 100px;
+        border-right: none;
     }
 </style>

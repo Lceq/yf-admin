@@ -395,9 +395,9 @@
                                     },
                                     on: {
                                         click: () => {
-                                            this.showModal = true;
-                                            this.selectOrderId = params.row.id;
-                                            this.getModalList(params.row.productId);
+                                            _this.showModal = true;
+                                            _this.selectOrderId = params.row.id;
+                                            _this.getModalList(params.row.productId);
                                         }
                                     }
                                 }, '创建BOM')

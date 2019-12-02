@@ -40,6 +40,9 @@ export default {
     },
 
     // 制造bom接口
+    prdBomProcessSaveRequest (params) {
+        return proxy.call('prd.bom.process.save', params);
+    },
     listHttp (params) {
         return proxy.call('prd.bom.list', params);
     },

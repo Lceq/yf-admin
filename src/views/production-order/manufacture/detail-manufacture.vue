@@ -35,8 +35,6 @@
                         <div class="read-only-item">{{bomDetailData.workshopName}}</div>
                     </FormItem>
                 </Col>
-            </Row>
-            <Row>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="产出物料:" prop="materielCodeIpt" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.productCode ? `${bomDetailData.productName}(${bomDetailData.productCode})` : ''}}</div>
@@ -104,10 +102,10 @@
                 </Col>
             </Row>
             <Collapse v-model="activePanel" @on-change="getCollapseEvent">
-                <Panel v-for="(item, index) in pathProcessList" :key="index" :name="item.processId + ''">
+                <Panel v-for="(item, index) in pathProcessList" :key="index" :name="item.id + ''">
                     {{item.processName}}设计
-                    <div slot="content" v-if="item.bomProductList">
-                        <div v-for="(productItem, productIndex) in item.bomProductList" :key="productIndex" class="detail-product-bar">
+                    <div slot="content" v-if="item.prdBomProductList">
+                        <div v-for="(productItem, productIndex) in item.prdBomProductList" :key="productIndex" class="detail-product-bar">
                             <Row>
                                 <Col span="24">
                                     <Row class="margin-bottom-15">
@@ -182,7 +180,7 @@
                             </Row>
                         </div>
                     </div>
-                    <Row slot="content" v-else-if="item.bomProductList === undefined">
+                    <Row slot="content" v-else-if="item.prdBomProductList === undefined">
                         <Col class="text-center" span="24">
                             <Spin fix>
                                 <Icon type="ios-loading" size=18 class="demo-spin-icon-load"></Icon>
@@ -225,12 +223,7 @@
                 auditStateName: '',
                 pathProcessList: [],
                 materialTableHeader: [
-                    {
-                        title: '序号',
-                        type: 'index',
-                        width: 60,
-                        align: 'center'
-                    },
+                    {title: '序号', type: 'index', width: 60, align: 'center'},
                     {
                         title: '产品',
                         key: 'mproductCode',
@@ -243,12 +236,7 @@
                             });
                         }
                     },
-                    {
-                        title: '规格',
-                        key: 'mproductModels',
-                        align: 'center',
-                        minWidth: 80
-                    },
+                    {title: '规格', key: 'mproductModels', align: 'center', minWidth: 80},
                     {
                         title: '单位',
                         key: 'munitCode',
@@ -262,30 +250,10 @@
                             });
                         }
                     },
-                    {
-                        title: '批号',
-                        key: 'mbatchCode',
-                        align: 'center',
-                        minWidth: 80
-                    },
-                    {
-                        title: '占比%',
-                        key: 'mmixtureRatio',
-                        align: 'center',
-                        minWidth: 80
-                    },
-                    {
-                        title: '损耗率%',
-                        key: 'mattritionRate',
-                        align: 'center',
-                        minWidth: 80
-                    },
-                    {
-                        title: '投料数量',
-                        key: 'mputinQty',
-                        align: 'center',
-                        minWidth: 80
-                    }
+                    {title: '批号', key: 'mbatchCode', align: 'center', minWidth: 80},
+                    {title: '占比%', key: 'mmixtureRatio', align: 'center', minWidth: 80},
+                    {title: '损耗率%', key: 'mattritionRate', align: 'center', minWidth: 80},
+                    {title: '投料数量', key: 'mputinQty', align: 'center', minWidth: 80}
                 ],
                 toCreated: false
             };
@@ -316,7 +284,7 @@
                     if (res.data.status === 200) {
                         this.spinShow = false;
                         this.specProductObj = res.data.res.specSheetProcessModel;
-                    };
+                    }
                 });
             },
             editEvent () {
@@ -352,7 +320,7 @@
                                 activated: true
                             }
                         });
-                    };
+                    }
                 });
             },
             // 审核
@@ -365,10 +333,10 @@
                                 this.operationData = getOperationData(res.data.res);
                                 this.bomDetailData = responseData;
                                 this.auditStateName = translateState(responseData.auditState);
-                            };
+                            }
                         });
                         noticeTips(this, 'auditTips');
-                    };
+                    }
                 });
             },
             // 反审核
@@ -381,10 +349,10 @@
                                 this.operationData = getOperationData(res.data.res);
                                 this.bomDetailData = responseData;
                                 this.auditStateName = translateState(responseData.auditState);
-                            };
+                            }
                         });
                         noticeTips(this, 'unAuditTips');
-                    };
+                    }
                 });
             },
             // 关闭
@@ -397,10 +365,10 @@
                                 this.operationData = getOperationData(res.data.res);
                                 this.bomDetailData = responseData;
                                 this.auditStateName = translateState(responseData.auditState);
-                            };
+                            }
                         });
                         noticeTips(this, 'closeTips');
-                    };
+                    }
                 });
             },
             // 反关闭
@@ -413,10 +381,10 @@
                                 this.operationData = getOperationData(res.data.res);
                                 this.bomDetailData = responseData;
                                 this.auditStateName = translateState(responseData.auditState);
-                            };
+                            }
                         });
                         noticeTips(this, 'unCloseTips');
-                    };
+                    }
                 });
             },
             // 折叠面板的事件
@@ -427,26 +395,26 @@
                             await this.getPreviousStepDetailHttp(processIdItem).then(res => {
                                 if (res.data.status === 200) {
                                     this.pathProcessList.forEach((processItem) => {
-                                        if (parseInt(processItem.processId) === parseInt(processIdItem)) {
-                                            this.$set(processItem, 'bomProductList', res.data.res.bomProductList);
-                                        };
+                                        if (parseInt(processItem.id) === parseInt(processIdItem)) {
+                                            this.$set(processItem, 'prdBomProductList', res.data.res.prdBomProductList);
+                                        }
                                     });
-                                };
+                                }
                             });
                         }
                     })();
-                };
+                }
             },
             // 根据工序获取dom详情
             getPreviousStepDetailHttp (processId) {
-                return this.$api.manufacture.previousStepDetailHttp({
-                    prdBomId: this.$route.query.id,
-                    processId: processId
+                return this.$api.manufacture.prdBomProcessDetailRequest({
+                    // prdBomId: this.$route.query.id,
+                    prdBomProcessId: processId
                 });
             },
             // 获取详情
             getDetailHttp () {
-                return this.$api.manufacture.bomDetailHttp({
+                return this.$api.manufacture.prdBomDetailRequest({
                     id: this.$route.query.id
                 });
             }
@@ -460,21 +428,21 @@
                     this.operationData = getOperationData(res.data.res);
                     this.bomDetailData = responseData;
                     this.auditStateName = translateState(responseData.auditState);
-                    this.pathProcessList = responseData.pathProcessModelList.reverse();
+                    this.pathProcessList = responseData.prdBomProcessList.reverse();
                     setTimeout(() => {
-                        this.activePanel = this.pathProcessList[0].processId.toString();
-                        this.getPreviousStepDetailHttp(this.pathProcessList[0].processId).then(res => {
+                        this.activePanel = this.pathProcessList[0].id.toString();
+                        this.getPreviousStepDetailHttp(this.pathProcessList[0].id).then(res => {
                             if (res.data.status === 200) {
                                 this.pathProcessList.forEach((processItem) => {
-                                    if (processItem.processId === parseFloat(this.pathProcessList[0].processId)) {
-                                        this.$set(processItem, 'bomProductList', res.data.res.bomProductList);
-                                    };
+                                    if (processItem.id === parseFloat(this.pathProcessList[0].id)) {
+                                        this.$set(processItem, 'prdBomProductList', res.data.res.prdBomProductList);
+                                    }
                                 });
                                 this.globalLoadingShow = false;
-                            };
+                            }
                         });
                     }, 100);
-                };
+                }
             });
         },
         activated () {
@@ -489,20 +457,20 @@
                         this.pathProcessList = responseData.pathProcessModelList.reverse();
                         setTimeout(() => {
                             this.activePanel = this.pathProcessList[0].processId.toString();
-                            this.getPreviousStepDetailHttp(this.pathProcessList[0].processId).then(res => {
+                            this.getPreviousStepDetailHttp(this.pathProcessList[0].id).then(res => {
                                 if (res.data.status === 200) {
                                     this.pathProcessList.forEach((processItem) => {
-                                        if (processItem.processId === parseFloat(this.pathProcessList[0].processId)) {
-                                            this.$set(processItem, 'bomProductList', res.data.res.bomProductList);
-                                        };
+                                        if (processItem.id === parseFloat(this.pathProcessList[0].id)) {
+                                            this.$set(processItem, 'prdBomProductList', res.data.res.prdBomProductList);
+                                        }
                                     });
                                     this.globalLoadingShow = false;
-                                };
+                                }
                             });
                         }, 100);
-                    };
+                    }
                 });
-            };
+            }
             this.$route.query.activated = false;
             this.toCreated = false;
         }

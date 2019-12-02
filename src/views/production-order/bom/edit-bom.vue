@@ -106,7 +106,7 @@
             <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
         </RadioGroup>
         <div class="view-bar margin-top-10">
-            <article style="overflow: hidden;position: relative;padding: 10px 10px;">
+            <article class="product-module-bar">
                 <div>
                     <content-loading :spinShow="showTabLoading"></content-loading>
                     <Form :style="{'overflow-y': 'auto'}" ref="formDynamic" :model="formDynamic" :label-width="90" :show-message="false">
@@ -239,13 +239,13 @@
                                     <Row type="flex" justify="end" class="total-num-big-box">
                                         合计：
                                         <div class="total-num-box total-MixtureRatio-width">
-                                            <div>{{ totalMixtureRatioNum }}%</div>
+                                            <div class="text-right">{{ item.totalMixtureRatioNum }}%</div>
                                         </div>
                                         <div class="total-num-box total-MixtureRatio-width">
                                             <!--<div>{{ totalMattritionRateNum }}%</div>-->
                                         </div>
                                         <div class="total-num-box total-num-box-width">
-                                            <div>{{ totalPutinQty }}</div>
+                                            <div class="text-right">{{ item.totalPutinQty }}</div>
                                         </div>
                                     </Row>
                                 </div>
@@ -327,9 +327,6 @@
                 ],
                 selectSpecTableLoading: false,
                 selectSpecPageTotal: 0,
-                totalPutinQty: 0,
-                totalMixtureRatioNum: 0,
-                totalMattritionRateNum: 0,
 
                 seeSpecModalSpinShow: false,
                 specProductObj: {},
@@ -341,9 +338,7 @@
                 globalLoadingShow: false,
                 processPathList: [],
                 showTabLoading: false,
-                formDynamic: {
-                    prdBomProductList: []
-                },
+                formDynamic: { prdBomProductList: [] },
                 activeTabPane: '0',
                 showFeeding: true,
                 tableHeader: [
@@ -377,9 +372,9 @@
                         minWidth: 200,
                         slot: 'mbatchCodeAction'
                     },
-                    {title: '占比%', key: 'mmixtureRatio', fixed: 'right', align: 'center', width: 100},
-                    {title: '损耗率%', key: 'mattritionRate', fixed: 'right', align: 'center', width: 100},
-                    {title: '投料数量', key: 'mputinQty', align: 'center', fixed: 'right', width: 160}
+                    {title: '占比%', key: 'mmixtureRatio', fixed: 'right', align: 'right', width: 100},
+                    {title: '损耗率%', key: 'mattritionRate', fixed: 'right', align: 'right', width: 100},
+                    {title: '投料数量', key: 'mputinQty', align: 'right', fixed: 'right', width: 160}
                 ],
                 activeProcessId: null,
                 allBatchCodeList: [],
@@ -570,24 +565,30 @@
                 this.formDynamic.prdBomProductList[event.dataIndex].prdBomMaterielList[event.moduleIndex] = event.materialData;
             },
             // 合计
-            calculationTotalPutinQty () {
+            calculationTotalPutinQty (prdBomProductList) {
                 let totalNum = 0;
                 let totalMixtureRatio = 0;
                 let totalMattritionRate = 0;
-                this.tableData.forEach((item) => {
-                    if (item.mputinQty) {
-                        totalNum = mathJsAdd(item.mputinQty, totalNum);
-                    }
-                    if (item.mmixtureRatio) {
-                        totalMixtureRatio = mathJsAdd(item.mmixtureRatio, totalMixtureRatio);
-                    }
-                    if (item.mattritionRate) {
-                        totalMattritionRate = mathJsAdd(item.mattritionRate, totalMattritionRate);
-                    }
+                prdBomProductList.forEach(prdProductItem => {
+                    totalNum = 0;
+                    totalMixtureRatio = 0;
+                    totalMattritionRate = 0;
+                    prdProductItem.prdBomMaterielList.forEach((item) => {
+                        if (item.mputinQty) {
+                            totalNum = mathJsAdd(item.mputinQty, totalNum);
+                        }
+                        if (item.mmixtureRatio) {
+                            totalMixtureRatio = mathJsAdd(item.mmixtureRatio, totalMixtureRatio);
+                        }
+                        if (item.mattritionRate) {
+                            totalMattritionRate = mathJsAdd(item.mattritionRate, totalMattritionRate);
+                        }
+                    });
+                    prdProductItem.totalPutinQty = totalNum;
+                    prdProductItem.totalMixtureRatioNum = totalMixtureRatio;
+                    prdProductItem.totalMattritionRateNum = totalMattritionRate;
                 });
-                this.totalPutinQty = totalNum;
-                this.totalMixtureRatioNum = totalMixtureRatio;
-                this.totalMattritionRateNum = totalMattritionRate;
+                return prdBomProductList;
             },
             // 根据产品获取工艺单
             getSpecListHttp (productId = null, processId = '', pageIndex = 1, code = '') {
@@ -753,7 +754,8 @@
                             }
                         }
                         this.formDynamic = res.data.res;
-                        this.formDynamic.prdBomProductList = responseData;
+                        this.formDynamic.prdBomProductList = this.calculationTotalPutinQty(responseData);
+                        // this.formDynamic.prdBomProductList = responseData;
                         this.showTabLoading = false;
                         this.globalLoadingShow = false;
                     }
@@ -797,5 +799,10 @@
     .search-batch-code-button{
         margin-left:-2px;
         z-index: 2;
+    }
+    .product-module-bar {
+        overflow: hidden;
+        position: relative;
+        padding: 10px 10px;
     }
 </style>

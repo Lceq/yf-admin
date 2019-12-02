@@ -382,16 +382,24 @@
                         title: '操作',
                         key: 'button',
                         sortable: true,
-                        minWidth: 110,
+                        width: 180,
                         fixed: 'left',
                         align: 'center',
                         render: (h, params) => {
-                            return h('div', [
+                            return h('div', {
+                                style: {
+                                    display: 'flex',
+                                    justifyContent: 'center'
+                                }
+                            }, [
                                 h('Button', {
                                     props: {
-                                        type: 'primary',
+                                        // type: 'primary',
                                         size: 'small',
-                                        disabled: params.row.auditState === 3 ? false : true
+                                        disabled: params.row.auditState === 3　&& !params.row.isQuote ? false : true
+                                    },
+                                    style: {
+                                        marginRight: '4px'
                                     },
                                     on: {
                                         click: () => {
@@ -400,7 +408,25 @@
                                             _this.getModalList(params.row.productId);
                                         }
                                     }
-                                }, '创建BOM')
+                                }, '创建BOM'),
+                                h('Button', {
+                                    props: {
+                                        // type: 'primary',
+                                        size: 'small',
+                                        disabled: params.row.isQuote ? false : true
+                                    },
+                                    on: {
+                                        click: () => {
+                                            _this.$router.push({
+                                                path: 'edit-bom',
+                                                query: {
+                                                    id: params.row.prdBomId,
+                                                    activated: true
+                                                }
+                                            });
+                                        }
+                                    }
+                                }, '查看BOM'),
                             ]);
                         }
                     },

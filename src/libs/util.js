@@ -309,7 +309,6 @@ util.openNewPage = function (vm, name, argu, query, attr) {
             // vm.$store.commit('increateTag', tag);
         }
         vm.$store.commit('increateTag', tag);
-
     }
     // vm.$route.meta.keepAlive = true;// 创建并缓存视图
     // vm.$store.commit('setCurrentPageName', name);

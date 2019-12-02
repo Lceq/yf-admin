@@ -294,23 +294,20 @@ util.openNewPage = function (vm, name, argu, query, attr) {
         });*/
         let tag = vm.$store.state.app.tagsList.filter((item) => {
             return item.name === name;
-
         });
         tag = tag[0];
-        // console.log('创建1', tag)
         // 处理路由携带的参数
-        /*if (tag) {
-            tag = tag.children ? tag.children[0] : tag;
+        if (tag) {
+            // tag = tag.children ? tag.children[0] : tag;
             if (argu) {
-                // tag.argu = argu;
+                tag.argu = argu;
             }
             if (query) {
-                // tag.query = query;
+                tag.query = query;
             }
-            console.log('创建2', tag)
             // moduleName ? tag.title = moduleName : false;
             // vm.$store.commit('increateTag', tag);
-        }*/
+        }
         vm.$store.commit('increateTag', tag);
 
     }

@@ -4,7 +4,7 @@
         <Form :label-width="100" :show-message="false">
             <Row type="flex" justify="space-between">
                 <Col class="flex-between-center">
-                    <Button icon="md-add" type="primary" @click="addClick" class="queryBarMarginRight margin-bottom-10">新增</Button>
+<!--                    <Button icon="md-add" type="primary" @click="addClick" class="queryBarMarginRight margin-bottom-10">新增</Button>-->
                     <Button v-show="parseInt(bomDetailData.auditState) === 1" icon="ios-create" type="primary" class="queryBarMarginLeft margin-bottom-10" @click="editEvent">编辑</Button>
                     <Button icon="ios-create" type="primary" class="queryBarMarginLeft margin-bottom-10" @click="backListEvent">返回列表页</Button>
                     <Button v-show="bomDetailData.auditState===2" icon="ios-undo" class="queryBarMarginLeft margin-bottom-10" type="warning" @click="cancelClickEvent">撤销提交</Button>
@@ -289,7 +289,7 @@
             },
             editEvent () {
                 this.$router.push({
-                    path: 'editManufactureBOM',
+                    path: 'edit-bom',
                     query: {
                         id: this.$route.query.id,
                         edit: true,
@@ -313,7 +313,7 @@
                     if (res.data.status === 200) {
                         noticeTips(this, 'cancelTips');
                         this.$router.push({
-                            path: 'editManufactureBOM',
+                            path: 'edit-bom',
                             query: {
                                 id: this.$route.query.id,
                                 edit: true,
@@ -454,9 +454,9 @@
                         this.operationData = getOperationData(res.data.res);
                         this.bomDetailData = responseData;
                         this.auditStateName = translateState(responseData.auditState);
-                        this.pathProcessList = responseData.pathProcessModelList.reverse();
+                        this.pathProcessList = responseData.prdBomProcessList.reverse();
                         setTimeout(() => {
-                            this.activePanel = this.pathProcessList[0].processId.toString();
+                            this.activePanel = this.pathProcessList[0].id.toString();
                             this.getPreviousStepDetailHttp(this.pathProcessList[0].id).then(res => {
                                 if (res.data.status === 200) {
                                     this.pathProcessList.forEach((processItem) => {

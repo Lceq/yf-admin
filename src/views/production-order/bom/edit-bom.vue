@@ -439,17 +439,22 @@
                     if (res.data.status === 200) {
                         this.submitButtonLoading = false;
                         noticeTips(this, 'submitTips');
-                        this.getDependentDataRequest();
+                        this.$router.push({
+                            path: 'bomDetail',
+                            query: {
+                                id: this.formValidate.id,
+                                activated: true
+                            }
+                        });
                     }
                 });
             },
             onSubmitEvent () {
                 this.$refs['formDynamic'].validate((valid) => {
                     if (valid) {
-                        this.$Message.success('Success!');
                         this.saveAndSubmitRequest();
                     } else {
-                        this.$Message.error('Fail!');
+                        noticeTips(this, 'unCompleteTips');
                     }
                 });
             },

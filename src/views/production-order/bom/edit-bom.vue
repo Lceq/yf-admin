@@ -215,28 +215,23 @@
                                     <Row>
                                         <Col>
                                             <Table border size="small" :columns="tableHeader" :data="item.prdBomMaterielList">
-                                                <template slot-scope="{ row, index }" slot="mmixtureRatioAction">
-                                                    <Select
-                                                            class="remoteSearchSelect"
-                                                            filterable
-                                                            clearable
-                                                            placeholder="请输入批号"
-                                                            transfer
-                                                            v-model="row.mbatchCode"
-                                                            @on-change="onSelectBatchCodeChangeEvent($event, moduleIndex)"
-                                                    >
-                                                        <Option v-for="(option) in item.remoteBatchList" :value="option.code" :key="option.id">{{option.code}}</Option>
-                                                    </Select>
-                                                    <Button @click="onClickBatchCodeButtonEvent($event, moduleIndex, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
-                                                </template>
-                                                <template slot-scope="{ row, index }" slot="mmixtureRatioAction">
-                                                    <InputNumber v-model="row.mmixtureRatio" type="error" @on-change="onMmixtureRatioChangeEvent($event, row, moduleIndex, index, item.productionQty)" :min="0" :max="100"></InputNumber>
-                                                </template>
-                                                <template slot-scope="{ row, index }" slot="mattritionRateAction">
-                                                    <InputNumber v-model="row.mattritionRate" type="error" @on-change="onMattritionRateChangeEvent($event, row, moduleIndex, index, item.productionQty)" :min="0" :max="100"></InputNumber>
-                                                </template>
-                                                <template slot-scope="{ row, index }" slot="mputinQtyAction">
-                                                    <InputNumber v-model="row.mputinQty" type="error" class="width-percentage" @on-change="onMputinQtyChangeEvent($event, row, moduleIndex, index, item.productionQty)" :min="0" :max="100"></InputNumber>
+                                                <template slot-scope="{ row, index }" slot="mbatchCodeAction">
+                                                    <div class="flex-left">
+                                                        <Select
+                                                                class="remoteSearchSelect"
+                                                                filterable
+                                                                placeholder="请输入批号"
+                                                                transfer
+                                                                v-model="row.mbatchCode"
+                                                                @on-change="onSelectBatchCodeChangeEvent($event, moduleIndex, index)"
+                                                        >
+                                                            <Option v-for="(option) in row.remoteBatchList" :value="option.batchCode" :key="option.id">{{option.batchCode}}</Option>
+                                                        </Select>
+                                                        <Button @click="onClickBatchCodeButtonEvent(row.mproductCode, moduleIndex, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
+                                                        <Tooltip content="点击创建批号" transfer>
+                                                            <Button @click="onCreatedBatchCodeButtonEvent(row.mproductCode, moduleIndex, index)" icon="ios-create" size="small" style="margin-left: 4px;line-height: 27px;"></Button>
+                                                        </Tooltip>
+                                                    </div>
                                                 </template>
                                             </Table>
                                         </Col>
@@ -281,18 +276,34 @@
                 @on-change-page="getSelectSpecModalPageCodeEvent"
                 @confirm-event="selectSpecModalConfirmEvent"
         ></select-spec-sheet-modal>
+        <select-batch-modal
+                :spin-show="selectBatchModalSpinShow"
+                :select-batch-page-total="selectBatchPageTotal"
+                :select-batch-modal-state="selectBatchModalState"
+                :select-batch-modal-table-data="selectBatchModalTableData"
+                @on-visible-change="selectBatchModalStateChangeEvent"
+                @on-change-page="onSelectBatchModalPageCodeEvent"
+                @select-batch-modal-search-event="onSelectBatchModalSearchBtnEvent"
+                @select-batch-modal-confirm-event="selectBatchModalConfirmEvent"
+        ></select-batch-modal>
     </card>
 </template>
 <script>
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import seeSpecSheet from '../manufacture/components/see-spec-sheet';
     import contentLoading from '../../components/modal-content-loading';
+    import selectBatchModal from '../manufacture/components/select-batch-modal';
     import { formatDay, noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul } from '../../../libs/common';
     export default {
         name: 'add-bom',
-        components: { contentLoading, seeSpecSheet, selectSpecSheetModal },
+        components: { contentLoading, seeSpecSheet, selectSpecSheetModal, selectBatchModal },
         data () {
             return {
+                selectBatchModalState: false,
+                selectBatchModalSpinShow: false,
+                selectBatchPageTotal: 0,
+                selectBatchModalTableData: [],
+
                 specModalContentSpinShow: false,
                 selectSpecModalState: false,
                 selectSpecModalTitle: '',
@@ -328,7 +339,15 @@
                 showFeeding: true,
                 tableHeader: [
                     {title: '序号', type: 'index', width: 60, align: 'center'},
-                    {title: '投入物料', key: 'mproductCode', minWidth: 200},
+                    {title: '投入物料', key: 'mproductCode', minWidth: 200,
+                        render: (h, params) => {
+                            return h('div', {
+                                domProps: {
+                                    innerHTML: params.row.mproductCode ? `${params.row.mproductName}(${params.row.mproductCode})` : ''
+                                }
+                            })
+                        }
+                    },
                     {title: '规格', key: 'mproductModels', align: 'center', minWidth: 100},
                     {
                         title: '计量单位',
@@ -347,6 +366,7 @@
                         title: '批号',
                         key: 'mbatchCode',
                         minWidth: 200,
+                        slot: 'mbatchCodeAction'/*,
                         render: (h, params) => {
                             return h('div', {
                                 style: {
@@ -434,135 +454,92 @@
                                     })
                                 ])
                             ]);
-                        }
-                    },
-                    {
-                        title: '占比%',
-                        key: 'mmixtureRatio',
-                        fixed: 'right',
-                        align: 'center',
-                        width: 100,
-                        slot: 'mmixtureRatioAction'/*,
-                        render: (h, params) => {
-                            return h('div', [
-                                h('InputNumber', {
-                                    props: {
-                                        value: params.row.mmixtureRatio,
-                                        min: 0,
-                                        max: 100
-                                    },
-                                    style: {
-                                        width: '100%'
-                                    },
-                                    on: {
-                                        'on-change': (e) => {
-                                            if (e === 0 || e) {
-                                                if (params.row.mattritionRate === 0 || params.row.mattritionRate) {
-                                                    let putinQtyNum = mathJsMul(this.productionQty, e);
-                                                    if (params.row.mattritionRate === 100) {
-                                                        params.row.mputinQty = 0;
-                                                    } else {
-                                                        params.row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, params.row.mattritionRate)));
-                                                    };
-                                                };
-                                                this.mMixtureRatioChangeEvent(e, params.index);
-                                                params.row.mmixtureRatio = e;
-                                                this.tableData[params.index] = params.row;
-                                                this.calculationTotalPutinQty();
-                                            };
-                                        }
-                                    }
-                                })
-                            ]);
                         }*/
                     },
-                    {
-                        title: '损耗率%',
-                        key: 'mattritionRate',
-                        fixed: 'right',
-                        align: 'center',
-                        width: 100,
-                        slot: 'mattritionRateAction',
-                        /*render: (h, params) => {
-                            return h('div', [
-                                h('InputNumber', {
-                                    props: {
-                                        value: params.row.mattritionRate,
-                                        min: 0,
-                                        max: 100
-                                    },
-                                    style: {
-                                        width: '100%'
-                                    },
-                                    on: {
-                                        'on-change': (e) => {
-                                            if (e === 0 || e) {
-                                                if (params.row.mmixtureRatio === 0 || params.row.mmixtureRatio) {
-                                                    let putinQtyNum = mathJsMul(this.productionQty, params.row.mmixtureRatio);
-                                                    if (e === 100) {
-                                                        params.row.mputinQty = 0;
-                                                    } else {
-                                                        params.row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, e)));
-                                                    };
-                                                };
-                                                this.mAttritionRateChangeEvent(e, params.index);
-                                                params.row.mattritionRate = e;
-                                                this.tableData[params.index] = params.row;
-                                                this.calculationTotalPutinQty();
-                                            };
-                                        }
-                                    }
-                                })
-                            ]);
-                        }*/
-                    },
-                    {
-                        title: '投料数量',
-                        key: 'mputinQty',
-                        align: 'center',
-                        fixed: 'right',
-                        width: 160,
-                        slot: 'mputinQtyAction'/*,
-                        render: (h, params) => {
-                            return h('div', [
-                                h('InputNumber', {
-                                    props: {
-                                        value: params.row.mputinQty,
-                                        min: 0,
-                                        precision: 0
-                                    },
-                                    style: {
-                                        width: '100%'
-                                    },
-                                    on: {
-                                        'on-change': (e) => {
-                                            if (e === 0 || e) {
-                                                this.mPutinQtyChangeEvent(e, params.index);
-                                                params.row.mputinQty = e;
-                                                this.tableData[params.index] = params.row;
-                                                this.calculationTotalPutinQty();
-                                            };
-                                        }
-                                    }
-                                })
-                            ]);
-                        }*/
-                    }
+                    {title: '占比%', key: 'mmixtureRatio', fixed: 'right', align: 'center', width: 100},
+                    {title: '损耗率%', key: 'mattritionRate', fixed: 'right', align: 'center', width: 100},
+                    {title: '投料数量', key: 'mputinQty', align: 'center', fixed: 'right', width: 160}
                 ],
                 activeProcessId: null,
                 allBatchCodeList: [],
                 allSpecSheetList: [],
-                productModuleIndex: 0
+                productModuleIndex: 0,
+                selectBatchModalPageSize: setPage.pageSize,
+                bomMaterialTableRowProduct: '',
+                bomMaterialTableRowIndex: null
             };
         },
         methods: {
-            // 获取选择的批号
-            onSelectBatchCodeChangeEvent () {
+            // 选择批次的modal
+            selectBatchModalConfirmEvent (event) {
+                this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', '');
+                setTimeout(()=>{
+                    this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCodeList', [{ batchCode: event.batchCode}]);
+                    this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', event.batchCode);
+                    this.selectBatchModalState = false;
+                },500);
+            },
+            getProductToBatchCodeListRequest (productCode, batchCode = '') {
+                return this.$call('product.batch.list',{
+                    productNameCode: productCode,
+                    batchCode: batchCode,
+                    auditState: 3,
+                    pageIndex: this.selectBatchModalPageIndex,
+                    pageSize: setPage.pageSize
+                });
+            },
+            onSelectBatchModalSearchBtnEvent (event) {
+                // 获取投料对应的所有批次
+                this.selectBatchModalPageIndex = 1;
+                this.selectBatchPageTotal = 1;
+                this.getProductToBatchCodeListRequest(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex].mproductCode, event.name).then(res => {
+                    if (res.data.status === 200) {
+                        this.selectBatchModalSpinShow = false;
+                        this.selectBatchModalTableData = res.data.res;
+                        this.selectBatchPageTotal = res.data.count;
+                    };
+                });
+            },
+            onSelectBatchModalPageCodeEvent (event) {
+                this.selectBatchModalPageIndex = event.pageIndex;
+                // 获取投料对应的所有批次
+                this.getProductToBatchCodeListRequest(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex].mproductCode, event.name).then(res => {
+                    if (res.data.status === 200) {
+                        this.selectBatchModalSpinShow = false;
+                        this.selectBatchModalTableData = res.data.res;
+                        this.selectBatchPageTotal = res.data.count;
+                    };
+                });
+            },
+            selectBatchModalStateChangeEvent (e) {
+                this.selectBatchModalState = e;
+            },
+            onCreatedBatchCodeButtonEvent (e, moduleIndex, index) {
+                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mbatchCode = e;
 
             },
+            // 获取下拉选择的批号
+            onSelectBatchCodeChangeEvent (e, moduleIndex, index) {
+                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mbatchCode = e;
+            },
             // 点击搜索的批号按钮事件
-            onClickBatchCodeButtonEvent () {
-
+            onClickBatchCodeButtonEvent (mproductCode, moduleIndex, index) {
+                this.selectBatchModalState = true;
+                this.productModuleIndex = moduleIndex;
+                this.bomMaterialTableRowIndex = index;
+                this.bomMaterialTableRowProduct = mproductCode;
+                this.selectBatchModalPageSize = setPage.pageSize;
+                this.selectBatchModalPageIndex = 1;
+                this.selectBatchPageTotal = 1;
+                this.selectBatchModalSpinShow = true;
+                // 获取投料对应的所有批次
+                this.getProductToBatchCodeListRequest(mproductCode).then(res => {
+                    if (res.data.status === 200) {
+                        this.selectBatchModalSpinShow = false;
+                        this.selectBatchModalTableData = res.data.res;
+                        this.selectBatchPageTotal = res.data.count;
+                    };
+                });
             },
             // 保存的请求
             saveRequest () {
@@ -588,55 +565,9 @@
             testEvent () {
                 console.log('测试', this.formDynamic)
             },
-            onMputinQtyChangeEvent (e, row, moduleIndex, index, mattritionRate) {
-                // console.log('数量1', e, row, moduleIndex, index, mattritionRate)
-                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mputinQty = e;
-                /*if (e === 0 || e) {
-                    this.mPutinQtyChangeEvent(e, index);
-                    row.mputinQty = e;
-                    this.tableData[index] = row;
-                    this.calculationTotalPutinQty();
-                };*/
-            },
             // 投料
             mPutinQtyChangeEvent (event) {
-                this.formDynamic.productModuleList[event.dataIndex].bomMaterielList[event.moduleIndex] = event.materialData;
-            },
-            onMattritionRateChangeEvent (e, row, moduleIndex, index, mattritionRate) {
-                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mattritionRate = e;
-
-                /*if (e === 0 || e) {
-                    if (params.row.mmixtureRatio === 0 || params.row.mmixtureRatio) {
-                        let putinQtyNum = mathJsMul(this.productionQty, params.row.mmixtureRatio);
-                        if (e === 100) {
-                            params.row.mputinQty = 0;
-                        } else {
-                            params.row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, e)));
-                        };
-                    };
-                    this.mAttritionRateChangeEvent(e, params.index);
-                    params.row.mattritionRate = e;
-                    this.tableData[params.index] = params.row;
-                    this.calculationTotalPutinQty();
-                };*/
-            },
-            onMmixtureRatioChangeEvent (e, row, moduleIndex, index, mattritionRate) {
-                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mmixtureRatio = e;
-
-                /*if (e === 0 || e) {
-                    if (row.mattritionRate === 0 || mattritionRate) {
-                        let putinQtyNum = mathJsMul(this.productionQty, e);
-                        if (row.mattritionRate === 100) {
-                            row.mputinQty = 0;
-                        } else {
-                            row.mputinQty = parseInt(mathJsDiv(putinQtyNum, mathJsSub(100, row.mattritionRate)));
-                        };
-                    };
-                    this.mMixtureRatioChangeEvent(e, index);
-                    row.mmixtureRatio = e;
-                    this.tableData[index] = row;
-                    this.calculationTotalPutinQty();
-                };*/
+                this.formDynamic.prdBomProductList[event.dataIndex].prdBomMaterielList[event.moduleIndex] = event.materialData;
             },
             // 合计
             calculationTotalPutinQty () {

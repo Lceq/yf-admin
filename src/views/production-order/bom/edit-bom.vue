@@ -3,7 +3,6 @@
         <global-loading v-show="globalLoadingShow"></global-loading>
         <Row type="flex" justify="space-between">
             <Col class="flex-between-center">
-                <Button @click="testEvent">测试</Button>
                 <Button v-show="formValidate.auditState===2" icon="ios-undo" class="queryBarMarginLeft margin-bottom-10" type="warning" @click="cancelClickEvent">撤销提交</Button>
                 <Button v-show="formValidate.auditState===2" icon="md-done-all" class="queryBarMarginLeft margin-bottom-10" type="primary" @click="auditClickEvent">审核</Button>
                 <Button v-show="formValidate.auditState===3&&formValidate.isQuote===false" type="warning" icon="md-refresh" class="queryBarMarginLeft margin-bottom-10" @click="unAuditClickEvent">撤销审核</Button>
@@ -227,7 +226,7 @@
                                                         >
                                                             <Option v-for="(option) in row.remoteBatchList" :value="option.batchCode" :key="option.id">{{option.batchCode}}</Option>
                                                         </Select>
-                                                        <Button @click="onClickBatchCodeButtonEvent(row.mproductCode, moduleIndex, index)" class="remoteSearchButton" size="small" icon="ios-search"></Button>
+                                                        <Button @click="onClickBatchCodeButtonEvent(row.mproductCode, moduleIndex, index)" class="search-batch-code-button" size="small" icon="ios-search"></Button>
                                                         <Tooltip content="点击创建批号" transfer>
                                                             <Button @click="onCreatedBatchCodeButtonEvent(row.mproductCode, moduleIndex, index)" icon="ios-create" size="small" style="margin-left: 4px;line-height: 27px;"></Button>
                                                         </Tooltip>
@@ -286,9 +285,16 @@
                 @select-batch-modal-search-event="onSelectBatchModalSearchBtnEvent"
                 @select-batch-modal-confirm-event="selectBatchModalConfirmEvent"
         ></select-batch-modal>
+        <add-batch-code-modal
+                :add-batch-modal-state="addBatchModalState"
+                :add-batch-modal-product-code-item="addBatchModalProductCodeItem"
+                @on-visible-change="addBatchCodeModalVisibleChangeEvent"
+                @add-batch-code-modal-confirm-event="onAddBatchCodeModalConfirmEvent"
+        ></add-batch-code-modal>
     </card>
 </template>
 <script>
+    import addBatchCodeModal from '../manufacture/components/add-batch-modal';
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import seeSpecSheet from '../manufacture/components/see-spec-sheet';
     import contentLoading from '../../components/modal-content-loading';
@@ -296,9 +302,11 @@
     import { formatDay, noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul } from '../../../libs/common';
     export default {
         name: 'add-bom',
-        components: { contentLoading, seeSpecSheet, selectSpecSheetModal, selectBatchModal },
+        components: { contentLoading, seeSpecSheet, selectSpecSheetModal, selectBatchModal, addBatchCodeModal },
         data () {
             return {
+                addBatchModalState: false,
+                addBatchModalProductCodeItem: {},
                 selectBatchModalState: false,
                 selectBatchModalSpinShow: false,
                 selectBatchPageTotal: 0,
@@ -366,95 +374,7 @@
                         title: '批号',
                         key: 'mbatchCode',
                         minWidth: 200,
-                        slot: 'mbatchCodeAction'/*,
-                        render: (h, params) => {
-                            return h('div', {
-                                style: {
-                                    display: 'flex',
-                                    paddingTop: '2px'
-                                }
-                            }, [
-                                h('Select', {
-                                    props: {
-                                        value: params.row.mbatchCode,
-                                        icon: 'ios-search',
-                                        filterable: true,
-                                        transfer: true,
-                                        placeholder: '请输入批号',
-                                        disabled: !params.row.mproductCode
-                                    },
-                                    on: {
-                                        'on-change': (e) => {
-                                            if (e) {
-                                                params.row.mbatchCode = e;
-                                                this.tableData[params.index] = params.row;
-                                                this.$emit('getSelectBatchCodeEvent', {
-                                                    dataIndex: this.dataIndex,
-                                                    rowIndex: params.index,
-                                                    row: this.tableData[params.index]
-                                                });
-                                            }
-                                        }
-                                    }
-                                }, params.row.remoteBatchList.map((item) => {
-                                    return h('Option', {
-                                        props: {
-                                            value: item.batchCode,
-                                            label: item.batchCode
-                                        }
-                                    });
-                                })),
-                                h('Button', {
-                                    props: {
-                                        icon: 'ios-search',
-                                        size: 'small',
-                                        disabled: !params.row.mproductCode
-                                    },
-                                    style: {
-                                        marginLeft: '-2px',
-                                        zIndex: '2'
-                                    },
-                                    on: {
-                                        'click': () => {
-                                            this.$emit('remoteSelectBatchSearchIconBtnEvent', {
-                                                dataIndex: this.dataIndex,
-                                                rowIndex: params.index,
-                                                mproductCode: params.row.mproductCode
-                                            });
-                                        }
-                                    }
-                                }),
-                                h('Tooltip', {
-                                    props: {
-                                        transfer: true,
-                                        content: '点击新增批号'
-                                    },
-                                    style: {
-                                        display: 'flex'
-                                    }
-                                }, [
-                                    h('Button', {
-                                        props: {
-                                            icon: 'ios-create',
-                                            size: 'small',
-                                            disabled: !params.row.mproductCode
-                                        },
-                                        style: {
-                                            height: '32px',
-                                            marginLeft: '4px'
-                                        },
-                                        on: {
-                                            click: () => {
-                                                this.$emit('addBatchCodeSearchButtonEvent', {
-                                                    dataIndex: this.dataIndex,
-                                                    rowIndex: params.index
-                                                });
-                                            }
-                                        }
-                                    })
-                                ])
-                            ]);
-                        }*/
+                        slot: 'mbatchCodeAction'
                     },
                     {title: '占比%', key: 'mmixtureRatio', fixed: 'right', align: 'center', width: 100},
                     {title: '损耗率%', key: 'mattritionRate', fixed: 'right', align: 'center', width: 100},
@@ -470,6 +390,26 @@
             };
         },
         methods: {
+            onCreatedBatchCodeButtonEvent (mproductCode, moduleIndex, index) {
+                this.bomMaterialTableRowProduct = mproductCode;
+                this.productModuleIndex = moduleIndex;
+                this.bomMaterialTableRowIndex = index;
+                this.addBatchModalState = true;
+                this.addBatchModalProductCodeItem = this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index];
+            },
+            // 新增批次modal
+            onAddBatchCodeModalConfirmEvent (batchCode) {
+                this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', '');
+                setTimeout(()=>{
+                    this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', batchCode);
+                    this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex].remoteBatchList.push({batchCode: batchCode});
+                    this.allBatchCodeList.push({batchCode: batchCode, productCode: this.addBatchModalProductCodeItem.productCode});
+                    this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCodeList', [{batchCode: batchCode}]);
+                },500);
+            },
+            addBatchCodeModalVisibleChangeEvent (e) {
+                this.addBatchModalState = e;
+            },
             // 选择批次的modal
             selectBatchModalConfirmEvent (event) {
                 this.$set(this.formDynamic.prdBomProductList[this.productModuleIndex].prdBomMaterielList[this.bomMaterialTableRowIndex], 'mbatchCode', '');
@@ -514,10 +454,6 @@
             selectBatchModalStateChangeEvent (e) {
                 this.selectBatchModalState = e;
             },
-            onCreatedBatchCodeButtonEvent (e, moduleIndex, index) {
-                this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mbatchCode = e;
-
-            },
             // 获取下拉选择的批号
             onSelectBatchCodeChangeEvent (e, moduleIndex, index) {
                 this.formDynamic.prdBomProductList[moduleIndex].prdBomMaterielList[index].mbatchCode = e;
@@ -559,11 +495,7 @@
                 })
             },
             onSelectProcessEvent (e) {
-                // alert(e)
                 this.saveRequest();
-            },
-            testEvent () {
-                console.log('测试', this.formDynamic)
             },
             // 投料
             mPutinQtyChangeEvent (event) {
@@ -577,13 +509,13 @@
                 this.tableData.forEach((item) => {
                     if (item.mputinQty) {
                         totalNum = mathJsAdd(item.mputinQty, totalNum);
-                    };
+                    }
                     if (item.mmixtureRatio) {
                         totalMixtureRatio = mathJsAdd(item.mmixtureRatio, totalMixtureRatio);
-                    };
+                    }
                     if (item.mattritionRate) {
                         totalMattritionRate = mathJsAdd(item.mattritionRate, totalMattritionRate);
-                    };
+                    }
                 });
                 this.totalPutinQty = totalNum;
                 this.totalMixtureRatioNum = totalMixtureRatio;
@@ -787,14 +719,6 @@
         mounted () {
             this.editId = this.$route.query.id;
             this.getDependentDataRequest();
-        },
-        watch: {
-            tabProcessId (newVal) {
-                if (newVal) {
-                    /*this.activeTabPane = '0';
-                    this.getBomProcessDetailData();*/
-                }
-            }
         }
     };
 </script>
@@ -806,5 +730,9 @@
     .total-MixtureRatio-width{
         width: 100px;
         border-right: none;
+    }
+    .search-batch-code-button{
+        margin-left:-2px;
+        z-index: 2;
     }
 </style>

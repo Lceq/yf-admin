@@ -502,7 +502,6 @@
                             this.formValidate.specPathNameValue = null;
                             this.current = 0;
                             this.pathProcessList = [];
-                            this.setProductMethod(e);
                             this.setProductMethod(item);
                         };
                     });

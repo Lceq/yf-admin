@@ -619,6 +619,14 @@
                     this.formValidate.isCovering = 'false';
                     this.formValidate.isSlub = 'false';
                 };
+                // 成品时，原料成分默认第一个
+                if (selectedData[selectedData.length - 1].typeName === '成品') {
+                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
+                } else if (selectedData[selectedData.length - 1].typeName === '半成品') {
+                    // 半成品时，原料成分默认第一个, 配比默认100
+                    this.formValidate.materialRatio = 100;
+                    this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
+                }
                 // 根据物料类别展示基本信息
                 this.showTabsIpt(selectedData[selectedData.length - 1].typeName);
                 this.formValidate.typeName = selectedData[selectedData.length - 1].typeName;

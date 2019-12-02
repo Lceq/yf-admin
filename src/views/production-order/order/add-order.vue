@@ -102,7 +102,7 @@
                                 </FormItem>
                             </Col>
                         </Row>
-                        <Row>
+                        <Row type="flex">
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="纱线用途:" class="formItemMargin">
                                     <Select label-in-value v-model="formValidate.purposeId" placeholder="请选择纱线用途" @on-change="getPurposeEvent">
@@ -147,8 +147,6 @@
                                     </div>
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row>
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label=" 计量单位:" class="formItemMargin">
                                     <div class="modal-readonly">{{ this.formValidate.unitName ? `${this.formValidate.unitName}(${this.formValidate.unitCode})` : '' }}</div>
@@ -169,8 +167,6 @@
                                     ></InputNumber>
                                 </FormItem>
                             </Col>-->
-                        </Row>
-                        <Row>
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label=" 计划员:" class="formItemMargin">
                                     <Select

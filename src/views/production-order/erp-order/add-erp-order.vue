@@ -45,8 +45,8 @@
                         </FormItem>
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
-                        <FormItem label="销售单号:" class="formItemMargin" prop="salesCode">
-                            <Input type="text" v-model="formValidate.salesCode" placeholder="请输入销售单号"/>
+                        <FormItem label="SAP订单:" class="formItemMargin" prop="salesCode">
+                            <Input type="text" v-model="formValidate.salesCode" placeholder="请输入SAP订单"/>
                         </FormItem>
                     </Col>
                 </Row>
@@ -102,7 +102,7 @@
                                 </FormItem>
                             </Col>
                         </Row>
-                        <Row>
+                        <Row type="flex">
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="纱线用途:" class="formItemMargin">
                                     <Select label-in-value v-model="formValidate.purposeId" placeholder="请选择纱线用途" @on-change="getPurposeEvent">
@@ -110,13 +110,13 @@
                                     </Select>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="纱线捻向:" prop="twistDirectionId" class="formItemMargin">
                                     <Select label-in-value v-model="formValidate.twistDirectionId" placeholder="请选择纱线捻向" @on-change="getTwistDirectionEvent">
                                         <Option v-for="item in twistDirectionList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                            </Col>
+                            </Col>-->
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="批号:" class="formItemMargin" prop="batchCode">
                                     <div class="flex-left line-height-27">
@@ -137,8 +137,6 @@
                                     </div>
                                 </FormItem>
                             </Col>
-                        </Row>
-                        <Row>
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label=" 计量单位:" class="formItemMargin">
                                     <div class="modal-readonly">{{ this.formValidate.unitName ? `${this.formValidate.unitName}(${this.formValidate.unitCode})` : '' }}</div>
@@ -149,7 +147,7 @@
                                     <InputNumber :min="0" :step="1" :precision='0' v-model="formValidate.productionQty" @on-blur="getProductionNumEvent" class="widthPercentage"></InputNumber>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="溢短装(±%):" class="formItemMargin" prop="weightRate">
                                     <InputNumber
                                             class="widthPercentage"
@@ -158,9 +156,7 @@
                                             v-model="formValidate.weightRate"
                                     ></InputNumber>
                                 </FormItem>
-                            </Col>
-                        </Row>
-                        <Row>
+                            </Col>-->
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label=" 计划员:" class="formItemMargin">
                                     <Select
@@ -192,11 +188,11 @@
                                     <div class="modal-readonly">{{ formValidate.productionQty }}</div>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="日供货量:" class="formItemMargin" prop="dailySupplyQty">
                                     <InputNumber :min="1" :precision="0" v-model="formValidate.dailySupplyQty" @on-blur="getDailySupplyQtyEvent" class="widthPercentage"/>
                                 </FormItem>
-                            </Col>
+                            </Col>-->
                         </Row>
                         <Row>
                             <Col  :sm="24" :md="24" :lg="24" :xl="24" :xxl="12">
@@ -237,25 +233,25 @@
                                     <InputNumber class="widthPercentage" :min="1" v-model="formValidate.packetQty"></InputNumber>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="编织袋规格:" :label-width="140" class="formItemMargin" prop="packingBag">
                                     <Input v-model="formValidate.packingBag"/>
                                 </FormItem>
-                            </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            </Col>-->
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="封包绳颜色:" :label-width="140" class="formItemMargin" prop="bagMouthId">
                                     <Select label-in-value v-model="formValidate.bagMouthId" @on-change="getBagMouthEvent">
                                         <Option v-for="item in bagMouthList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                            </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            </Col>-->
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="腰绳颜色:" :label-width="140" class="formItemMargin" prop="waistRopeId">
                                     <Select transfer label-in-value v-model="formValidate.waistRopeId" @on-change="getWaistRopeEvent">
                                         <Option v-for="item in waistRopeList" :value="item.id" :key="item.id">{{ item.name }}</Option>
                                     </Select>
                                 </FormItem>
-                            </Col>
+                            </Col>-->
                             <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="是否纸板:" :label-width="140" class="formItemMargin">
                                     <Checkbox v-model="formValidate.isCardboard">是</Checkbox>

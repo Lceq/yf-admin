@@ -46,7 +46,7 @@
                             </FormItem>
                         </Col>
                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
-                            <FormItem label="销售单号:" prop="emergencyStateIpt" class="formItemMargin">
+                            <FormItem label="SAP单号:" prop="emergencyStateIpt" class="formItemMargin">
                                 <div class="exhibitionInputBackground">{{detailData.salesCode}}</div>
                             </FormItem>
                         </Col>
@@ -60,11 +60,11 @@
                                 <div class="exhibitionInputBackground">{{detailData.deliveryDateTo}}</div>
                             </FormItem>
                         </Col>
-                        <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                        <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                             <FormItem label="日供货量:" class="formItemMargin">
                                 <div class="exhibitionInputBackground">{{detailData.dailySupplyQty}}</div>
                             </FormItem>
-                        </Col>
+                        </Col>-->
                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                             <FormItem label="单据状态:" prop="batchNumberIpt" class="formItemMargin">
                                 <div class="exhibitionInputBackground">{{auditStateName}}</div>
@@ -105,25 +105,21 @@
                                                 <div class="exhibitionInputBackground">{{detailData.technologyName}}</div>
                                             </FormItem>
                                         </Col>
-                                    </Row>
-                                    <Row>
                                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label=" 纱线用途:" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.purposeName}}</div>
                                             </FormItem>
                                         </Col>
-                                        <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                        <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label=" 纱线捻向:" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.twistDirectionName}}</div>
                                             </FormItem>
-                                        </Col>
+                                        </Col>-->
                                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label="批号:" prop="batchNumberIpt" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.batchCode}}</div>
                                             </FormItem>
                                         </Col>
-                                    </Row>
-                                    <Row>
                                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label=" 计量单位:" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.unitName ? `${detailData.unitName}(${detailData.unitCode})` : ''}}</div>
@@ -139,13 +135,11 @@
                                                 <div class="exhibitionInputBackground">{{detailData.completionQty}}</div>
                                             </FormItem>
                                         </Col>
-                                    </Row>
-                                    <Row>
-                                        <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
-                                            <FormItem label="溢短装(±%):" class="formItemMargin">
-                                                <div class="exhibitionInputBackground">{{detailData.weightRate}}</div>
-                                            </FormItem>
-                                        </Col>
+                                        <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                           <FormItem label="溢短装(±%):" class="formItemMargin">
+                                               <div class="exhibitionInputBackground">{{detailData.weightRate}}</div>
+                                           </FormItem>
+                                       </Col>-->
                                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label=" 计划员:" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.plannerName}}</div>
@@ -167,11 +161,11 @@
                                                 <div class="exhibitionInputBackground">{{detailData.productionQty}}</div>
                                             </FormItem>
                                         </Col>
-                                        <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                        <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label="日供货量:" class="formItemMargin" prop="dailySupplyQty">
                                                 <div class="exhibitionInputBackground">{{detailData.dailySupplyQty}}</div>
                                             </FormItem>
-                                        </Col>
+                                        </Col>-->
                                     </Row>
                                     <Row>
                                         <Col :sm="24" :md="24" :lg="18">
@@ -210,7 +204,7 @@
                                                 <div class="exhibitionInputBackground">{{orderPackingEntity.packetQty}}</div>
                                             </FormItem>
                                         </Col>
-                                        <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                        <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label="编织袋规格:" :label-width="140" class="formItemMargin" prop="packingBag">
                                                 <div class="exhibitionInputBackground">{{orderPackingEntity.packingBag}}</div>
                                             </FormItem>
@@ -224,7 +218,7 @@
                                             <FormItem label="腰绳颜色:" :label-width="140" class="formItemMargin" prop="waistRopeId">
                                                 <div class="exhibitionInputBackground">{{orderPackingEntity.waistRopeName}}</div>
                                             </FormItem>
-                                        </Col>
+                                        </Col>-->
                                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label="是否纸板:" :label-width="140" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{orderPackingEntity.isCardboard?'是': '否'}}</div>

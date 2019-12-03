@@ -102,9 +102,14 @@
                 </Row>
             </div>
         </Form>
-        <RadioGroup v-model="tabProcessId" type="button" @on-change="onSelectProcessEvent">
-            <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
-        </RadioGroup>
+        <div class="flex-between">
+            <div class="process-path-bar">
+                <RadioGroup v-model="tabProcessId" type="button" @on-change="onSelectProcessEvent">
+                    <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
+                </RadioGroup>
+            </div>
+            <Button type="primary" @click="onUpdateEvent" :loading="updateLoading">数据更新</Button>
+        </div>
         <div class="view-bar margin-top-10">
             <article class="product-module-bar">
                 <div>
@@ -306,6 +311,7 @@
         components: { contentLoading, seeSpecSheet, selectSpecSheetModal, selectBatchModal, addBatchCodeModal },
         data () {
             return {
+                updateLoading: false,
                 addBatchModalState: false,
                 addBatchModalProductCodeItem: {},
                 selectBatchModalState: false,
@@ -387,6 +393,25 @@
             };
         },
         methods: {
+            onUpdateEvent () {
+                this.$refs['formDynamic'].validate((valid) => {
+                    if (valid) {
+                        this.updateLoading = true;
+                        this.saveRequest().then(res => {
+                            if (res.data.status === 200) {
+                                noticeTips(this, 'saveTips');
+                                this.activeTabPane = '0';
+                                this.updateLoading = false;
+                                this.getBomProcessDetailData();
+                            } else {
+                                this.updateLoading = false;
+                            }
+                        });
+                    } else {
+                        noticeTips(this, 'unCompleteTips');
+                    }
+                });
+            },
             onCancelClickEvent () {
                 this.globalLoadingShow = true;
                 this.$api.manufacture.cancelHttp([this.formValidate.id]).then(res => {
@@ -558,13 +583,16 @@
                 });
             },
             onSelectProcessEvent (e) {
-                this.saveRequest().then(res => {
+                /*this.saveRequest().then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'saveTips');
                         this.activeTabPane = '0';
                         this.getBomProcessDetailData();
                     }
-                });
+                });*/
+                this.showTabLoading = true;
+                this.activeTabPane = '0';
+                this.getBomProcessDetailData();
             },
             // 投料
             mPutinQtyChangeEvent (event) {
@@ -803,22 +831,5 @@
     };
 </script>
 <style lang="less">
-    .view-bar {
-        background: #f3f3f3;
-        border-radius: 8px;
-    }
-    .total-MixtureRatio-width{
-        width: 100px;
-        border-right: none;
-    }
-    .search-batch-code-button{
-        margin-left:-2px;
-        z-index: 2;
-    }
-    .product-module-bar {
-        overflow: hidden;
-        position: relative;
-        padding: 10px 10px;
-    }
     @import "bom.less";
 </style>

@@ -1,4 +1,4 @@
-import { fetch, post } from '../../ajax/http';
+import { proxy, post } from '../../ajax/http';
 import axios from 'axios/index';
 
 // 获取工序列表
@@ -56,5 +56,8 @@ export default {
     },
     getProcessDisable (params) {
         return post(('process/disable'), params);
+    },
+    processListRequest (params) {
+        return proxy.call(('process.list'), params);
     }
 };

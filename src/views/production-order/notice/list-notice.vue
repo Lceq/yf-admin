@@ -82,29 +82,23 @@
                     <Page show-sizer :page-size="pageSize" show-total :total="pageTotal" show-elevator :page-size-opts="pageOpts" @on-change="getPageIndex" @on-page-size-change="getPageSizeEvent"></Page>
                 </Col>
             </Row>
-            <Row>
-                <tips-modal
+            <tips-modal
                     :v-model="deleteModalStatus"
                     :tipMsg="deleteMsg"
                     :loading="deleteButtonLoading"
                     @cancel="deleteCancel"
                     @confirm="deleteConfirm"
-                >
-                </tips-modal>
-            </Row>
-            <Row>
-                <Col>
-                    <process-modification-modal
-                        :spinShow="spinShow"
-                        :modificationModalBtnLoading="modificationModalBtnLoading"
-                        :specSheetDetail="specSheetDetail"
-                        :modificationModalState="modificationModalState"
-                        @modificationModalConfirmEvent="modificationModalConfirmEvent"
-                        @modificationModalCancelEvent="modificationModalCancelEvent"
-                        @modificationModalStateChangeEvent="modificationModalStateChangeEvent"
-                    ></process-modification-modal>
-                </Col>
-            </Row>
+            >
+            </tips-modal>
+            <process-modification-modal
+                    :spinShow="spinShow"
+                    :modificationModalBtnLoading="modificationModalBtnLoading"
+                    :specSheetDetail="specSheetDetail"
+                    :modificationModalState="modificationModalState"
+                    @modificationModalConfirmEvent="modificationModalConfirmEvent"
+                    @modificationModalCancelEvent="modificationModalCancelEvent"
+                    @modificationModalStateChangeEvent="modificationModalStateChangeEvent"
+            ></process-modification-modal>
         </div>
     </left-menu>
 </template>
@@ -123,18 +117,9 @@
             return {
                 queryBarStartState: null,
                 startStateList: [
-                    {
-                        id: '0',
-                        name: '未开台'
-                    },
-                    {
-                        id: '1',
-                        name: '部分开台'
-                    },
-                    {
-                        id: '2',
-                        name: '全部开台'
-                    }
+                    {id: '0', name: '未开台'},
+                    {id: '1', name: '部分开台'},
+                    {id: '2', name: '全部开台'}
                 ],
                 globalLoadingShow: false,
                 modificationModalBtnLoading: false,
@@ -168,12 +153,7 @@
                 queryBarProcessTypeValue: null,
                 showMore: false,
                 tableHeader: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        fixed: 'left',
-                        align: 'center'
-                    },
+                    {type: 'selection', width: 60, fixed: 'left', align: 'center'},
                     {
                         title: '操作',
                         sortable: true,
@@ -344,19 +324,8 @@
                             ]);
                         }
                     },
-                    {
-                        title: '计划开工时间',
-                        key: 'planStartDate',
-                        minWidth: 110,
-                        sortable: true,
-                        align: 'left'
-                    },{
-                        title: '计划完工时间',
-                        key: 'planFinishDate',
-                        minWidth: 110,
-                        sortable: true,
-                        align: 'left'
-                    },
+                    {title: '计划开工时间', key: 'planStartDate', minWidth: 110, sortable: true, align: 'left'},
+                    {title: '计划完工时间', key: 'planFinishDate', minWidth: 110, sortable: true, align: 'left'},
                     {
                         title: '产品',
                         key: 'productCode',
@@ -371,13 +340,7 @@
                             });
                         }
                     },
-                    {
-                        title: '批号',
-                        sortable: true,
-                        minWidth: 110,
-                        align: 'left',
-                        key: 'batchCode'
-                    },
+                    {title: '批号', sortable: true, minWidth: 110, align: 'left', key: 'batchCode'},
                     {
                         title: '计量单位',
                         key: 'unitName',
@@ -392,56 +355,13 @@
                             })
                         }
                     },
-                    {
-                        title: '生产数量',
-                        key: 'productionQty',
-                        minWidth: 110,
-                        sortable: true,
-                        align: 'right'
-                    },
-                    {
-                        title: '排产机台数量',
-                        key: 'machineNumber',
-                        minWidth: 110,
-                        sortable: true,
-                        align: 'right'
-                    },
-
-                    {
-                        title: '生产工序',
-                        key: 'processName',
-                        minWidth: 130,
-                        sortable: true,
-                        align: 'center'
-                    },
-                    {
-                        title: '所属工段',
-                        key: 'processTypeName',
-                        minWidth: 120,
-                        sortable: true,
-                        align: 'left'
-                    },
-                    {
-                        title: '生产车间',
-                        key: 'workshopName',
-                        minWidth: 110,
-                        sortable: true,
-                        align: 'left'
-                    },
-                    {
-                        title: '创建人',
-                        key: 'createName',
-                        minWidth: 110,
-                        sortable: true,
-                        align: 'center'
-                    },
-                    {
-                        title: '创建日期',
-                        key: 'createTime',
-                        minWidth: 150,
-                        sortable: true,
-                        align: 'left'
-                    }
+                    {title: '生产数量', key: 'productionQty', minWidth: 110, sortable: true, align: 'right'},
+                    {title: '排产机台数量', key: 'machineNumber', minWidth: 110, sortable: true, align: 'right'},
+                    {title: '生产工序', key: 'processName', minWidth: 130, sortable: true, align: 'center'},
+                    {title: '所属工段', key: 'processTypeName', minWidth: 120, sortable: true, align: 'left'},
+                    {title: '生产车间', key: 'workshopName', minWidth: 110, sortable: true, align: 'left'},
+                    {title: '创建人', key: 'createName', minWidth: 110, sortable: true, align: 'center'},
+                    {title: '创建日期', key: 'createTime', minWidth: 150, sortable: true, align: 'left'}
                 ],
                 tableData: [],
                 pageHeights: null,
@@ -454,41 +374,41 @@
                 let isStartState = false;
                 // 了机状态为全部了机,才能进行关闭
                 this.checkArr.forEach((item)=>{
-                    if (item.finishState !== 2) { isStartState = true };
+                    if (item.finishState !== 2) isStartState = true;
                 });
                 if (this.checkArr.length !== 0) {
                     if (!isStartState) {
                         this.closeHttp();
                     } else {
                         emptyTips(this, '全部了机,才能进行关闭!');
-                    };
+                    }
                 } else {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             closeHttp () {
-                this.$call('prd.notice.close', this.getAllIdMethods(this.checkArr)).then(res => {
+                this.$api.notice.prdNoticeCloseRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                     if (res.data.status === 200) {
                         this.getMenuHttp();
                         this.getListHttp();
                         noticeTips(this, 'closeTips');
                         this.checkArr = [];
-                    };
+                    }
                 });
             },
             unCloseEvent () {
                 if (this.checkArr.length && this.checkArr.length !== 0) {
-                    this.$call('prd.notice.unclose', this.getAllIdMethods(this.checkArr)).then(res => {
+                    this.$api.notice.prdNoticeUncloseRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                         if (res.data.status === 200) {
                             this.getMenuHttp();
                             this.getListHttp();
                             noticeTips(this, 'unCloseTips');
                             this.checkArr = [];
-                        };
+                        }
                     });
                 } else {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             // 获取工艺类型
             getProcessTypeEvent (e) {
@@ -497,7 +417,7 @@
             processModificationEvent (id, isDesigned) {
                 this.modificationModalState = true;
                 this.spinShow = true;
-                this.$call('prd.notice.spec.detailByNoticeId', {id: id}).then(res => {
+                this.$api.notice.prdNoticeSpecDetailByNoticeIdRequest({id: id}).then(res => {
                     if (res.data.status === 200) {
                         this.spinShow = false;
                         res.data.res.tubeColorIds = JSON.parse(res.data.res.tubeColorIds);
@@ -506,14 +426,14 @@
                             res.data.res.noticeSpecParamList.forEach(item => {
                                 item.actualVal = item.val;
                             });
-                        };
+                        }
                         this.specSheetDetail = res.data.res;
-                    };
+                    }
                 })
             },
             modificationModalStateChangeEvent (e) {
                 this.modificationModalState = e;
-                if (e === false) { this.modificationModalBtnLoading = false; };
+                if (e === false) this.modificationModalBtnLoading = false;
             },
             modificationModalConfirmEvent (params) {
                 this.saveModificationHttp(JSON.parse(JSON.stringify(params)));
@@ -526,7 +446,7 @@
                 params.tubeColorIds = JSON.stringify(params.tubeColorIds);
                 params.tubeColorNames = JSON.stringify(params.tubeColorNames);
                 this.modificationModalBtnLoading = true;
-                this.$call('prd.notice.spec.save', params).then(res => {
+                this.$api.notice.prdNoticeSpecSaveRequest(params).then(res => {
                     if (res.data.status === 200) {
                         this.modificationModalState = false;
                         this.modificationModalBtnLoading = false;
@@ -535,7 +455,7 @@
                         this.getListHttp();
                     } else {
                         this.modificationModalBtnLoading = false;
-                    };
+                    }
                 })
             },
             modificationModalCancelEvent () {
@@ -555,20 +475,20 @@
                             title: '提示',
                             content: '已开台或上机物料已设定,不能进行撤销审核!'
                         });
-                    };
+                    }
                 } else {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             // 反审核
             unAuditHttp () {
-                this.$call('prd.notice.unapprove', this.getAllIdMethods(this.checkArr)).then(res => {
+                this.$api.notice.prdNoticeUnapproveRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                     if (res.data.status === 200) {
                         this.getMenuHttp();
                         this.getListHttp();
                         noticeTips(this, 'unAuditTips');
                         this.checkArr = [];
-                    };
+                    }
                 });
             },
             // 审核的事件
@@ -577,7 +497,7 @@
                     this.auditHttp();
                 } else {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             // 撤销事件
             cancelEvent () {
@@ -588,11 +508,11 @@
                             this.getListHttp();
                             noticeTips(this, 'cancelTips');
                             this.checkArr = [];
-                        };
+                        }
                     });
                 } else {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             // 提交事件
             pushEvent () {
@@ -601,7 +521,7 @@
                     this.submitHttp();
                 } else {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             // 获取勾选的对象
             selectionChangeEvent (currentRow) {
@@ -626,7 +546,7 @@
             },
             // 获取左侧菜单
             getMenuHttp () {
-                return this.$call('prd.notice.stateCount', {
+                return this.$api.notice.prdNoticeStateCountRequest({
                     workshopId: this.queryBarWorkshopValue
                 }).then(res => {
                     if (res.data.status === 200) {
@@ -635,10 +555,10 @@
                                 item.name = '待创建';
                             } else if (item.id === 1) {
                                 item.name = '待提交';
-                            };
+                            }
                         });
                         this.menuArr = res.data.res;
-                    };
+                    }
                 });
             },
             // 获取每页条数
@@ -664,7 +584,7 @@
                 this.queryBarStartState = this.queryBarStartState || '';
                 this.queryBarDateFrom ? this.queryBarDateFrom = formatDate(this.queryBarDateFrom).split(' ')[0] : this.queryBarDateFrom = '';
                 this.queryBarDateTo ? this.queryBarDateTo = formatDate(this.queryBarDateTo).split(' ')[0] : this.queryBarDateTo = '';
-                this.$call('prd.notice.list', {
+                this.$api.notice.prdNoticeListRequest({
                     // 'dateFrom': this.queryBarDateFrom,
                     // 'dateTo': this.queryBarDateTo,
                     'planStartDateFrom': this.queryBarDateFrom,
@@ -687,7 +607,7 @@
                         this.pageTotal = res.data.count;
                         this.pageTotal = res.data.count;
                         this.globalLoadingShow = false;
-                    };
+                    }
                 });
             },
             // 获取页码事件
@@ -702,7 +622,7 @@
                     this.deleteMsg = '确认删除？';
                 } else {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             // 获取id
             getAllIdMethods (array) {
@@ -711,7 +631,7 @@
             // 删除的确认按钮
             deleteConfirm () {
                 this.deleteButtonLoading = true;
-                this.$call('prd.notice.delete', this.getAllIdMethods(this.checkArr)).then((res) => {
+                this.$api.notice.prdNoticeDeleteRequest(this.getAllIdMethods(this.checkArr)).then((res) => {
                     if (res.data.status === 200) {
                         this.deleteButtonLoading = false;
                         this.deleteModalStatus = false;
@@ -721,7 +641,7 @@
                         noticeTips(this, 'deleteTips');
                     } else {
                         this.deleteButtonLoading = false;
-                    };
+                    }
                 });
             },
             // 删除的取消按钮
@@ -741,25 +661,24 @@
             },
             // 提交的请求
             submitHttp () {
-                this.$call('prd.notice.submit', this.getAllIdMethods(this.checkArr)
-                ).then(res => {
+                this.$api.notice.prdNoticeSubmitRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                     if (res.data.status === 200) {
                         this.getListHttp();
                         this.getMenuHttp();
                         noticeTips(this, 'submitTips');
                         this.checkArr = [];
-                    };
+                    }
                 });
             },
             // 审核的请求
             auditHttp () {
-                this.$call('prd.notice.approve', this.getAllIdMethods(this.checkArr)).then(res => {
+                this.$api.notice.prdNoticeApproveRequest(this.getAllIdMethods(this.checkArr)).then(res => {
                     if (res.data.status === 200) {
                         this.getListHttp();
                         this.getMenuHttp();
                         noticeTips(this, 'auditTips');
                         this.checkArr = [];
-                    };
+                    }
                 });
             },
             // 显示更多的事件
@@ -778,10 +697,10 @@
                     setTimeout(() => {
                         this.tableHeight = compClientHeight(tableDom.offsetTop + 130 + this.pageHeights + 30);
                     }, 0);
-                };
+                }
             },
             getWorkshopHttp () {
-                return this.$call('user.data.workshops2').then(res => {
+                return this.$api.common.userWorkshopRequest().then(res => {
                     if (res.data.status === 200) {
                         let responseData = res.data.res;
                         this.queryBarWorkshopValue = responseData.defaultDeptId;
@@ -791,23 +710,23 @@
             },
             // 获取工序
             getProcessHttp (processTypeId = '') {
-                return this.$call('process.list', {processTypeId: processTypeId, auditState: 3, state: 1}).then(res => {
+                return this.$api.process.processListRequest({processTypeId: processTypeId, auditState: 3, state: 1}).then(res => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((item)=>{
                             if (parseInt(item.parentId) !== 0) {
                                 item.style = 'margin-left:10px;';
                                 item.renderStyle = '10px';
                             }
-                        })
+                        });
                         this.queryBarProcessList = res.data.res;
-                    };
+                    }
                 });
             },
             getProcessTypeHttp () {
-                return this.$call('dict.list', { parentCode: 'process_type' }).then(res => {
+                return this.$api.dictionary.dictListRequest({ parentCode: 'process_type' }).then(res => {
                     if (res.data.status === 200) {
                         this.queryBarProcessTypList = res.data.res;
-                    };
+                    }
                 })
             },
             calculationTableHeight () {
@@ -844,7 +763,7 @@
             if (!this.toCreated && this.$route.query.activated === true) {
                 Object.assign(this.$data, this.$options.data());
                 this.getDependentDataHttp();
-            };
+            }
             this.$nextTick(()=>{ this.calculationTableHeight(); });
             this.$route.query.activated = false;
             this.toCreated = false;
@@ -853,11 +772,6 @@
 </script>
 
 <style scoped>
-    .query-bar-label-width{
-        width:96px;
-        text-align: right;
-        margin-right: 4px;
-    }
     .query-bar-input-width{
         width:150px;
     }

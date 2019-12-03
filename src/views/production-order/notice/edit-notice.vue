@@ -208,20 +208,16 @@
                 </Col>
             </Row>
         </Form>
-        <Row>
-            <Col>
-                <select-machine-modal
-                        :spin-show="spinShow"
-                        :select-machine-modal-state="selectMachineModalState"
-                        :select-machine-modal-work-center-list="selectMachineModalWorkCenterList"
-                        :select-machine-machine-and-date="selectMachineMachineAndDate"
-                        :select-machine-modal-table-data="selectMachineModalTableData"
-                        @on-visible-change="selectMachineModalStateChangeEvent"
-                        @select-machine-modal-search-event="selectMachineModalSearchBtnEvent"
-                        @select-machine-modal-confirm-event="selectMachineModalConfirmEvent"
-                ></select-machine-modal>
-            </Col>
-        </Row>
+        <select-machine-modal
+                :spin-show="spinShow"
+                :select-machine-modal-state="selectMachineModalState"
+                :select-machine-modal-work-center-list="selectMachineModalWorkCenterList"
+                :select-machine-machine-and-date="selectMachineMachineAndDate"
+                :select-machine-modal-table-data="selectMachineModalTableData"
+                @on-visible-change="selectMachineModalStateChangeEvent"
+                @select-machine-modal-search-event="selectMachineModalSearchBtnEvent"
+                @select-machine-modal-confirm-event="selectMachineModalConfirmEvent"
+        ></select-machine-modal>
     </card>
 </template>
 <script>
@@ -262,13 +258,7 @@
                 billDateValue: toDay(),
                 activeTabPane: '0',
                 tableHeader: [
-                    {
-                        title: '序号',
-                        type: 'index',
-                        width: 80,
-                        sortable: true,
-                        align: 'center'
-                    },
+                    {title: '序号', type: 'index', width: 80, sortable: true, align: 'center'},
                     {
                         title: '操作',
                         key: 'operation',
@@ -291,19 +281,8 @@
                             ]);
                         }
                     },
-                    {
-                        title: '生产机台',
-                        key: 'machineCode',
-                        minWidth: 120,
-                        sortable: true
-                    },
-                    {
-                        title: '生产机台名称',
-                        key: 'machineName',
-                        minWidth: 120,
-                        sortable: true,
-                        align: 'center'
-                    },
+                    {title: '生产机台', key: 'machineCode', minWidth: 120, sortable: true},
+                    {title: '生产机台名称', key: 'machineName', minWidth: 120, sortable: true, align: 'center'},
                     {
                         title: '计划开台时间',
                         key: 'planDateFrom',
@@ -335,11 +314,11 @@
                                                     params.row.productionQty = null;
                                                 } else {
                                                     _this.$set(params.row, 'productionQty', _this.productionQtyCalculation(params.row.planDateFrom, params.row.planDateTo).productionQty);
-                                                };
-                                            };
+                                                }
+                                            }
                                         } else {
                                             params.row.productionQty = e;
-                                        };
+                                        }
                                         _this.$set(_this.tableData, params.index, params.row);
                                         _this.calculationTotalProductionQty();
                                     },
@@ -352,9 +331,9 @@
                                                     params.row.productionQty = null;
                                                     params.row.planDateFrom = '';
                                                     _this.$set(_this.tableData, params.index, params.row);
-                                                };
-                                            };
-                                        };
+                                                }
+                                            }
+                                        }
                                     }
                                 }
                             });
@@ -391,10 +370,10 @@
                                                     emptyTips(_this, '计划了机时间下于计划开台时间');
                                                     params.row.productionQty = 0;
                                                 }
-                                            };
+                                            }
                                         } else {
                                             params.row.productionQty = e;
-                                        };
+                                        }
                                         _this.$set(_this.tableData, params.index, params.row);
                                         _this.calculationTotalProductionQty();
                                     },
@@ -411,8 +390,8 @@
                                                     params.row.productionQty = 0;
                                                     _this.tableData[params.index] = params.row;
                                                 }
-                                            };
-                                        };
+                                            }
+                                        }
                                     }
                                 }
                             });
@@ -461,22 +440,22 @@
         methods: {
             closeClickEvent () {
                 if (this.saveParams.finishState === 2) {
-                    this.$call('prd.notice.close', [this.$route.query.id]).then(res => {
+                    this.$api.notice.prdNoticeCloseRequest([this.$route.query.id]).then(res => {
                         if (res.data.status === 200) {
                             noticeTips(this, 'closeTips');
                             this.getDetailHttp();
-                        };
+                        }
                     });
                 } else {
                     emptyTips(this, '全部了机,才能进行关闭!');
-                };
+                }
             },
             openClickEvent () {
-                this.$call('prd.notice.unclose', [this.$route.query.id]).then(res => {
+                this.$api.notice.prdNoticeUncloseRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'unCloseTips');
                         this.getDetailHttp();
-                    };
+                    }
                 });
             },
             // 单台排产数量的失焦事件
@@ -495,7 +474,7 @@
                                 overFlowNum = mathJsSub(overFlowNum, this.saveParams.perPlannedOutput);
                             } else {
                                 this.$set(item, 'productionQty', overFlowNum);
-                            };
+                            }
                         });
                     } else {
                         let totalNum = 0;
@@ -509,10 +488,10 @@
                         let lastNum2 = Math.ceil(mathJsAdd(lastNum1, machineList[machineList.length - 1].productionQty));
                         machineList[machineList.length - 1].productionQty = lastNum2;
                         machineList[machineList.length - 1].planDateTo = this.calculatePlanDateTo(machineList[machineList.length - 1].planDateFrom, machineList[machineList.length - 1].productionQty, machineList.length - 1);
-                    };
+                    }
                     this.tableData = machineList;
                     this.calculationTotalProductionQty();
-                };
+                }
             },
             // 设置每个机台的排产数量和计划了机时间
             setDefaultValue () {
@@ -544,8 +523,7 @@
                     this.$set(this.tableData[index], 'cellClassName', {
                         machineCode: 'demo-table-info-cell-age'
                     });
-                    // return emptyTips(_this, '开台时间不在开工时间区间!');
-                };
+                }
             },
             // 合计排产数量
             calculationTotalProductionQty () {
@@ -553,7 +531,7 @@
                 this.tableData.forEach((item)=>{
                     if (item.productionQty) {
                         totalNum = mathJsAdd(item.productionQty, totalNum);
-                    };
+                    }
                 });
                 this.totalProductionQty = totalNum;
             },
@@ -600,10 +578,10 @@
                         this.addMachineToTable(checkArray);
                     } else {
                         this.addMachineToTable(checkArray);
-                    };
+                    }
                 } else {
                     this.addMachineToTable(checkArray);
-                };
+                }
                 this.selectMachineModalState = false;
             },
             addMachineToTable (checkArray) {
@@ -622,11 +600,11 @@
                                 let d = new Date(this.saveParams.planStartDate.replace(/-/g, '/')).valueOf();
                                 let times = d + 8 * 60 * 60 * 1000;
                                 this.$set(item, 'planDateFrom', formatDate(times));
-                            };
-                        };
+                            }
+                        }
                         this.$set(item, 'planDateTo', '');
                         this.tableData.push(item);
-                    };
+                    }
                 });
                 this.setDefaultValue();
             },
@@ -653,7 +631,7 @@
             },
             // 获取工作中心下的机台
             getWorkCenterMachineListHttp (machineCodeOrName = '', workCenterId = '') {
-                this.$call('work.center.machine.driving.list', {
+                this.$api.notice.workCenterMachineDrivingListRequest({
                     machine: machineCodeOrName,
                     workCenterId: workCenterId,
                     processId: this.saveParams.processId,
@@ -671,12 +649,12 @@
                                 if (allMachineItem.machineId === selectMachineItem.machineId) {
                                     allMachineItem._disabled = true;
                                     allMachineItem._checked = true;
-                                };
+                                }
                             });
                         });
                         this.selectMachineMachineAndDate = res.data.res;
                         this.selectMachineModalTableData = res.data.res.machineList;
-                    };
+                    }
                 })
             },
             selectMachineModalStateChangeEvent (e) {
@@ -694,7 +672,7 @@
                     this.setDefaultValue();
                 } else {
                     this.totalProductionQty = 0;
-                };
+                }
             },
             // 保存的事件
             saveEvent () {
@@ -705,14 +683,14 @@
                     if (res.data.status === 200) {
                         noticeTips(this, 'saveTips');
                         this.getDetailHttp();
-                    };
+                    }
                 });
             },
             // 保存的请求
             saveHttp (params) {
                 params.planStartDate = formatDate(params.planStartDate);
                 params.planFinishDate = formatDate(params.planFinishDate);
-                return this.$call('prd.notice.save', params);
+                return this.$api.notice.prdNoticeSaveRequest(params);
             },
             pushEvent () {
                 this.$refs['saveParams'].validate((valid) => {
@@ -729,7 +707,7 @@
                                 } else {
                                     this.$set(item, 'planDateFrom' , item.planDateFrom + ':00');
                                     this.$set(item, 'planDateTo' , item.planDateTo + ':00');
-                                };
+                                }
                             });
                             if (isEmpty === false) {
                                 // 最大值、最小值
@@ -744,7 +722,7 @@
                                     this.$set(this.saveParams, 'date', formatDate(this.billDateValue));
                                     this.saveHttp(this.saveParams).then(res => {
                                         if (res.data.status === 200) {
-                                            this.$call('prd.notice.submit', [this.$route.query.id]).then(res => {
+                                            this.$api.notice.prdNoticeSubmitRequest([this.$route.query.id]).then(res => {
                                                 if (res.data.status === 200) {
                                                     noticeTips(this, 'submitTips');
                                                     this.$router.push({
@@ -755,67 +733,67 @@
                                                         }
                                                     });
                                                     this.$store.commit('removeTag', 'editNotice');
-                                                };
+                                                }
                                             });
-                                        };
+                                        }
                                     });
                                 } else {
                                     emptyTips(this, `排产总数量应在${this.minNum}~${this.maxNum}区间内!`);
-                                };
+                                }
                             } else {
                                 emptyTips(this, '机台信息不能为空!');
-                            };
+                            }
                         } else {
                             emptyTips(this, '机台不能为空!');
-                        };
+                        }
                     } else {
                         noticeTips(this, 'unCompleteTips');
                     }
                 });
             },
             cancelEvent () {
-                this.$call('prd.notice.cancel', [this.$route.query.id]).then(res => {
+                this.$api.notice.prdNoticeCancelRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'cancelTips');
                         this.getDetailHttp();
-                    };
+                    }
                 });
             },
             auditEvent () {
-                this.$call('prd.notice.approve', [this.$route.query.id]).then(res => {
+                this.$api.notice.prdNoticeApproveRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'auditTips');
                         this.getDetailHttp();
-                    };
+                    }
                 });
             },
             unAuditEvent () {
-                this.$call('prd.notice.unapprove', [this.$route.query.id]).then(res => {
+                this.$api.notice.prdNoticeUnapproveRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'unAuditTips');
                         this.getDetailHttp();
-                    };
+                    }
                 });
             },
             closeEvent () {
-                this.$call('prd.notice.close', [this.$route.query.id]).then(res => {
+                this.$api.notice.prdNoticeCloseRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'closeTips');
                         this.getDetailHttp();
-                    };
+                    }
                 });
             },
             unCloseEvent () {
-                this.$call('prd.notice.unclose', [this.$route.query.id]).then(res => {
+                this.$api.notice.prdNoticeUncloseRequest([this.$route.query.id]).then(res => {
                     if (res.data.status === 200) {
                         noticeTips(this, 'unCloseTips');
                         this.getDetailHttp();
-                    };
+                    }
                 });
             },
             // 获取通知单的详情
             getDetailHttp () {
-                return this.$call('prd.notice.detail', { id: this.$route.query.id }).then(res => {
+                return this.$api.notice.prdNoticeDetailRequest({ id: this.$route.query.id }).then(res => {
                     if (res.data.status === 200) {
                         let responseData = res.data.res;
                         this.saveParams = responseData;
@@ -824,23 +802,23 @@
                         this.tableData.forEach((item, index) => {
                             this.judgePlanDateInStartWorkRange(item.planDateFrom, index);
                             this.judgePlanDateInStartWorkRange(item.planDateTo, index);
-                        })
+                        });
                         this.operationData = getOperationData(responseData);
                         this.globalLoadingShow = false;
                         this.calculationTotalProductionQty();
                         return responseData;
-                    };
+                    }
                 });
             },
             getWorkCenterListHttp (processId) {
-                return this.$call('work.center.list', {
+                return this.$api.workCenter.workCenterListRequest({
                     processId: processId,
                     auditState: 3,
                     enableState: 1
                 }).then(res => {
                     if (res.data.status === 200) {
                         this.selectMachineModalWorkCenterList = res.data.res;
-                    };
+                    }
                 });
             },
             calculationTableHeight () {
@@ -873,7 +851,7 @@
             _this = this;
             if (!this.toCreated && this.$route.query.activated === true) {
                 this.getDependentDataHttp();
-            };
+            }
             this.$nextTick(()=>{ this.calculationTableHeight(); });
             this.toCreated = false;
             this.$route.query.activated = false;

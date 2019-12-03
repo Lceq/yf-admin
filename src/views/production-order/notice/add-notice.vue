@@ -173,20 +173,16 @@
                 </Col>
             </Row>
         </Form>
-        <Row>
-            <Col>
-                <select-machine-modal
-                        :spin-show="spinShow"
-                        :select-machine-modal-state="selectMachineModalState"
-                        :select-machine-machine-and-date="selectMachineMachineAndDate"
-                        :select-machine-modal-work-center-list="selectMachineModalWorkCenterList"
-                        :select-machine-modal-table-data="selectMachineModalTableData"
-                        @on-visible-change="selectMachineModalStateChangeEvent"
-                        @select-machine-modal-search-event="selectMachineModalSearchBtnEvent"
-                        @select-machine-modal-confirm-event="selectMachineModalConfirmEvent"
-                ></select-machine-modal>
-            </Col>
-        </Row>
+        <select-machine-modal
+                :spin-show="spinShow"
+                :select-machine-modal-state="selectMachineModalState"
+                :select-machine-machine-and-date="selectMachineMachineAndDate"
+                :select-machine-modal-work-center-list="selectMachineModalWorkCenterList"
+                :select-machine-modal-table-data="selectMachineModalTableData"
+                @on-visible-change="selectMachineModalStateChangeEvent"
+                @select-machine-modal-search-event="selectMachineModalSearchBtnEvent"
+                @select-machine-modal-confirm-event="selectMachineModalConfirmEvent"
+        ></select-machine-modal>
     </card>
 </template>
 <script>
@@ -223,13 +219,7 @@
                 activeTabPane: '0',
                 tableHeight: null,
                 tableHeader: [
-                    {
-                        title: '序号',
-                        type: 'index',
-                        width: 80,
-                        sortable: true,
-                        align: 'center'
-                    },
+                    {title: '序号', type: 'index', width: 80, sortable: true, align: 'center'},
                     {
                         title: '操作',
                         key: 'operation',
@@ -254,19 +244,8 @@
                         }
 
                     },
-                    {
-                        title: '生产机台',
-                        key: 'machineCode',
-                        minWidth: 120,
-                        sortable: true
-                    },
-                    {
-                        title: '生产机台名称',
-                        key: 'machineName',
-                        minWidth: 120,
-                        sortable: true,
-                        align: 'center'
-                    },
+                    {title: '生产机台', key: 'machineCode', minWidth: 120, sortable: true},
+                    {title: '生产机台名称', key: 'machineName', minWidth: 120, sortable: true, align: 'center'},
                     {
                         title: '计划开台时间',
                         key: 'planDateFrom',
@@ -689,7 +668,7 @@
             },
             // 提交的请求
             submitHttp (id) {
-                this.$call('prd.notice.submit', [id]).then(res => {
+                this.$api.notice.prdNoticeSubmitRequest([id]).then(res => {
                     if (res.data.status === 200) {
                         this.$router.push({
                             path: 'editNotice',
@@ -724,7 +703,7 @@
             saveHttp (params) {
                 params.planStartDate = formatDate(params.planStartDate);
                 params.planFinishDate = formatDate(params.planFinishDate);
-                return this.$call('prd.notice.save', params);
+                return this.$api.notice.prdNoticeSaveRequest(params);
             },
             // 获取生产排产的详情
             getArrangeDetailHttp () {
@@ -750,7 +729,7 @@
             },
             // 获取工作中心列表数据
             getWorkCenterListHttp (processId) {
-                return this.$call('work.center.list', {
+                return this.$api.workCenter.workCenterListRequest({
                     processId: processId,
                     auditState: 3,
                     enableState: 1

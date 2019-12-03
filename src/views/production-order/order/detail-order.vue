@@ -105,6 +105,8 @@
                                                 <div class="exhibitionInputBackground">{{detailData.technologyName}}</div>
                                             </FormItem>
                                         </Col>
+                                        </Row>
+                                    <Row>
                                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label=" 纱线用途:" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.purposeName}}</div>
@@ -115,7 +117,7 @@
                                                 <div class="exhibitionInputBackground">{{detailData.twistDirectionName}}</div>
                                             </FormItem>
                                         </Col>-->
-                                        <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                        <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6"  >
                                             <FormItem label="批号:" prop="batchNumberIpt" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.batchCode}}</div>
                                             </FormItem>
@@ -125,6 +127,8 @@
                                                 <div class="exhibitionInputBackground">{{detailData.unitName ? `${detailData.unitName}(${detailData.unitCode})` : ''}}</div>
                                             </FormItem>
                                         </Col>
+                                    </Row>
+                                    <Row>
                                         <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                             <FormItem label="订单数量:" prop="productionNumIpt" class="formItemMargin">
                                                 <div class="exhibitionInputBackground">{{detailData.productionQty}}</div>

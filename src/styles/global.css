@@ -304,7 +304,7 @@
     align-items: center;
 }
 .exhibitionInputBackground{
-    line-height:32px;
+    height:32px;
     padding-left:6px;
     background: #f8f8f8;
     border-radius: 4px;

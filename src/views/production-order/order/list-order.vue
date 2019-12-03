@@ -281,8 +281,7 @@
                     <!-- 分页 -->
                     <Row class="pageHeight">
                         <Col class="pageStyle">
-                            <Page :total="pageTotal" size="small" show-total @on-change="pageIndexEvent"
-                                  :page-size="bomPageSize"/>
+                            <Page :total="bomPageTotal" size="small" show-total @on-change="pageIndexEvent" :page-size="bomPageSize"/>
                         </Col>
                     </Row>
                 </div>

@@ -1,4 +1,4 @@
-import { post, fetch } from '../../ajax/http';
+import { post, proxy } from '../../ajax/http';
 // 工艺单
 export default {
     listHttp (params) {
@@ -36,5 +36,11 @@ export default {
     },
     deleteHttp (params) {
         return post('prd/notice/delete', params);
+    },
+    prdBomProductDetail2Request (params) {
+        return proxy.call('prd.bom.product.detail2', params);
+    },
+    workCenterMachineDrivingListRequest (params) {
+        return proxy.call('work.center.machine.driving.list', params);
     }
 };

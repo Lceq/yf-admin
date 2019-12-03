@@ -286,7 +286,7 @@
                 :select-batch-page-total="selectBatchPageTotal"
                 :select-batch-modal-state="selectBatchModalState"
                 :select-batch-modal-table-data="selectBatchModalTableData"
-                @on-visible-change="selectBatchModalStateChangeEvent"
+                @on-visible-change="onSelectBatchModalStateChangeEvent"
                 @on-change-page="onSelectBatchModalPageCodeEvent"
                 @select-batch-modal-search-event="onSelectBatchModalSearchBtnEvent"
                 @select-batch-modal-confirm-event="selectBatchModalConfirmEvent"
@@ -545,7 +545,7 @@
                     }
                 });
             },
-            selectBatchModalStateChangeEvent (e) {
+            onSelectBatchModalStateChangeEvent (e) {
                 this.selectBatchModalState = e;
             },
             // 获取下拉选择的批号
@@ -583,13 +583,6 @@
                 });
             },
             onSelectProcessEvent (e) {
-                /*this.saveRequest().then(res => {
-                    if (res.data.status === 200) {
-                        noticeTips(this, 'saveTips');
-                        this.activeTabPane = '0';
-                        this.getBomProcessDetailData();
-                    }
-                });*/
                 this.showTabLoading = true;
                 this.activeTabPane = '0';
                 this.getBomProcessDetailData();
@@ -789,7 +782,6 @@
                         }
                         this.formDynamic = res.data.res;
                         this.formDynamic.prdBomProductList = this.calculationTotalPutinQty(responseData);
-                        // this.formDynamic.prdBomProductList = responseData;
                         this.showTabLoading = false;
                         this.globalLoadingShow = false;
                     }

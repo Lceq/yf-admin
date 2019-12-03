@@ -820,4 +820,5 @@
         position: relative;
         padding: 10px 10px;
     }
+    @import "bom.less";
 </style>

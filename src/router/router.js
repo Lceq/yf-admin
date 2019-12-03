@@ -47,9 +47,6 @@ export const charts = {
     name: 'charts-top',
     icon: 'arrow-swap',
     component: () => import('@/views/production-order/charts-indicate/chart-top.vue')
-    // path: '/locking',
-    // name: 'locking',
-    // component: () => import('@/views/main-components/lockscreen/components/locking-page.vue')
 };
 
 // 作为Main组件的子页面展示但是不在左侧菜单显示的路由写在otherRouter里
@@ -77,14 +74,11 @@ export const otherRouter = {
         { meta: { keepAlive: true }, path:'addPartsReplace',title:'新增配件更换',name:'addPartsReplace',icon:'ios-rose', component: () => import('@/views/equipment-mgmt/parts-replace/add-partsReplace.vue') },
         { meta: { keepAlive: true }, path:'editPartsReplace',title:'编辑配件更换',name:'editPartsReplace',icon:'ios-rose', component: () => import('@/views/equipment-mgmt/parts-replace/edit-partsReplace.vue') },
         { meta: { keepAlive: true }, path:'addManufactureBOM',title:'新增制造BOM',name:'addManufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/bom/add-bom.vue')},
-        { meta: { keepAlive: true }, path:'editManufactureBOM',title:'编辑制造BOM',name:'editManufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/bom/edit-bom.vue')},
         { meta: { keepAlive: true }, path:'detail-bom',title:'制造BOM详情',name:'detail-bom',icon:'ios-paper', component: () => import('@/views/production-order/bom/detail-bom.vue') },
-
         { meta: { keepAlive: true }, path:'detail-standard-bom',title:'标准BOM详情',name:'detail-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/detail-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'edit-standard-bom',title:'编辑标准BOM',name:'edit-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/edit-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'add-standard-bom',title:'新增标准BOM',name:'add-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/add-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'edit-bom',title:'编辑制造BOM',name:'edit-bom',icon:'ios-paper', component: () => import('@/views/production-order/bom/edit-bom.vue') },
-
         { meta: { keepAlive: true }, path:'orderDetail',title:'生产订单详情',name:'orderDetail',icon:'ios-paper', component: () => import('@/views/production-order/order/detail-order.vue') },
         { meta: { keepAlive: true }, path:'add-blend',title:'新增配棉档案',name:'add-blend',icon:'ios-paper', component: () => import('@/views/cotton-blend/archives/add-blend-archives.vue') },
         { meta: { keepAlive: true }, path:'edit-blend',title:'编辑配棉档案',name:'edit-blend',icon:'ios-paper', component: () => import('@/views/cotton-blend/archives/edit-blend-archives.vue') },

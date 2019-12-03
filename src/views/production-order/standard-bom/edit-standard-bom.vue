@@ -1048,5 +1048,5 @@
     };
 </script>
 <style lang="less">
-   @import "../bom/manufacture.less";
+   @import "../bom/bom.less";
 </style>

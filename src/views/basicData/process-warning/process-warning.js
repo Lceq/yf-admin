@@ -64,7 +64,7 @@ export default ({
                     minWidth: 110
                 },
                 {
-                    title: '电流上线',
+                    title: '电流上限',
                     key: 'currentMax',
                     align: 'right',
                     sortable: true,

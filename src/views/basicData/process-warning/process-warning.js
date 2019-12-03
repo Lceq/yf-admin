@@ -89,7 +89,7 @@ export default ({
                     key: 'powerFactorMin',
                     align: 'right',
                     sortable: true,
-                    minWidth: 110
+                    minWidth: 120
                 },
                 {
                     title: '数据状态',

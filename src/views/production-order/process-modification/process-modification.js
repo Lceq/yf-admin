@@ -1,5 +1,5 @@
 import layout from '../../layout';
-import {curDate, page} from '../../../libs/tools';
+import { curDate, page } from '../../../libs/tools';
 import modal from '../../public/modal';
 import xwValidate from '@/libs/xwValidate';
 // import api from "../../../ajax/api";
@@ -26,8 +26,59 @@ export default ({
             isChangeSpecSet: false,
             prdNoticeId: null,
             modificationOne: {},
+            // 这
+            allSelest: false,
             processModificationColumns: [
                 {
+                    type: 'selection',
+                    width: 60,
+                    fixed: 'left',
+                    align: 'center',
+                    // 有问题
+                    render: (h, params) => {
+                        return h('div', [
+                            h('checkbox', {
+                                on: {
+                                    change: () => {
+                                        console.log(111);
+                                    },
+                                    click: () => {
+                                        console.log(111);
+                                    }
+                                }
+                            }, params.row.name)
+                        ]);
+                    }
+                },
+                {
+                    title: '生产',
+                    width: 60,
+                    align: 'left',
+                    key: 'checkbox',
+                    render: (h, params) => {
+                        return h('div', [h('button', {
+                            props: {
+                                type: 'primary',
+                                size: 'small'
+                            },
+                            style: {
+                                marginRight: '5px'
+                            },
+                            on: {
+                                click: () => {
+                                    console.log(params, 'params');
+                                    console.log(11);
+                                },
+                                change: () => {
+                                    console.log(params, 'params');
+                                    console.log(5551);
+                                }
+                            }
+                        }, 'aaaaaaaaaa')]);
+                    }
+                },
+                {
+
                     title: '操作',
                     sortable: true,
                     minWidth: 120,
@@ -332,6 +383,7 @@ export default ({
             isProcessModificationTitle: '',
             isProcessModificationModalLoading: false,
             isProcessModificationColumns: [
+
                 {
                     title: '序号',
                     key: 'index',
@@ -341,6 +393,7 @@ export default ({
                         return h('p', {}, params.index + 1);
                     }
                 },
+
                 {
                     title: '工艺项目',
                     key: 'specParamName'
@@ -382,7 +435,7 @@ export default ({
                             }, [
                                 params.row.paramValueList.map(item => {
                                     return h('Option', {
-                                        props: {value: item.value, key: item.value},
+                                        props: { value: item.value, key: item.value },
                                         style: {
                                         }
                                     }, item.value);
@@ -477,6 +530,13 @@ export default ({
         };
     },
     methods: {
+        // 翻转
+        handleSelectAll (status) {
+            this.$refs.selection.selectAll(status);
+            console.log(this.$refs, 'this.$refs');
+
+
+        },
         getFormulaData () {
             let obj = {};
             this.isProcessModificationData.filter(x => x.dataType === 1).map(item => {
@@ -641,7 +701,7 @@ export default ({
         },
         getPrdBomProductDetail () {
             const _this = this;
-            this.$call('prd.notice.machine.spec.obtain', {prdNoticeMachineId: this.prdNoticeMachineId, paramType: this.isChangeSpecSet ? 1 : 2}).then(res => {
+            this.$call('prd.notice.machine.spec.obtain', { prdNoticeMachineId: this.prdNoticeMachineId, paramType: this.isChangeSpecSet ? 1 : 2 }).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
                     _this.processModificationForm = content.res;
@@ -808,7 +868,7 @@ export default ({
         //     });
         // },
         getTubeType () {
-            let param = {parentCode: 'post_type'};
+            let param = { parentCode: 'post_type' };
             // this.$call('dict/list ', param).then(res => {
             this.$api.dictionary.getTubeType(param).then(res => {
                 let content = res.data;

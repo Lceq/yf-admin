@@ -381,8 +381,8 @@
     import tipsModal from '../../public/deleteWarning';
     import pageOtherMessage from '../../components/operation-log';
     import selectMaterialModal from './select-material';
-    import addBatchModal from '../manufacture/components/add-batch-modal';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
+    import addBatchModal from '../bom/components/add-batch-modal';
+    import selectBatchModal from '../bom/components/select-batch-modal';
     export default{
         name: 'edit-order',
         components: { tipsModal, pageOtherMessage, selectMaterialModal, addBatchModal, selectBatchModal },

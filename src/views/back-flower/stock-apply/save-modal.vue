@@ -136,8 +136,8 @@
     import { noticeTips, getOperationData, setPage, addNum, setInputLength, formatDate, mathJsDiv, emptyTips } from '../../../libs/common';
     import modalContentLoading from '../../components/modal-content-loading';
     import operationLog from '../../components/modal-operation-log';
-    import selectBatchCodeModal from '../../production-order/manufacture/components/select-batch-modal';
-    import addBatchCodeModal from '../../production-order/manufacture/components/add-batch-modal';
+    import selectBatchCodeModal from '../../production-order/bom/components/select-batch-modal';
+    import addBatchCodeModal from '../../production-order/bom/components/add-batch-modal';
     export default {
         components: { modalFooter, selectProductModal, modalContentLoading, operationLog, selectBatchCodeModal, addBatchCodeModal },
         props: {

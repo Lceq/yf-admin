@@ -295,11 +295,11 @@
     </card>
 </template>
 <script>
-    import addBatchCodeModal from '../manufacture/components/add-batch-modal';
+    import addBatchCodeModal from './components/add-batch-modal';
     import selectSpecSheetModal from '../../components/select-bill-modal';
-    import seeSpecSheet from '../manufacture/components/see-spec-sheet';
+    import seeSpecSheet from './components/see-spec-sheet';
     import contentLoading from '../../components/modal-content-loading';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
+    import selectBatchModal from './components/select-batch-modal';
     import { formatDay, noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul } from '../../../libs/common';
     export default {
         name: 'add-bom',

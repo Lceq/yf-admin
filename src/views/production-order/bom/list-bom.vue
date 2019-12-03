@@ -9,7 +9,7 @@
             <Row type="flex" justify="space-between" align="middle">
                 <Col>
                     <Row type="flex" justify="start">
-                        <Button icon="md-add" v-show="activeMenuAuditSate===1" type="primary" @click="addClickEvent" class="queryBarMarginRight margin-bottom-10">新增</Button>
+<!--                        <Button icon="md-add" v-show="activeMenuAuditSate===1" type="primary" @click="addClickEvent" class="queryBarMarginRight margin-bottom-10">新增</Button>-->
                         <Button icon="ios-undo" v-show="activeMenuAuditSate===2" type="warning" @click="cancelEvent" class="queryBarMarginRight margin-bottom-10">撤销提交</Button>
                         <Button icon="md-done-all" v-show="activeMenuAuditSate===2" type="primary" @click="auditEvent" class="queryBarMarginRight margin-bottom-10">审核</Button>
                         <Button icon="md-refresh" v-show="activeMenuAuditSate===3" type="warning" @click="unAuditEvent" class="queryBarMarginRight margin-bottom-10">撤销审核</Button>

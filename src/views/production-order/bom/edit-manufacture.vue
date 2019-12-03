@@ -1241,7 +1241,7 @@
                     this.saveBomId = this.$route.query.id;
                     this.getDetailHttp();
                 },0);
-            };
+            }
             this.toCreated = false;
             this.$route.query.activated = false;
         }

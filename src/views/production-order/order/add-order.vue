@@ -352,8 +352,8 @@
     import tipsClear from '../../components/tips-modal';
     import selectMaterialModal from './select-material';
     import createTipsModal from '../../components/tips-modal';
-    import addBatchModal from '../manufacture/components/add-batch-modal';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
+    import addBatchModal from '../bom/components/add-batch-modal';
+    import selectBatchModal from '../bom/components/select-batch-modal';
     let _this = this;
     export default{
         name: 'add-order',

@@ -76,9 +76,9 @@ export const otherRouter = {
         { meta: { keepAlive: true }, path:'editUpkeep',title:'编辑保养计划',name:'editUpkeep',icon:'ios-rose', component: () => import('@/views/equipment-mgmt/upkeep/edit-upkeepPlan.vue') },
         { meta: { keepAlive: true }, path:'addPartsReplace',title:'新增配件更换',name:'addPartsReplace',icon:'ios-rose', component: () => import('@/views/equipment-mgmt/parts-replace/add-partsReplace.vue') },
         { meta: { keepAlive: true }, path:'editPartsReplace',title:'编辑配件更换',name:'editPartsReplace',icon:'ios-rose', component: () => import('@/views/equipment-mgmt/parts-replace/edit-partsReplace.vue') },
-        { meta: { keepAlive: true }, path:'addManufactureBOM',title:'新增制造BOM',name:'addManufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/manufacture/add-manufacture.vue')},
-        { meta: { keepAlive: true }, path:'editManufactureBOM',title:'编辑制造BOM',name:'editManufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/manufacture/edit-manufacture.vue')},
-        { meta: { keepAlive: true }, path:'bomDetail',title:'制造BOM详情',name:'bomDetail',icon:'ios-paper', component: () => import('@/views/production-order/manufacture/detail-manufacture.vue') },
+        { meta: { keepAlive: true }, path:'addManufactureBOM',title:'新增制造BOM',name:'addManufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/bom/add-bom.vue')},
+        { meta: { keepAlive: true }, path:'editManufactureBOM',title:'编辑制造BOM',name:'editManufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/bom/edit-bom.vue')},
+        { meta: { keepAlive: true }, path:'bomDetail',title:'制造BOM详情',name:'bomDetail',icon:'ios-paper', component: () => import('@/views/production-order/bom/detail-bom.vue') },
 
         { meta: { keepAlive: true }, path:'detail-standard-bom',title:'标准BOM详情',name:'detail-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/detail-standard-bom.vue') },
         { meta: { keepAlive: true }, path:'edit-standard-bom',title:'编辑标准BOM',name:'edit-standard-bom',icon:'ios-paper', component: () => import('@/views/production-order/standard-bom/edit-standard-bom.vue') },
@@ -237,7 +237,7 @@ export const appRouter = [];
             { path:'processModification',title:'工艺翻改',name:'processModification',icon:'ios-paper', component: () => import('@/views/production-order/process-modification/process-modification.vue')},
             { path:'rialInspection',title:'试纺质检',name:'rialInspection',icon:'ios-paper', component: () => import('@/views/production-order/rial-inspection/rial-inspection.vue')},
             { path:'production-monitor',title:'生产监控看板',name:'production-monitor',icon:'ios-paper', component: () => import('@/views/production-order/monitoring/production-monitor.vue')},
-            { meta: { keepAlive: true }, path:'manufactureBOM',title:'制造BOM',name:'manufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/manufacture/list-manufacture.vue')}
+            { meta: { keepAlive: true }, path:'manufactureBOM',title:'制造BOM',name:'manufactureBOM',icon:'ios-paper', component: () => import('@/views/production-order/bom/list-bom.vue')}
         ]
     },
     {

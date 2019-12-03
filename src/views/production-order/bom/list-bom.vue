@@ -135,7 +135,7 @@
                                         on: {
                                             click: () => {
                                                 _this.$router.push({
-                                                    path: 'bomDetail',
+                                                    path: 'detail-bom',
                                                     query: {
                                                         id: params.row.id,
                                                         activated: true
@@ -169,7 +169,7 @@
                                         on: {
                                             click: () => {
                                                 _this.$router.push({
-                                                    path: 'bomDetail',
+                                                    path: 'detail-bom',
                                                     query: {
                                                         id: params.row.id,
                                                         activated: true
@@ -525,7 +525,7 @@
             if (!this.toCreated && this.$route.query.activated === true) {
                 Object.assign(this.$data, this.$options.data());
                 this.getDependentDataHttp();
-            };
+            }
             this.$nextTick(()=>{ this.calculationTableHeight(); });
             this.$route.query.activated = false;
             this.toCreated = false;

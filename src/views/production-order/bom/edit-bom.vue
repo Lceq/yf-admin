@@ -382,7 +382,8 @@
                 productModuleIndex: 0,
                 selectBatchModalPageSize: setPage.pageSize,
                 bomMaterialTableRowProduct: '',
-                bomMaterialTableRowIndex: null
+                bomMaterialTableRowIndex: null,
+                toCreated: false,
             };
         },
         methods: {
@@ -440,7 +441,7 @@
                         this.submitButtonLoading = false;
                         noticeTips(this, 'submitTips');
                         this.$router.push({
-                            path: 'bomDetail',
+                            path: 'detail-bom',
                             query: {
                                 id: this.formValidate.id,
                                 activated: true
@@ -784,11 +785,20 @@
             }
         },
         created () {
+            this.toCreated = true;
             this.editId = this.$route.query.id;
             this.getDependentDataRequest();
         },
-        mounted () {
+        activated () {
             this.editId = this.$route.query.id;
+            if (!this.toCreated && this.$route.query.activated === true) {
+                this.globalLoadingShow = true;
+                setTimeout(() => {
+                    this.getDependentDataRequest();
+                }, 0);
+            }
+            this.toCreated = false;
+            this.$route.query.activated = false;
         }
     };
 </script>

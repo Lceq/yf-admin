@@ -108,7 +108,7 @@
                     <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
                 </RadioGroup>
             </div>
-            <Button type="primary" @click="onUpdateEvent" :loading="updateLoading">数据更新</Button>
+            <Button type="primary" @click="onUpdateEvent" :loading="updateLoading" icon="md-sync">数据更新</Button>
         </div>
         <div class="view-bar margin-top-10">
             <article class="product-module-bar">

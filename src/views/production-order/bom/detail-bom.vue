@@ -300,7 +300,7 @@
             },
             backListEvent () {
                 this.$router.push({
-                    path: 'manufactureBOM',
+                    path: 'list-bom',
                     query: {
                         activated: true
                     }

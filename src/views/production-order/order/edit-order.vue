@@ -131,7 +131,7 @@
                                         </Select>
                                     </FormItem>
                                 </Col>-->
-                                <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6" >
                                     <FormItem label="批号:" prop="batchCode" class="formItemMargin">
                                         <!--<div class="flex-left line-height-27">
                                             <Select
@@ -160,13 +160,13 @@
                                         </div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row>
                                 <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                     <FormItem label=" 计量单位:" class="formItemMargin">
                                         <div class="modal-readonly">{{ this.formValidate.unitName ? `${this.formValidate.unitName}(${this.formValidate.unitCode})` : '' }}</div>
                                     </FormItem>
                                 </Col>
+                            </Row>
+                            <Row>
                                 <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                     <FormItem label="订单数量:" prop="productionQty" class="formItemMargin">
                                         <InputNumber @on-blur="getProductionNumEvent" :min="0" :step="1" :precision='0' v-model="formValidate.productionQty" class="widthPercentage"></InputNumber>
@@ -177,18 +177,6 @@
                                         <div class="exhibitionInputBackground">{{formValidate.completionQty}}</div>
                                     </FormItem>
                                 </Col>
-                            </Row>
-                            <Row>
-                                <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
-                                    <FormItem label="溢短装(±%):" class="formItemMargin" prop="weightRate">
-                                        <InputNumber
-                                                class="widthPercentage"
-                                                :min="0"
-                                                :max="10"
-                                                v-model="formValidate.weightRate"
-                                        ></InputNumber>
-                                    </FormItem>
-                                </Col>-->
                                 <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                     <FormItem label=" 计划员:" class="formItemMargin">
                                         <Select
@@ -204,6 +192,18 @@
                                         </Select>
                                     </FormItem>
                                 </Col>
+                            </Row>
+                            <Row>
+                                <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                    <FormItem label="溢短装(±%):" class="formItemMargin" prop="weightRate">
+                                        <InputNumber
+                                                class="widthPercentage"
+                                                :min="0"
+                                                :max="10"
+                                                v-model="formValidate.weightRate"
+                                        ></InputNumber>
+                                    </FormItem>
+                                </Col>-->
                             </Row>
                             <Row>
                                 <Col :sm="24" :md="24" :lg="24" :xl="24" :xxl="12">
@@ -381,8 +381,8 @@
     import tipsModal from '../../public/deleteWarning';
     import pageOtherMessage from '../../components/operation-log';
     import selectMaterialModal from './select-material';
-    import addBatchModal from '../manufacture/components/add-batch-modal';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
+    import addBatchModal from '../bom/components/add-batch-modal';
+    import selectBatchModal from '../bom/components/select-batch-modal';
     export default{
         name: 'edit-order',
         components: { tipsModal, pageOtherMessage, selectMaterialModal, addBatchModal, selectBatchModal },

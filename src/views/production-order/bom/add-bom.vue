@@ -1535,5 +1535,5 @@
     };
 </script>
 <style lang="less">
-    @import "manufacture.less";
+    @import "bom.less";
 </style>

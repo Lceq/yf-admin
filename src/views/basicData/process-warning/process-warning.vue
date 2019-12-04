@@ -97,9 +97,9 @@
                     </Row>
                     <Row>
                         <Col span="12">
-                            <FormItem label="电流上线：" prop="currentMax" class="formItemMargin">
+                            <FormItem label="电流上限：" prop="currentMax" class="formItemMargin">
                                 <!--<Input class=" " type="text" v-model="formValidate.settingTemperature" placeholder="请输入温度"/>-->
-                                <InputNumber class="formWidthModal" v-model="formValidate.currentMax" placeholder="请输入电流上线"></InputNumber>
+                                <InputNumber class="formWidthModal" v-model="formValidate.currentMax" placeholder="请输入电流上限"></InputNumber>
                             </FormItem>
                         </Col>
                     </Row>

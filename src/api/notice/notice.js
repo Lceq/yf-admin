@@ -1,40 +1,55 @@
-import { post, fetch } from '../../ajax/http';
+import { post, proxy } from '../../ajax/http';
 // 工艺单
 export default {
-    listHttp (params) {
-        return post('prd/notice/list', params);
+    prdNoticeListRequest (params) {
+        return proxy.call('prd.notice.list', params);
     },
     saveHttp (params) {
         return post('prd/notice/save?staging=false', params);
     },
-    submitHttp (params) {
-        return post('prd/notice/submit', params);
+    prdNoticeSubmitRequest (params) {
+        return proxy.call('prd.notice.submit', params);
     },
     stagingHttp (params) {
         return post('prd/notice/save?staging=true', params);
     },
-    detailHttp (params) {
-        return post('prd/notice/detail', params);
+    prdNoticeDetailRequest (params) {
+        return proxy.call('prd.notice.detail', params);
     },
-    approveHttp (params) {
-        return post('prd/notice/approve', params);
+    prdNoticeApproveRequest (params) {
+        return proxy.call('prd.notice.approve', params);
     },
-    unapproveHttp (params) {
-        return post('prd/notice/unapprove', params);
+    prdNoticeUnapproveRequest (params) {
+        return proxy.call('prd.notice.unapprove', params);
     },
-    closeHttp (params) {
-        return post('prd/notice/close', params);
+    prdNoticeCloseRequest (params) {
+        return proxy.call('prd.notice.close', params);
     },
-    uncloseHttp (params) {
-        return post('prd/notice/unclose', params);
+    prdNoticeUncloseRequest (params) {
+        return proxy.call('prd.notice.unclose', params);
     },
-    leftMenuListHttp (params) {
-        return post('prd/notice/stateCount', params);
+    prdNoticeStateCountRequest (params) {
+        return proxy.call('prd.notice.stateCount', params);
     },
-    cancelHttp (params) {
-        return post('prd/notice/cancel', params);
+    prdNoticeCancelRequest (params) {
+        return proxy.call('prd.notice.cancel', params);
     },
-    deleteHttp (params) {
-        return post('prd/notice/delete', params);
+    prdNoticeDeleteRequest (params) {
+        return proxy.call('prd.notice.delete', params);
+    },
+    prdBomProductDetail2Request (params) {
+        return proxy.call('prd.bom.product.detail2', params);
+    },
+    workCenterMachineDrivingListRequest (params) {
+        return proxy.call('work.center.machine.driving.list', params);
+    },
+    prdNoticeSaveRequest (params) {
+        return proxy.call('prd.notice.save', params);
+    },
+    prdNoticeSpecDetailByNoticeIdRequest (params) {
+        return proxy.call('prd.notice.spec.detailByNoticeId', params);
+    },
+    prdNoticeSpecSaveRequest (params) {
+        return proxy.call('prd.notice.spec.save', params);
     }
 };

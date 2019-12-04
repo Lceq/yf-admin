@@ -102,9 +102,14 @@
                 </Row>
             </div>
         </Form>
-        <RadioGroup v-model="tabProcessId" type="button" @on-change="onSelectProcessEvent">
-            <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
-        </RadioGroup>
+        <div class="flex-between">
+            <div class="process-path-bar">
+                <RadioGroup v-model="tabProcessId" type="button" @on-change="onSelectProcessEvent">
+                    <Radio v-for="(item, index) in processPathList" :key="index" :label="item.id">{{item.processName}}</Radio>
+                </RadioGroup>
+            </div>
+            <Button type="primary" @click="onUpdateEvent" :loading="updateLoading">数据更新</Button>
+        </div>
         <div class="view-bar margin-top-10">
             <article class="product-module-bar">
                 <div>
@@ -281,7 +286,7 @@
                 :select-batch-page-total="selectBatchPageTotal"
                 :select-batch-modal-state="selectBatchModalState"
                 :select-batch-modal-table-data="selectBatchModalTableData"
-                @on-visible-change="selectBatchModalStateChangeEvent"
+                @on-visible-change="onSelectBatchModalStateChangeEvent"
                 @on-change-page="onSelectBatchModalPageCodeEvent"
                 @select-batch-modal-search-event="onSelectBatchModalSearchBtnEvent"
                 @select-batch-modal-confirm-event="selectBatchModalConfirmEvent"
@@ -295,17 +300,18 @@
     </card>
 </template>
 <script>
-    import addBatchCodeModal from '../manufacture/components/add-batch-modal';
+    import addBatchCodeModal from './components/add-batch-modal';
     import selectSpecSheetModal from '../../components/select-bill-modal';
-    import seeSpecSheet from '../manufacture/components/see-spec-sheet';
+    import seeSpecSheet from './components/see-spec-sheet';
     import contentLoading from '../../components/modal-content-loading';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
+    import selectBatchModal from './components/select-batch-modal';
     import { formatDay, noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul } from '../../../libs/common';
     export default {
         name: 'add-bom',
         components: { contentLoading, seeSpecSheet, selectSpecSheetModal, selectBatchModal, addBatchCodeModal },
         data () {
             return {
+                updateLoading: false,
                 addBatchModalState: false,
                 addBatchModalProductCodeItem: {},
                 selectBatchModalState: false,
@@ -382,10 +388,30 @@
                 productModuleIndex: 0,
                 selectBatchModalPageSize: setPage.pageSize,
                 bomMaterialTableRowProduct: '',
-                bomMaterialTableRowIndex: null
+                bomMaterialTableRowIndex: null,
+                toCreated: false,
             };
         },
         methods: {
+            onUpdateEvent () {
+                this.$refs['formDynamic'].validate((valid) => {
+                    if (valid) {
+                        this.updateLoading = true;
+                        this.saveRequest().then(res => {
+                            if (res.data.status === 200) {
+                                noticeTips(this, 'saveTips');
+                                this.activeTabPane = '0';
+                                this.updateLoading = false;
+                                this.getBomProcessDetailData();
+                            } else {
+                                this.updateLoading = false;
+                            }
+                        });
+                    } else {
+                        noticeTips(this, 'unCompleteTips');
+                    }
+                });
+            },
             onCancelClickEvent () {
                 this.globalLoadingShow = true;
                 this.$api.manufacture.cancelHttp([this.formValidate.id]).then(res => {
@@ -440,7 +466,7 @@
                         this.submitButtonLoading = false;
                         noticeTips(this, 'submitTips');
                         this.$router.push({
-                            path: 'bomDetail',
+                            path: 'detail-bom',
                             query: {
                                 id: this.formValidate.id,
                                 activated: true
@@ -519,7 +545,7 @@
                     }
                 });
             },
-            selectBatchModalStateChangeEvent (e) {
+            onSelectBatchModalStateChangeEvent (e) {
                 this.selectBatchModalState = e;
             },
             // 获取下拉选择的批号
@@ -557,13 +583,9 @@
                 });
             },
             onSelectProcessEvent (e) {
-                this.saveRequest().then(res => {
-                    if (res.data.status === 200) {
-                        noticeTips(this, 'saveTips');
-                        this.activeTabPane = '0';
-                        this.getBomProcessDetailData();
-                    }
-                });
+                this.showTabLoading = true;
+                this.activeTabPane = '0';
+                this.getBomProcessDetailData();
             },
             // 投料
             mPutinQtyChangeEvent (event) {
@@ -760,7 +782,6 @@
                         }
                         this.formDynamic = res.data.res;
                         this.formDynamic.prdBomProductList = this.calculationTotalPutinQty(responseData);
-                        // this.formDynamic.prdBomProductList = responseData;
                         this.showTabLoading = false;
                         this.globalLoadingShow = false;
                     }
@@ -784,30 +805,23 @@
             }
         },
         created () {
+            this.toCreated = true;
             this.editId = this.$route.query.id;
             this.getDependentDataRequest();
         },
-        mounted () {
+        activated () {
             this.editId = this.$route.query.id;
+            if (!this.toCreated && this.$route.query.activated === true) {
+                this.globalLoadingShow = true;
+                setTimeout(() => {
+                    this.getDependentDataRequest();
+                }, 0);
+            }
+            this.toCreated = false;
+            this.$route.query.activated = false;
         }
     };
 </script>
 <style lang="less">
-    .view-bar {
-        background: #f3f3f3;
-        border-radius: 8px;
-    }
-    .total-MixtureRatio-width{
-        width: 100px;
-        border-right: none;
-    }
-    .search-batch-code-button{
-        margin-left:-2px;
-        z-index: 2;
-    }
-    .product-module-bar {
-        overflow: hidden;
-        position: relative;
-        padding: 10px 10px;
-    }
+    @import "bom.less";
 </style>

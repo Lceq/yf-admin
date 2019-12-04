@@ -1,11 +1,11 @@
-import {post} from '../../ajax/http';
+import {post, proxy} from '../../ajax/http';
 
 export default {
     getQmInspectionList (params) {
         return post('qm/inspection/list', params);
     },
     getQmInspectionSave (params) {
-        return post('qm/inspection/save', params);
+        return proxy.call('qm.inspection.save', params);
     },
     getQmInspectionDetail (params) {
         return post('qm/inspection/detail', params);

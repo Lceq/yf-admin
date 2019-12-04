@@ -152,7 +152,7 @@
 <script>
     import operationLog from '../../components/operation-log';
     import { noticeTips, formatDate, toDay, setPage, translateState, translateIsQuote, getOperationData } from '../../../libs/common';
-    import seeSpecSheet from '../manufacture/components/see-spec-sheet';
+    import seeSpecSheet from '../bom/components/see-spec-sheet';
     export default {
         name: 'detail-manufacture',
         components: { seeSpecSheet, operationLog },

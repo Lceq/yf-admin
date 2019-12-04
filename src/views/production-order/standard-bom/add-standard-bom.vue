@@ -275,14 +275,14 @@
 </template>
 <script>
     import bomTable from './bom-table';
-    import seeSpecSheet from '../manufacture/components/see-spec-sheet';
+    import seeSpecSheet from '../bom/components/see-spec-sheet';
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import selectMaterialModal from '../order/select-material';
     import selectProductModal from '../order/select-material';
     import { noticeTips, formatDate, toDay, setPage, compClientHeight, emptyTips, addNum } from '../../../libs/common';
     import tipsClear from '../../public/deleteWarning';
     import tipsModal from '../../components/tips-modal';
-    import addBatchCodeModal from '../manufacture/components/add-batch-modal';
+    import addBatchCodeModal from '../bom/components/add-batch-modal';
     export default {
         name: 'add-manufacture',
         components: { selectProductModal, bomTable, seeSpecSheet, selectMaterialModal, selectSpecSheetModal, tipsClear, tipsModal },
@@ -1288,5 +1288,5 @@
     };
 </script>
 <style lang="less">
-    @import "../manufacture/manufacture.less";
+    @import "../bom/bom.less";
 </style>

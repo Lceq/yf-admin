@@ -250,12 +250,12 @@
 </template>
 <script>
     import bomTable from './bom-table';
-    import seeSpecSheet from '../manufacture/components/see-spec-sheet';
+    import seeSpecSheet from '../bom/components/see-spec-sheet';
     import selectSpecSheetModal from '../../components/select-bill-modal';
     import selectMaterialModal from '../order/select-material';
     import { noticeTips, formatDate, toDay, setPage, translateState, compClientHeight, emptyTips, translateIsQuote, addNum } from '../../../libs/common';
-    import addBatchCodeModal from '../manufacture/components/add-batch-modal';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
+    import addBatchCodeModal from '../bom/components/add-batch-modal';
+    import selectBatchModal from '../bom/components/select-batch-modal';
     export default {
         name: 'edit-manufacture',
         components: { bomTable, seeSpecSheet, selectMaterialModal, selectSpecSheetModal },
@@ -1048,5 +1048,5 @@
     };
 </script>
 <style lang="less">
-   @import "../manufacture/manufacture.less";
+   @import "../bom/bom.less";
 </style>

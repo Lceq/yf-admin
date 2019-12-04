@@ -142,7 +142,9 @@
                                     <div class="modal-readonly">{{ this.formValidate.unitName ? `${this.formValidate.unitName}(${this.formValidate.unitCode})` : '' }}</div>
                                 </FormItem>
                             </Col>
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                        </Row>
+                        <Row>
+                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6" >
                                 <FormItem label="订单数量:" prop="productionQty" class="formItemMargin">
                                     <InputNumber :min="0" :step="1" :precision='0' v-model="formValidate.productionQty" @on-blur="getProductionNumEvent" class="widthPercentage"></InputNumber>
                                 </FormItem>
@@ -157,7 +159,7 @@
                                     ></InputNumber>
                                 </FormItem>
                             </Col>-->
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6" >
                                 <FormItem label=" 计划员:" class="formItemMargin">
                                     <Select
                                             v-model="formValidate.plannerId"
@@ -342,8 +344,8 @@
     import tipsClear from '../../components/tips-modal';
     import selectMaterialModal from '../order/select-material';
     import createTipsModal from '../../components/tips-modal';
-    import addBatchModal from '../manufacture/components/add-batch-modal';
-    import selectBatchModal from '../manufacture/components/select-batch-modal';
+    import addBatchModal from '../bom/components/add-batch-modal';
+    import selectBatchModal from '../bom/components/select-batch-modal';
     import mathJs from 'mathjs';
     let _this = this;
 

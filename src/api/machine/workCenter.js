@@ -1,4 +1,4 @@
-import {post} from '../../ajax/http';
+import { post, proxy } from '../../ajax/http';
 export default {
     // 工作中心列表
     getWorkCenterList (params) {
@@ -35,5 +35,8 @@ export default {
     // 获取所有已经分配的机台
     getWorkCenterMachineList (params) {
         return post('work/center/machine/list', params);
+    },
+    workCenterListRequest (params) {
+        return proxy.call('work.center.list', params);
     }
 };

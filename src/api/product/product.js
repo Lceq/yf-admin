@@ -44,5 +44,5 @@ export default {
     // 获取有工序的产品
     productList2 (params) {
         return proxy.call('product.list2', params);
-    },
+    }
 };

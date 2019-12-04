@@ -23,5 +23,9 @@ export default {
     // 登录人默认工序及工序列表
     userDefaultProcessRequest () {
         return proxy.call('user.defaultProcess');
+    },
+    // 判断是否自动生成, 如: 是否自动生成物料编号
+    paraListRequest (params) {
+        return proxy.call('para.list', params);
     }
 };

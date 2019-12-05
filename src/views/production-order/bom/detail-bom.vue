@@ -173,7 +173,7 @@
                                     <Row>
                                         <Col class="margin-bottom-15"><Icon type="ios-cube" /><span class="margin-left-10">投入物料</span></Col>
                                         <Col>
-                                            <Table size="small" border :columns="materialTableHeader" :data="productItem.bomMaterielList"></Table>
+                                            <Table size="small" border :columns="materialTableHeader" :data="productItem.prdBomMaterielList"></Table>
                                         </Col>
                                     </Row>
                                 </Col>

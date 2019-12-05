@@ -1,5 +1,6 @@
+
 import layout from '../../layout';
-import { curDate, page } from '../../../libs/tools';
+import { page } from '../../../libs/tools';
 import modal from '../../public/modal';
 import xwValidate from '@/libs/xwValidate';
 // import api from "../../../ajax/api";
@@ -27,58 +28,59 @@ export default ({
             prdNoticeId: null,
             modificationOne: {},
             // 这
-            allSelest: false,
+            allSelest: true,
+            //zhe
             processModificationColumns: [
+
                 {
-                    type: 'selection',
+                    title: '选择',
+                    sortable: true,
                     width: 60,
-                    fixed: 'left',
                     align: 'center',
-                    // 有问题
+                    key: 'selection',
                     render: (h, params) => {
-                        return h('div', [
-                            h('checkbox', {
-                                on: {
-                                    change: () => {
-                                        console.log(111);
-                                    },
-                                    click: () => {
-                                        console.log(111);
-                                    }
-                                }
-                            }, params.row.name)
-                        ]);
-                    }
-                },
-                {
-                    title: '生产',
-                    width: 60,
-                    align: 'left',
-                    key: 'checkbox',
-                    render: (h, params) => {
-                        return h('div', [h('button', {
+                        const _this = this;
+                        return h('Checkbox', {
                             props: {
-                                type: 'primary',
-                                size: 'small'
-                            },
-                            style: {
-                                marginRight: '5px'
+                                value: params.row.select
                             },
                             on: {
-                                click: () => {
-                                    console.log(params, 'params');
-                                    console.log(11);
-                                },
-                                change: () => {
-                                    console.log(params, 'params');
-                                    console.log(5551);
+                                'on-change': (val) => {
+                                    this.prdNoticeId = params.row.prdNoticeId;
+                                    this.prdNoticeIdList=this.prdNoticeIdList.concat(params.row.id)
+
+                                    _this.processModificationData[params.index].select = val;
+                                    if (_this.processModificationData.length === 1) {
+                                        this.allSelest = false
+                                    }
+
+
+                                    _this.processModificationData.filter(x => x.select === true).map(y => {
+
+                                        let obj = _this.processModificationData.find(x => x.select === true);
+
+                                        if (obj) {
+                                            if (y.prdOrderCodes !== obj.prdOrderCodes) {
+                                                this.$Modal.warning({
+                                                    title: '提示',
+                                                    content: '<p>物料的品种或者批号不一致</p>'
+                                                });
+                                                setTimeout(() => {
+                                                    _this.processModificationData[params.index].select = false;
+                                                }, 100);
+                                            } else {
+                                                // t
+                                                this.allSelest = false
+                                            }
+                                        }
+                                    });
+
                                 }
                             }
-                        }, 'aaaaaaaaaa')]);
+                        });
                     }
                 },
                 {
-
                     title: '操作',
                     sortable: true,
                     minWidth: 120,
@@ -87,8 +89,7 @@ export default ({
                     key: 'belongDate',
                     render: (h, params) => {
                         const vm = this;
-                        return h('Div', {
-                        }, [
+                        return h('Div', {}, [
                             h('Button', {
                                 props: {
                                     size: 'small'
@@ -128,6 +129,25 @@ export default ({
                         ]);
                     }
                 },
+                // {
+                //     type: 'selection',
+                //     width: 60,
+                //     fixed: 'left',
+                //     align: 'center',
+                //     // render: (h, params) => {
+                //     //     const _this = this;
+                //     //     return h('Checkbox', {
+                //     //         props: {
+                //     //             value: params.row.select
+                //     //         },
+                //     //         on: {
+                //     //             'on-change': () => {
+                //     //                 console.log(11)
+                //     //             }
+                //     //         }
+                //     //     });
+                //     // }
+                // },
                 {
                     title: '机台',
                     minWidth: 80,
@@ -178,8 +198,7 @@ export default ({
                                 }
                             }, [
                                 params.row.prdOrderCodes.split(',').map(item => {
-                                    return h('p', {
-                                    }, item);
+                                    return h('p', {}, item);
                                 })
                             ])
                         ]);
@@ -311,8 +330,7 @@ export default ({
                                 }
                             }, [
                                 params.row.prdBomCodes.split(',').map(item => {
-                                    return h('p', {
-                                    }, item);
+                                    return h('p', {}, item);
                                 })
                             ])
                         ]);
@@ -419,6 +437,7 @@ export default ({
                             return h('Select', {
                                 props: {
                                     value: params.row.actualVal
+
                                 },
                                 style: {
                                     textAlign: 'left'
@@ -436,8 +455,7 @@ export default ({
                                 params.row.paramValueList.map(item => {
                                     return h('Option', {
                                         props: { value: item.value, key: item.value },
-                                        style: {
-                                        }
+                                        style: {}
                                     }, item.value);
                                 })
                             ]);
@@ -526,26 +544,107 @@ export default ({
             processModificationFormRule: {
                 // tubeTypeId: {required: true, validator: xwValidate.select, trigger: 'change'},
                 // tubeColorIds: {required: true, validator: xwValidate.selectedMultiple, trigger: 'change'}
-            }
+            },
+            //    翻转f
+            prdNoticeId: '',
+            paramType: 1,
+            isFlipProcess: false,
+            isFlipProcessTitle: '翻转工艺',
+            isFlipProcessTitleData: [],
+            isflipProcesSelsct: false,
+            prdNoticeIdList: [],
+            flipProcessTitleForm: {
+                productName: '',
+                oldProductName: '',
+                machineModelName: '',
+                gramWeight: '',
+                meters: '',
+                hourYield: '',
+                moistureRegain: '',
+                efficiencyPercent: '',
+                tubeTypeId: null,
+                tubeColorIds: []
+            },
         };
     },
     methods: {
-        // 翻转
-        handleSelectAll (status) {
-            this.$refs.selection.selectAll(status);
-            console.log(this.$refs, 'this.$refs');
+        onSelectionEvent (e) {
+            // console.log('参数', e)
+            let prdOrderCodesList = e.map((item) => item.prdOrderCodes)
+            for (var i = 0; i < prdOrderCodesList.length - 1; i++) {
+                if (prdOrderCodesList[i] === prdOrderCodesList[i + 1]) {
 
+                    this.allSelest = false
+                } else {
+                    this.$Modal.warning({
+                        title: '提示',
+                        content: '<p>生产工序或者订单号不一致</p>'
+                    });
 
+                }
+            }
+        },
+        onSeverseTec () {
+            this.isFlipProcess = true
+            let params = {
+                prdNoticeId: this.prdNoticeId,
+                paramType: this.paramType
+            }
+            this.$api.manufacture.rdNoticeMachineSpecObtainByPrdNoticeId(params).then(res => {
+                if (res.data.status === 200) {
+                    this.flipProcessTitleForm = res.data.res
+                    this.isFlipProcessTitleData = res.data.res.prdNoticeMachineSpecParamList
+                }
+            });
+
+        },
+        flipProcessTitleCancel () {
+            this.isFlipProcess = false
+        },
+        flipProcessTitleSubmit () {
+            this.isFlipProcess = false
+            let params = {
+                id: this.flipProcessTitleForm.id ? this.flipProcessTitleForm.id : null,
+                paramType: this.paramType,
+                prdNoticeMachineIds: this.prdNoticeIdList,
+                prdNoticeId: this.prdNoticeId,
+                machineModelId: this.flipProcessTitleForm.machineModelId,
+                machineModelName: this.flipProcessTitleForm.machineModelName,
+                gramWeight: this.flipProcessTitleForm.gramWeight,
+                meters: this.flipProcessTitleForm.meters,
+                hourYield: this.flipProcessTitleForm.hourYield,
+                moistureRegain: this.flipProcessTitleForm.moistureRegain,
+                efficiencyPercent: this.flipProcessTitleForm.efficiencyPercent,
+                prdNoticeMachineSpecParamList: this.isFlipProcessTitleData.map(item => {
+                    return {
+                        id: this.flipProcessTitleForm.id ? item.id : null,
+                        specParamId: item.specParamId,
+                        specParamName: item.specParamName,
+                        specParamCode: item.specParamCode,
+                        oldVal: item.oldVal,
+                        val: item.val,
+                        actualVal: item.dataType === 1 ? Number(item.actualVal).toFixed(3) : item.actualVal,
+                        // val: item.dataType === 1 ? Number(item.val).toFixed(3) : item.val,
+                        paramType: item.paramType,
+                        dataType: item.dataType,
+                        isBusi: item.isBusi
+                    };
+                })
+            }
+
+            this.$api.manufacture.prdNoticeMachineSpecSaveAll(params).then(res => {
+                if (res.data.status === 200) {
+                    this.$Message.success('翻转工艺设定成功');
+                }
+            });
         },
         getFormulaData () {
             let obj = {};
             this.isProcessModificationData.filter(x => x.dataType === 1).map(item => {
                 obj[item.specParamCode] = parseFloat(item.actualVal);
             });
-            // console.log(obj);
             this.isProcessModificationData.filter(x => x.isFormula === true).map(item => {
                 if (item.formula) {
-                    // console.log(obj);
                     let value = (eval(item.formula.trim().replace(/\[/g, '(obj.').replace(/\]/g, ')')) || (eval(item.formula.trim().replace(/\[/g, '(obj.').replace(/\]/g, ')')) !== 'Infinity')) ? (eval(item.formula.trim().replace(/\[/g, '(obj.').replace(/\]/g, ')'))) : 0;
                     item.actualVal = value ? value.toFixed(3) : null;
                 }
@@ -662,6 +761,7 @@ export default ({
             this.prdNoticeCode = '';
             this.productNameCode = '';
             this.curCompletionState = val.id;
+            this.paramType = val.id + 1
             if (val.id === 0) {
                 this.replacementState = 'false';
                 this.settingState = '';
@@ -669,6 +769,7 @@ export default ({
             if (val.id === 1) {
                 this.replacementState = '';
                 this.settingState = 'false';
+                this.isflipProcesSelsct = !this.isflipProcesSelsct
             }
             this.getNum();
         },
@@ -696,12 +797,17 @@ export default ({
                 if (content.status === 200) {
                     this.pageTotal = content.count;
                     this.processModificationData = content.res;
+
                 }
             });
         },
         getPrdBomProductDetail () {
             const _this = this;
-            this.$call('prd.notice.machine.spec.obtain', { prdNoticeMachineId: this.prdNoticeMachineId, paramType: this.isChangeSpecSet ? 1 : 2 }).then(res => {
+            this.$call('prd.notice.machine.spec.obtain', {
+                prdNoticeMachineId: this.prdNoticeMachineId,
+                paramType: this.isChangeSpecSet ? 1 : 2
+
+            }).then(res => {
                 let content = res.data;
                 if (content.status === 200) {
                     _this.processModificationForm = content.res;
@@ -710,7 +816,6 @@ export default ({
                     _this.isProcessModificationData = content.res.prdNoticeMachineSpecParamList.map(x => {
                         return x;
                     });
-                    // console.log(content.res.tubeColorIds);
                     _this.getTubeColorList();
                     _this.isProcessModification = true;
                 }
@@ -771,6 +876,7 @@ export default ({
                         };
                     })
                 };
+
                 this.$call('prd.notice.machine.spec.save', param).then(res => {
                     let content = res.data;
                     if (content.status === 200) {

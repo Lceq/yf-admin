@@ -622,7 +622,7 @@
                 return this.$api.specSheet.listHttp({
                     auditState: 3,
                     productId: productId,
-                    processId: processId,
+                    // processId: processId,
                     pageIndex:pageIndex,
                     code: code,
                     enableState: 1,
@@ -737,7 +737,7 @@
                 return this.$api.specSheet.listHttp({
                     auditState: 3,
                     productId: productId,
-                    processId: this.activeProcessId,
+                    // processId: this.activeProcessId,
                     enableState: 1,
                     productIds: this.formValidate.productIds
                 });

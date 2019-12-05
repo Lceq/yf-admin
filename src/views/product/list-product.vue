@@ -90,8 +90,8 @@
                 </Row>
                 <Row>
                     <Col span="12">
-                        <FormItem label="物料编码：" class="formItemMargin">
-                            <Input type="text" v-model="formValidate.code" disabled placeholder="自动生成物料编码" class="inputLength"/>
+                        <FormItem label="物料编码：" class="formItemMargin" prop="code">
+                            <Input type="text" v-model="formValidate.code" :disabled="isAutoCreatedProductCode === 'True' || editId" :placeholder="isAutoCreatedProductCode ? '自动生成物料编码' : '请输入物料编号!'" class="inputLength"/>
                         </FormItem>
                     </Col>
                     <Col span="12">
@@ -389,6 +389,14 @@
             const validateYarnCountMin = (rule, value, callback) => { this.formValidate.yarnCountMin || this.formValidate.yarnCountMin === 0 ? callback() : callback(new Error()); };
             const validateYarnCount = (rule, value, callback) => { this.formValidate.yarnCount ? callback() : callback(new Error()); };
             const validateTwist = (rule, value, callback) => { this.formValidate.twist ? callback() : callback(new Error()); };
+            const validateCode = (rule, value, callback) => {
+                // 编号自动生成或编辑页时,表单验证通过
+                if (this.isAutoCreatedProductCode === 'True' || this.editId) {
+                    callback();
+                } else {
+                    this.formValidate.code ? callback() : callback(new Error());
+                }
+            };
             return {
                 showBarCode: false,
                 showColor: false,
@@ -440,6 +448,7 @@
                     meters: 0
                 },
                 ruleValidate: {
+                    code: [{ required: true, validator: validateCode, trigger: 'change' }],
                     yarnCount: [{ required: true, validator: validateYarnCount, trigger: 'change' }],
                     yarnCountMin: [{ required: true, validator: validateYarnCountMin, trigger: 'change' }],
                     yarnCountMax: [{ required: true, validator: validateYarnCountMax, trigger: 'change' }],
@@ -637,19 +646,20 @@
                 pageIndex: 1,
                 loadingStatus: false,
                 deleteId: '',
-                attrContain: []
+                attrContain: [],
+                isAutoCreatedProductCode: false
             };
         },
         methods: {
             getYarnMaxEvent (e) {
                 if (this.formValidate.yarnCountMin > this.formValidate.yarnCountMax) {
                     emptyTips(this, '支数上限不能小于支数下限!');
-                };
+                }
             },
             getYarnMinEvent (e) {
                 if (this.formValidate.yarnCountMin > this.formValidate.yarnCountMax) {
                     emptyTips(this, '支数下限不能大于支数上限!');
-                };
+                }
             },
             // 获取色号
             getColorEvent (e) {
@@ -659,9 +669,9 @@
                             this.formValidate.colorId = item.id;
                             this.formValidate.colorName = item.name;
                             this.formValidate.colorCode = item.code;
-                        };
+                        }
                     });
-                };
+                }
             },
             // 获取计量单位
             getUnitEvent (e) {
@@ -671,9 +681,9 @@
                             this.formValidate.unitId = item.id;
                             this.formValidate.unitCode = item.code;
                             this.formValidate.unitName = item.name;
-                        };
+                        }
                     });
-                };
+                }
             },
             // 获取加工工序事件
             getWorkProcessEvent (e) {
@@ -685,9 +695,9 @@
                             this.formValidate.processName = item.name;
                             this.showTabsIpt(this.formValidate.typeName);
                             this.formValidate.technologyId = null;
-                        };
+                        }
                     });
-                };
+                }
             },
             handleView (name) {
                 this.visible = true;
@@ -709,7 +719,7 @@
                     this.$set(this.formValidate, 'meters', 0);
                     this.$set(this.formValidate, 'twist', 0);
                     this.byWorkProcessShowBasic('');
-                };
+                }
             },
             getModelListHttp (id) {
                 this.$api.model.listHttp({processId: id}).then(res => {
@@ -736,7 +746,7 @@
                     this.$set(this.$refs.upload.fileList[0], 'status', 'finished');
                     this.$set(this.uploadList[0], 'url', res.res.absUrl);
                     this.$set(this.uploadList[0], 'status', 'finished');
-                };
+                }
             },
             // 获取新增栏内选中的适用设备机型
             getEquipmentModel (e) {
@@ -767,7 +777,7 @@
                         this.loadingStatus = false;
                         this.tableData = translateState(res.data.res);
                         this.pageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             // 获取选中的审核状态
@@ -783,7 +793,7 @@
                             this.auditHttp(ids);
                         } else {
                             emptyTips(this, '只有状态为"待审核"的才可以审核!');
-                        };
+                        }
                     } else if (e === '反审核') {
                         this.checkTableObj.forEach((item) => {
                             parseFloat(item.auditState) === 3 ? ids.push(item.id) : switchState = false;
@@ -792,11 +802,11 @@
                             this.unAuditHttp(ids);
                         } else {
                             emptyTips(this, '只有状态为"审核"的才可以反审核!');
-                        };
-                    };
+                        }
+                    }
                 } else if (this.checkTableObj.length === 0) {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             unAuditHttp (ids) {
                 this.$api.product.productUnapproveHttp(ids).then(res => {
@@ -813,7 +823,7 @@
                         noticeTips(this, 'auditTips');
                         this.getListHttp();
                         this.checkTableObj = [];
-                    };
+                    }
                 });
             },
             // 获取操作栏选中的禁用状态
@@ -829,7 +839,7 @@
                             this.disableHttp(ids);
                         } else {
                             emptyTips(this, '已"审核"的情况下才可以禁用!');
-                        };
+                        }
                     } else if (e === '取消禁用') {
                         this.checkTableObj.forEach((items) => {
                             parseFloat(items.enableState) === 0 ? ids.push(items.id) : switchState = false;
@@ -838,11 +848,11 @@
                             this.enableHttp(ids);
                         } else {
                             emptyTips(this, '已"禁用"的情况下才可以取消禁用!');
-                        };
-                    };
+                        }
+                    }
                 } else if (this.checkTableObj.length === 0) {
                     noticeTips(this, 'unCheckTips');
-                };
+                }
             },
             enableHttp (ids) {
                 this.$api.product.productEnableHttp(ids).then(res => {
@@ -850,7 +860,7 @@
                         noticeTips(this, 'enableTips');
                         this.getListHttp();
                         this.checkTableObj = [];
-                    };
+                    }
                 });
             },
             disableHttp (ids) {
@@ -859,7 +869,7 @@
                         noticeTips(this, 'disableTips');
                         this.getListHttp();
                         this.checkTableObj = [];
-                    };
+                    }
                 });
             },
             // 删除modal的确认事件
@@ -878,7 +888,7 @@
                         this.$Loading.finish();
                     } else {
                         this.deleteButtonLoading = false;
-                    };
+                    }
                 });
             },
             deleteTipsModalCancel () {
@@ -896,7 +906,7 @@
                         items.values.forEach((vls) => {
                             if (vls.name === name) this.selectValues.push(vls);
                         });
-                    };
+                    }
                 });
             },
             // 初始化基本信息的数据
@@ -954,7 +964,7 @@
                 if (this.formValidate.typeName === '成品') {
                     this.formValidate.isCovering = 'false';
                     this.formValidate.isSlub = 'false';
-                };
+                }
                 // 成品时，原料成分默认第一个
                 if (selectedData[selectedData.length - 1].typeName === '成品') {
                     this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
@@ -972,7 +982,7 @@
                     this.pageSize = e;
                     this.pageIndex = 1;
                     this.getListHttp();
-                };
+                }
             },
             // 获取点击的页
             getPageEvent (e) {
@@ -1022,8 +1032,8 @@
                     // 根据物料类别展示基本信息
                     if (this.treeObj && this.treeObj.length !== 0) {
                         this.showTabsIpt(this.treeObj[0].typeName);
-                    };
-                };
+                    }
+                }
             },
             getSupplierHttp () {
                 this.$call('product/supplier/list', { 'auditState': 3 }).then(res => {
@@ -1042,11 +1052,11 @@
                                 });
                             } else {
                                 items.values = [];
-                            };
+                            }
                         });
                         this.attrTableData = res.data.res;
                         this.attrContain = res.data.res;
-                    };
+                    }
                 });
             },
             // 新增的点击事件
@@ -1061,11 +1071,11 @@
                         parseInt(this.treeObj[0].parentId) !== 0 ? this.formValidate.materialType = this.getFatherPath(this.treeObj[0].path, this.treeObj[0].id) : this.formValidate.materialType = [];
                     } else {
                         this.formValidate.materialType = [];
-                    };
+                    }
                     this.formValidate.typeName = this.treeObj[0].typeName;
                     // 获取辅助属性的请求
                     this.getAddAttrTable(this.treeObj[0].id);
-                };
+                }
             },
             // 获取原料成分
             getMaterialCompositionHttp () {
@@ -1099,7 +1109,7 @@
                 if (this.formValidate.typeName === '成品') {
                     this.formValidate.yarnCountMin = this.formValidate.yarnCount;
                     this.formValidate.yarnCountMax = this.formValidate.yarnCount;
-                };
+                }
                 this.formValidate.name = clearSpace(this.formValidate.name.toUpperCase());
                 this.formValidate.models = clearSpace(this.formValidate.models.toUpperCase());
                 let param = {...this.formValidate};
@@ -1120,7 +1130,7 @@
                         this.$Loading.finish();
                     } else {
                         this.buttonLoading = false;
-                    };
+                    }
                 });
             },
             // 保存modal的确认按钮
@@ -1134,7 +1144,7 @@
                                 if (items.id === values.productPropertyItemId) {
                                     items.subValues = [];
                                     items.subValues.push(values);
-                                };
+                                }
                             });
                         });
                         // 获取将表格的数据转成对应的数组
@@ -1154,7 +1164,7 @@
                         this.saveRequest(properties);
                     } else {
                         noticeTips(this, 'unCompleteTips');
-                    };
+                    }
                 });
             },
             // 保存modal的取消按钮
@@ -1172,7 +1182,7 @@
                 this.pageIndex = 1;
                 if (this.treeObj && this.treeObj.length !== 0) {
                     this.getListHttp();
-                };
+                }
             },
             // 编辑的事件
             editMaterialEvent (id, index, row) {
@@ -1207,7 +1217,7 @@
                             responseData.productAddition.isSlub = responseData.productAddition.isSlub + '';
                             this.formValidate = {...this.formValidate, ...responseData.productAddition};
                             if (responseData.productAddition.basicTabProcessIpt) this.getModelListHttp(responseData.productAddition.basicTabProcessIpt);
-                        };
+                        }
                         this.formValidate.materialType = this.getFatherPath(responseData.path, responseData.categoryId);
                         this.uploadUrl = responseData.picUrl;
                         this.$set(this.$refs.upload.fileList[0], 'url', responseData.picUrl);
@@ -1233,7 +1243,7 @@
                         let categoryId = responseData.categoryId;
                         // 根据物料类别的id获取对应的物料属性
                         this.getMaterialCategoryToAttr(categoryId, attrProperties);
-                    };
+                    }
                 });
             },
             getMaterialCategoryToAttr (categoryId, attrProperties) {
@@ -1247,7 +1257,7 @@
                                 });
                             } else {
                                 items.values = [];
-                            };
+                            }
                         });
                         this.attrContain = res.data.res;
                         attrProperties.forEach((attrPro, index) => { // 匹配,添加label、values属性
@@ -1260,7 +1270,7 @@
                         });
                         this.attrTableData = this.attrContain;
                         this.spinShow = false;
-                    };
+                    }
                 });
             },
             // 获取上级的id
@@ -1270,7 +1280,7 @@
                 splitFatherPath.forEach((item) => {
                     if (item !== '') {
                         fatherPath.push(Number(item));
-                    };
+                    }
                 });
                 fatherPath.push(id);
                 return fatherPath;
@@ -1298,16 +1308,16 @@
                         // 半成品时，原料成分默认第一个, 配比默认100
                         this.formValidate.materialRatio = 100;
                         this.formValidate.componentId = this.basicTabMaterialList.length !== 0 ? this.basicTabMaterialList[0].id : null;
-                    };
+                    }
                     this.showTabsIpt(e[0].typeName);
                     !e[0].children ? this.formValidate.materialType = this.getFatherPath(this.treeObj[0].path, this.treeObj[0].id) : this.formValidate.materialType = [];
                     this.pageIndex = 1;
                     this.pageTotal = 1;
                     this.getListHttp();
-                };
+                }
             },
             getMaterialCategoryHttp () {
-                this.$api.category.getProductCategoryList({auditState: 3}).then((res) => {
+                return this.$api.category.getProductCategoryList({auditState: 3}).then((res) => {
                     if (res.data.status === 200) {
                         this.globalLoadingShow = false;
                         let treeAllData = this.toTree(res.data.res);
@@ -1323,29 +1333,29 @@
             },
             // 获取计量单位
             getUnitListHttp () {
-                this.$api.unit.getUnitList({auditState: 3}).then((res) => {
+                return this.$api.unit.getUnitList({auditState: 3}).then((res) => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((items) => {
                             items.value = items.id;
                             items.label = items.name + '(' + items.code + ')';
                         });
                         this.materialUnitList = res.data.res;
-                    };
+                    }
                 });
             },
             // 获取数据状态
             getAuditStateListHttp () {
-                this.$api.state.enumAuditState2List().then(res => {
+                return this.$api.state.enumAuditState2List().then(res => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((items) => {
                             this.dataSateList.push(items);
                         });
-                    };
+                    }
                 });
             },
             // 获取禁用状态
             getDisableHttpList () {
-                this.$api.state.enumEnableStateList().then(res => {
+                return this.$api.state.enumEnableStateList().then(res => {
                     if (res.data.status === 200) this.disableStateList = res.data.res;
                 });
             },
@@ -1355,30 +1365,40 @@
             },
             // 获取颜色列表数据
             getColorListHttp () {
-                this.$api.color.getColorList({auditState: 3}).then(res => {
+                return this.$api.color.getColorList({auditState: 3}).then(res => {
                     if (res.data.status === 200) {
                         res.data.res.forEach((item) => {
                             this.$set(item, 'label', `${item.code}(${item.name})`);
                         });
                         this.colorList = res.data.res;
-                    };
+                    }
                 });
+            },
+            // 判断是否自动生成物料批号
+            getParamListHttp () {
+                return this.$api.common.paraListRequest({paraKey: 'is_auto_createProductCode'}).then(res => {
+                    if (res.data.status === 200) this.isAutoCreatedProductCode = res.data.res[0].paraValue;
+                });
+            },
+            async getDependentDataRequest () {
+                await this.getParamListHttp();
+                await this.getColorListHttp();
+                await this.getProcessListHttp().then(res => {
+                    this.allProcessList = res;
+                    this.workingProcessList = res;
+                    this.applyProcessList = res;
+                });
+                await this.getUnitListHttp();
+                await this.getAuditStateListHttp();
+                await this.getDisableHttpList();
+                await this.getMaterialCategoryHttp();
             }
         },
         created () {
-            this.getColorListHttp();
-            this.getProcessListHttp().then(res => {
-                this.allProcessList = res;
-                this.workingProcessList = res;
-                this.applyProcessList = res;
-            });
-            this.getUnitListHttp();
-            this.getAuditStateListHttp();
-            this.getDisableHttpList();
-            this.getMaterialCategoryHttp();
+            this.globalLoadingShow = true;
+            this.getDependentDataRequest();
         },
         mounted () {
-            this.globalLoadingShow = true;
             let tableDom = document.getElementsByClassName('tableOffsetTop')[0];
             let pageHeightDom = document.getElementsByClassName('pageHeight')[0];
             this.pageHeights = pageHeightDom.offsetHeight + 10;

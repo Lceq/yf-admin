@@ -80,7 +80,7 @@
                             return h('Button', {
                                 props: {
                                     size: 'small',
-                                    disabled: params.row.isSync === 2
+                                    disabled: params.row.isClosed
                                 },
                                 on: {
                                     'click': () => {

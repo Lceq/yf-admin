@@ -15,7 +15,6 @@
     </div>
   </div>
 </template>
-
 <script>
 import xwTable from './xw-table';
 export default {
@@ -101,13 +100,13 @@ export default {
       this.$call('large.screen.machineFinishDetail', params).then(res => {
         let content = res.data;
         if (content.status === 200) {
-          // this.list = content.res.map(x => {
-          //     let date = x.planDateTo.split(' ')[0].split('-')[1] + '-' + x.planDateTo.split(' ')[0].split('-')[2];
-          //     let hour = x.planDateTo.split(' ')[1].split(':')[0];
-          //     x.planDateTo = date + ' ' + hour + 'h';
-          //     return x;
-          // });
-          this.list = []
+          this.list = content.res.map(x => {
+            let date = x.planDateTo.split(' ')[0].split('-')[1] + '-' + x.planDateTo.split(' ')[0].split('-')[2];
+            let hour = x.planDateTo.split(' ')[1].split(':')[0];
+            x.planDateTo = date + ' ' + hour + 'h';
+            return x;
+          });
+          // this.list = []
           if (this.list.length === 0) {
             this.showTips = false
           }

@@ -1,3 +1,5 @@
+
+
 import { proxy } from '../../ajax/http';
 // BOM
 export default {
@@ -84,5 +86,16 @@ export default {
     },
     previousStepDetailHttp (params) {
         return proxy.call('prd.bom.process.previousStep', params);
-    }
+    },
+    rdNoticeMachineSpecObtainByPrdNoticeId (params) {
+        return proxy.call('prd.notice.machine.spec.obtainByPrdNoticeId', params);
+    } ,
+    prdNoticeMachineSpecSaveAll (params) {
+        return proxy.call('prd.notice.machine.spec.saveAll', params);
+    },
+    // prdNoticeMachineSpecSaveAll (params) {
+    //     return proxy.call('prd.notice.machine.spec.saveAll', params);
+    // }
+
+
 };

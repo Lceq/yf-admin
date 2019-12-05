@@ -91,7 +91,7 @@
                 <Row>
                     <Col span="12">
                         <FormItem label="物料编码：" class="formItemMargin" prop="code">
-                            <Input type="text" v-model="formValidate.code" :disabled="isAutoCreatedProductCode === 'True' || editId" :placeholder="isAutoCreatedProductCode ? '自动生成物料编码' : '请输入物料编号!'" class="inputLength"/>
+                            <Input type="text" v-model="formValidate.code" :disabled="isAutoCreatedProductCode === 'True' || editId ? true : false" :placeholder="isAutoCreatedProductCode === 'True' ? '自动生成物料编码' : '请输入物料编号!'" class="inputLength"/>
                         </FormItem>
                     </Col>
                     <Col span="12">

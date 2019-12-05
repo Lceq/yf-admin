@@ -526,6 +526,7 @@
                     {title: '产品编号', key: 'productCode', align: 'center'},
                     {title: '产品名称', key: 'productName', align: 'center'},
                     {title: '工序', key: 'processName', align: 'center'},
+                    {title: '设备机型', key: 'model', align: 'center'},
                     {title: '工艺员', key: 'specUserName', align: 'center'}
                 ],
                 selectSpecModalTableData: [],

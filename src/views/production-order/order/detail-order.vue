@@ -12,7 +12,7 @@
                 <Button icon="md-refresh" type="warning" v-show="detailData.auditState === 3 && detailData.isQuote === false && detailData.isReport === false" class="screenButton" @click="unAuditEvent">撤销审核</Button>
                 <Button icon="md-close" type="error" v-show="detailData.auditState === 3" class="screenButton" @click="closeEvent">关闭单据</Button>
                 <Button icon="md-swap" type="warning" v-show="detailData.auditState === 4" class="screenButton" @click="unCloseEvent">撤销关闭</Button>
-                <Button v-show="detailData.auditState === 3 && isQuote === false" class="screenButton" @click="createdBomEvent">生成制造BOM</Button>
+<!--                <Button v-show="detailData.auditState === 3 && isQuote === false" class="screenButton" @click="createdBomEvent">生成制造BOM</Button>-->
                 <Button v-show="detailData.auditState === 3 && isQuote === true" class="screenButton" @click="seeBomDetailEvent">查看制造BOM</Button>
             </Col>
         </Row>

@@ -98,6 +98,7 @@
                                             v-show="curCompletionState === 1"
                                             v-model="settingState"
                                             placeholder="请选工艺设定状态"
+                                          
                                     >
                                         <Option
                                                 v-for="(item, index) in settingStateList"

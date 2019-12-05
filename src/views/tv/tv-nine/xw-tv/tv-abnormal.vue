@@ -2,7 +2,8 @@
   <div>
     <Carousel
       v-model="active"
-      :autoplay="false"
+      :autoplay="true"
+      :autoplay-speed="utoplaySpeed"
       :radius-dot="false"
       arrow="never"
       dots="none"
@@ -53,6 +54,7 @@
         ></xw-table>
         <div
           v-show="!showTipsThree"
+          class="center"
           style="line-height: 300px;text-align:center;"
         >
           暂无数据
@@ -80,6 +82,7 @@ export default {
   },
   data () {
     return {
+      utoplaySpeed: 3000,
       active: 0,
       fontSize: 0,
       numbers: 9,
@@ -225,11 +228,14 @@ export default {
       let params = {
         workshopId: this.workshopId
       };
+
       this.$call('large.screen.earlyWarning', params).then(res => {
         let content = res.data;
         if (content.status === 200) {
           this.listTwo = content.res;
-          //   this.listTwo = []
+          // this.listTwo = []
+          // console.log( this.listTwo,' this.listTwo');
+
           if (this.listTwo.length === 0) {
             this.showTipsTwo = false
           }
@@ -238,7 +244,9 @@ export default {
         }
       });
     },
+
     electricitiy () {
+
       let params = {
         workshopId: this.workshopId
       };
@@ -251,7 +259,9 @@ export default {
             x.power = x.power ? x.power : '-';
             return x;
           });
-          //   this.listThree = []
+          // this.listThree = []
+          // console.log(this.listThree,'this.listThree');
+
           if (this.listThree.length === 0) {
             this.showTipsThree = false
           }
@@ -287,6 +297,7 @@ export default {
       setTimeout(() => {
         this.getTime2(num, length, theight);
       }, this.stoptime);
+      // this.utoplaySpeed=2000000
     },
     getTime2 (num, length, theight) {
       this.$nextTick(() => {
@@ -330,6 +341,10 @@ export default {
       });
     }
   },
+  created () {
+    this.earlyWarning()
+    this.electricitiy()
+  },
   watch: {
     workshopId (newData, oldData) {
       this.processShowMonitoring();
@@ -338,4 +353,8 @@ export default {
 };
 </script>
 <style scoped>
+/* .center {
+  background-color: red;
+  color: pink;
+} */
 </style>

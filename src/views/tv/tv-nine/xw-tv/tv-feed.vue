@@ -2,7 +2,7 @@
   <div>
     <Carousel
       v-model="active"
-      :autoplay="false"
+      :autoplay="true"
       :radius-dot="false"
       arrow="never"
       dots="none"

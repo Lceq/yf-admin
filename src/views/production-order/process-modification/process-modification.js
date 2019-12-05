@@ -34,6 +34,7 @@ export default ({
 
                 {
                     title: '选择',
+                    fixed: 'left',
                     sortable: true,
                     width: 60,
                     align: 'center',
@@ -47,34 +48,35 @@ export default ({
                             on: {
                                 'on-change': (val) => {
                                     this.prdNoticeId = params.row.prdNoticeId;
-                                    this.prdNoticeIdList=this.prdNoticeIdList.concat(params.row.id)
-
-                                    _this.processModificationData[params.index].select = val;
+                                    this.prdNoticeIdList = this.prdNoticeIdList.concat(params.row.id)
+                                    params.row.
+                                        _this.processModificationData[params.index].select = val;
+                                    if (params.row.replacementState || params.row.settingState) {
+                                        _this.processModificationData[params.index].select = false
+                                        this.$Modal.warning({
+                                            title: '提示',
+                                            content: '<p>设备工艺状态为已进行或运转工艺状态为已进行</p>'
+                                        });
+                                    }
                                     if (_this.processModificationData.length === 1) {
                                         this.allSelest = false
                                     }
-
-
                                     _this.processModificationData.filter(x => x.select === true).map(y => {
-
                                         let obj = _this.processModificationData.find(x => x.select === true);
-
                                         if (obj) {
                                             if (y.prdOrderCodes !== obj.prdOrderCodes) {
                                                 this.$Modal.warning({
                                                     title: '提示',
-                                                    content: '<p>物料的品种或者批号不一致</p>'
+                                                    content: '<p>生产工序或订单号不一致</p>'
                                                 });
                                                 setTimeout(() => {
                                                     _this.processModificationData[params.index].select = false;
                                                 }, 100);
                                             } else {
-                                                // t
                                                 this.allSelest = false
                                             }
                                         }
                                     });
-
                                 }
                             }
                         });
@@ -568,6 +570,7 @@ export default ({
         };
     },
     methods: {
+
         onSelectionEvent (e) {
             // console.log('参数', e)
             let prdOrderCodesList = e.map((item) => item.prdOrderCodes)
@@ -796,9 +799,14 @@ export default ({
                 this.processModificationLoading = false;
                 if (content.status === 200) {
                     this.pageTotal = content.count;
-                    this.processModificationData = content.res;
-
+                    for (var i = 0; i <= content.res.length - 1; i++) {
+                          content.res[i]._checked= true
+                    }
+                    // 有问题
+                    this.processModificationData=content.res
+                    console.log(this.processModificationData,'sssssssssss');
                 }
+
             });
         },
         getPrdBomProductDetail () {

@@ -35,7 +35,6 @@ export default ({
                 {
                     title: '选择',
                     fixed: 'left',
-                    sortable: true,
                     width: 60,
                     align: 'center',
                     key: 'selection',
@@ -49,14 +48,16 @@ export default ({
                                 'on-change': (val) => {
                                     this.prdNoticeId = params.row.prdNoticeId;
                                     this.prdNoticeIdList = this.prdNoticeIdList.concat(params.row.id)
-                                    params.row.
+                                    // params.row.
                                         _this.processModificationData[params.index].select = val;
                                     if (params.row.replacementState || params.row.settingState) {
-                                        _this.processModificationData[params.index].select = false
                                         this.$Modal.warning({
                                             title: '提示',
                                             content: '<p>设备工艺状态为已进行或运转工艺状态为已进行</p>'
                                         });
+                                        setTimeout(() => {
+                                            _this.processModificationData[params.index].select = false;
+                                        }, 100);
                                     }
                                     if (_this.processModificationData.length === 1) {
                                         this.allSelest = false
@@ -634,7 +635,6 @@ export default ({
                     };
                 })
             }
-
             this.$api.manufacture.prdNoticeMachineSpecSaveAll(params).then(res => {
                 if (res.data.status === 200) {
                     this.$Message.success('翻转工艺设定成功');
@@ -799,14 +799,12 @@ export default ({
                 this.processModificationLoading = false;
                 if (content.status === 200) {
                     this.pageTotal = content.count;
-                    for (var i = 0; i <= content.res.length - 1; i++) {
-                          content.res[i]._checked= true
-                    }
                     // 有问题
-                    this.processModificationData=content.res
-                    console.log(this.processModificationData,'sssssssssss');
+                    this.processModificationData = content.res.map(x => {
+                        x.select = false;
+                        return x;
+                    });
                 }
-
             });
         },
         getPrdBomProductDetail () {

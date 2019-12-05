@@ -323,8 +323,6 @@
                 ></Table>
             </div>
         </modal>
-
-
         <!-- 翻转工艺        flipProcessTitle      FlipProcessTitle-->
         <modal
                 :isShow="isFlipProcess"
@@ -480,13 +478,10 @@
 
         
         </modal>
-
     </div>
 </template>
-
 <script>
     import processModification from './process-modification';
-
     export default {
         ...processModification,
         name: 'process-modification'

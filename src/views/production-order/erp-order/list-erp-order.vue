@@ -9,6 +9,9 @@
                 <global-loading v-show="globalLoadingShow"></global-loading>
                 <Row type="flex" justify="space-between" align="middle">
                     <Col>
+                        <Button icon="md-close" v-show="isSync === 1" type="error" @click="closeEvent" class="queryBarMarginRight margin-bottom-10">关闭</Button>
+                        <Button icon="md-swap" v-show="isSync === 2" type="warning" @click="unCloseEvent" class="queryBarMarginRight margin-bottom-10">撤销关闭
+                        </Button>
                         <Button icon="ios-trash" v-show="isSync===0" type="error" @click="deleteEvent" class="queryBarMarginRight margin-bottom-10">删除</Button>
                     </Col>
                     <Col>
@@ -66,12 +69,7 @@
                 deleteMsg: '',
                 deleteButtonLoading: false,
                 tableHeader: [
-                    {
-                        type: 'selection',
-                        width: 60,
-                        fixed: 'left',
-                        align: 'center'
-                    },
+                    {type: 'selection', width: 60, fixed: 'left', align: 'center'},
                     {
                         title: '操作',
                         key: 'date',
@@ -82,7 +80,7 @@
                             return h('Button', {
                                 props: {
                                     size: 'small',
-                                    disabled: params.row.isSync ? true : false
+                                    disabled: params.row.isSync === 2
                                 },
                                 on: {
                                     'click': () => {
@@ -92,29 +90,9 @@
                             }, '数据同步')
                         }
                     },
-                    {
-                        title: '订单日期',
-                        key: 'orderDate',
-                        align: 'left',
-                        fixed: 'left',
-                        sortable: true,
-                        minWidth: 110
-                    },
-                    {
-                        title: 'SAP编号',
-                        key: 'erpCode',
-                        fixed: 'left',
-                        sortable: true,
-                        minWidth: 160,
-                        align: 'left'
-                    },
-                    {
-                        title: '生产车间',
-                        key: 'workshopName',
-                        align: 'left',
-                        minWidth: 110,
-                        sortable: true
-                    },
+                    {title: '订单日期', key: 'orderDate', align: 'left', fixed: 'left', sortable: true, minWidth: 110},
+                    {title: 'SAP编号', key: 'erpCode', fixed: 'left', sortable: true, minWidth: 160, align: 'left'},
+                    {title: '生产车间', key: 'workshopName', align: 'left', minWidth: 110, sortable: true},
                     {
                         title: '产品',
                         key: 'productCode',
@@ -129,46 +107,12 @@
                             });
                         }
                     },
-                    {
-                        title: '批号',
-                        key: 'batchCode',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '工序',
-                        key: 'processName',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '生产数量',
-                        key: 'productionQty',
-                        align: 'right',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '交货开始日期',
-                        key: 'deliveryDateFrom',
-                        align: 'center',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '交货结束日期',
-                        key: 'deliveryDateTo',
-                        align: 'center',
-                        minWidth: 110,
-                        sortable: true
-                    },
-                    {
-                        title: '创建日期',
-                        key: 'createTime',
-                        align: 'center',
-                        minWidth: 140,
-                        sortable: true
-                    }
+                    {title: '批号', key: 'batchCode', minWidth: 110, sortable: true},
+                    {title: '工序', key: 'processName', minWidth: 110, sortable: true},
+                    {title: '生产数量', key: 'productionQty', align: 'right', minWidth: 110, sortable: true},
+                    {title: '交货开始日期', key: 'deliveryDateFrom', align: 'center', minWidth: 110, sortable: true},
+                    {title: '交货结束日期', key: 'deliveryDateTo', align: 'center', minWidth: 110, sortable: true},
+                    {title: '创建日期', key: 'createTime', align: 'center', minWidth: 140, sortable: true}
                 ],
                 tableData: [],
                 isSync: 0,
@@ -186,6 +130,34 @@
             };
         },
         methods: {
+            closeEvent () {
+                if (this.checkArr.length !== 0) {
+                    this.$api.order.erpOrderClosedRequest(this.checkArr.map(item => item.id)).then(res => {
+                        if (res.data.status === 200) {
+                            noticeTips(this, 'closeTips');
+                            this.checkArr = [];
+                            this.getListRequest();
+                            this.getMenuRequest();
+                        }
+                    })
+                } else {
+                    noticeTips(this, 'unCheckTips');
+                }
+            },
+            unCloseEvent () {
+                if (this.checkArr.length !== 0) {
+                    this.$api.order.erpOrderUnClosedRequest(this.checkArr.map(item => item.id)).then(res => {
+                        if (res.data.status === 200) {
+                            noticeTips(this, 'unCloseTips');
+                            this.checkArr = [];
+                            this.getListRequest();
+                            this.getMenuRequest();
+                        }
+                    })
+                } else {
+                    noticeTips(this, 'unCheckTips');
+                }
+            },
             // 同步事件
             syncDataEvent (id) {
                 this.$router.push({
@@ -199,6 +171,7 @@
             },
             // 菜单的点击事件
             getClickMenuEvent (menuData) {
+                console.log('选择', menuData)
                 this.pageIndex = 1;
                 this.pageTotal = 1;
                 this.isSync = menuData.id;
@@ -265,6 +238,7 @@
                     isSync: Boolean(this.isSync),
                     // workshopId: this.queryBarWorkshopValue,
                     pageSize: this.pageSize,
+                    isClosed: this.isSync === 2, // 未同步和已同步，传false
                     pageIndex: this.pageIndex
                 }).then((res) => {
                     if (res.data.status === 200) {

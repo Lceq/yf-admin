@@ -39,5 +39,11 @@ export default({
     },
     leftMenuListHttp (params) {
         return proxy.call('prd.order.stateCount', params);
+    },
+    erpOrderClosedRequest (params) {
+        return proxy.call('erp.order.closed', params);
+    },
+    erpOrderUnClosedRequest (params) {
+        return proxy.call('erp.order.unClosed', params);
     }
 });

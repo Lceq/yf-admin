@@ -46,7 +46,7 @@
                     </Col>
                     <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                         <FormItem label="SAP订单:" class="formItemMargin" prop="salesCode">
-                            <Input type="text" v-model="formValidate.salesCode" placeholder="请输入SAP订单"/>
+                            <Input type="text" v-model="formValidate.erpCode" placeholder="请输入SAP订单"/>
                         </FormItem>
                     </Col>
                 </Row>

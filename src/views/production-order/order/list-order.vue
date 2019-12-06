@@ -372,8 +372,7 @@
                             });
                         }
                     },
-                    {title: '生产数量', key: 'productionQty', align: 'right', minWidth: 100, sortable: true},
-                    {title: '单据状态', key: 'auditStateName', minWidth: 100, align: 'center', sortable: true}
+                    {title: '生产数量', key: 'productionQty', align: 'right', minWidth: 100, sortable: true}
                 ],
                 tableHeader: [
                     {type: 'selection', width: 60, fixed: 'left', align: 'center'},

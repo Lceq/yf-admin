@@ -613,11 +613,7 @@
                     }
                 ],
                 tableData: [
-                    {
-                        deliveryDate: '',
-                        operation: '',
-                        deliveredQty: null
-                    }
+                    {deliveryDate: '', operation: '', deliveredQty: null}
                 ],
                 workshopList: [],
                 orderTypeList: [],
@@ -675,7 +671,7 @@
                 } else {
                     this.formCustom.paperTubeId = null;
                     this.formCustom.paperTubeName = '';
-                };
+                }
             },
             // 封包绳颜色事件
             getBagMouthEvent (e) {
@@ -685,7 +681,7 @@
                 } else {
                     this.formCustom.bagMouthId = null;
                     this.formCustom.bagMouthName = '';
-                };
+                }
             },
             // 腰绳颜色事件
             getWaistRopeEvent (e) {
@@ -695,7 +691,7 @@
                 } else {
                     this.formCustom.waistRopeId = null;
                     this.formCustom.waistRopeName = '';
-                };
+                }
             },
             // 日供货量的事件
             getDailySupplyQtyEvent (e) {
@@ -704,7 +700,7 @@
                 } else {
                     emptyTips(this, '日供货量不能大于订单数量!');
                     this.tableData = JSON.parse(JSON.stringify(this.initTableData));
-                };
+                }
             },
             // 获取选中的包装方式
             getPackingModelEvent (event) {
@@ -724,7 +720,7 @@
                     if (res.data.status === 200) {
                         this.remoteBatchCodeList = res.data.res;
                         this.$set(this.formValidate, 'batchCode', batchCode);
-                    };
+                    }
                 });
             },
             // 选择批次modal的搜索按钮事件
@@ -735,7 +731,7 @@
                     if (res.data.status === 200) {
                         this.selectBatchModalTableData = res.data.res;
                         this.selectBatchPageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             // 选择批次modal的分页事件
@@ -745,7 +741,7 @@
                     if (res.data.status === 200) {
                         this.selectBatchModalTableData = res.data.res;
                         this.selectBatchPageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             // 获取批次列表
@@ -777,7 +773,7 @@
                         this.selectBatchModalSpinShow = false;
                         this.selectBatchModalTableData = res.data.res;
                         this.selectBatchPageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             selectBatchModalStateChangeEvent (e) {
@@ -814,12 +810,12 @@
             getPacketWeightMinEvent () {
                 if (this.formCustom.packetWeightMin >= this.formCustom.packetWeightMax) {
                     emptyTips(this, '最小成包重量不能大于或等于最大成包重量!');
-                };
+                }
             },
             getPacketWeightMaxEvent () {
                 if (this.formCustom.packetWeightMin >= this.formCustom.packetWeightMax) {
                     emptyTips(this, '最小成包重量不能大于或等于最大成包重量!');
-                };
+                }
             },
             // 选择物料modal的搜索事件
             selectMaterialModalSearchBtnEvent (e) {
@@ -870,9 +866,7 @@
                     this.formValidate.technologyId = e.technologyId;
                     this.selectMaterialModalState = false;
                     this.getProductToBatchCodeListHttp(e.code).then(res => {
-                        if (res.data.status === 200) {
-                            this.remoteBatchCodeList = res.data.res;
-                        }
+                        if (res.data.status === 200) this.remoteBatchCodeList = res.data.res;
                     });
                 }
             },
@@ -913,7 +907,7 @@
                             this.remoteBatchCodeList = res.data.res;
                         }
                     });
-                };
+                }
             },
             // 搜索产品的方法
             remoteMaterialMethod (query) {
@@ -962,20 +956,22 @@
             // 计算具体交期和交货数量
             calculateQty () {
                 if (this.formValidate.deliveryDateFrom && this.formValidate.productionQty && this.formValidate.dailySupplyQty) {
+                    let allDates = [];
+                    allDates = this.getAllDate(this.formValidate.deliveryDateFrom, this.formValidate.deliveryDateTo);
                     this.tableData = [];
-                    let day = Math.ceil(mathJsDiv(this.formValidate.productionQty, this.formValidate.dailySupplyQty));
-                    for (let i = 0; i < parseInt(day); i++) {
+                    allDates.forEach(item => {
                         this.tableData.push({
-                            deliveryDate: formatDay(new Date(this.formValidate.deliveryDateFrom).valueOf() + i * 24 * 60 * 60 * 1000),
+                            deliveryDate: item,
                             deliveredQty: this.formValidate.dailySupplyQty
                         });
-                    };
-                    let accumulationQty = 0; // 当前交货数量
-                    let surplusQty = 0; // 剩余交货数量
-                    accumulationQty = mathJsMul(parseInt(day), this.formValidate.dailySupplyQty);
-                    surplusQty = mathJsSub(this.formValidate.productionQty, accumulationQty);
-                    this.tableData[this.tableData.length - 1].deliveredQty = mathJsAdd(this.tableData[this.tableData.length - 1].deliveredQty, surplusQty);
-                };
+                    });
+                    // 剩余数量
+                    let surplusQty = mathJsSub(this.formValidate.productionQty, mathJsMul(this.formValidate.dailySupplyQty, this.tableData.length));
+                    // 将剩余累加到最后一天
+                    if (surplusQty) {
+                        this.tableData[this.tableData.length - 1].deliveredQty = mathJsAdd(this.tableData[this.tableData.length - 1].deliveredQty, surplusQty)
+                    }
+                }
             },
             // 获取生产数量
             getProductionNumEvent (e) {
@@ -986,10 +982,10 @@
                         this.calculateQty();
                     } else {
                         emptyTips(this, '交货开始时间必须早于交货结束时间!');
-                    };
+                    }
                 } else {
                     this.tableData = JSON.parse(JSON.stringify(this.initTableData));
-                };
+                }
             },
             format (time) {
                 let ymd = '';
@@ -1034,7 +1030,7 @@
                         this.selectMaterialTableLoading = false;
                         this.selectMaterielModalTableData = res.data.res;
                         this.selectMaterialPageTotal = res.data.count;
-                    };
+                    }
                 });
             },
             // 获取细纱关联的产品
@@ -1049,7 +1045,7 @@
                             this.$set(item, 'label', `${item.name}(${item.code})`);
                         });
                         this.remoteList = res.data.res;
-                    };
+                    }
                 }).catch(err => {
                     reject(err);
                 });
@@ -1098,7 +1094,7 @@
                             return date && (date.valueOf() < startTime);
                         }
                     };
-                };
+                }
                 // this.startTimeAndEndTime();
                 if (this.formValidate.deliveryDateFrom && this.formValidate.deliveryDateTo) {
                     let dayNum = this.getAllDate(formatDay(this.formValidate.deliveryDateFrom), formatDay(this.formValidate.deliveryDateTo)).length;
@@ -1149,12 +1145,12 @@
                     });
                 } else {
                     this.tableData = this.initTableData;
-                };
+                }
                 // 计算日供货量
                 if (this.formValidate.productionQty) {
                     let vl = accDivision(this.formValidate.productionQty, this.tableData.length);
                     this.formValidate.dailySupplyQty = parseInt(vl);
-                };
+                }
             },
             // 获取选中的计划员
             getSelectPlanner (e) {
@@ -1163,12 +1159,12 @@
                         if (item.id === e) {
                             this.formValidate.plannerId = item.id;
                             this.formValidate.plannerName = item.name;
-                        };
+                        }
                     });
                 } else {
                     this.formValidate.plannerId = null;
                     this.formValidate.plannerName = '';
-                };
+                }
             },
             // 搜索计划员的方法
             getPlanner (query) {
@@ -1180,7 +1176,7 @@
                     }, 200);
                 } else {
                     this.plannerList = [];
-                };
+                }
             },
             getUserListHttp (resolve, reject) {
                 return this.$api.user.listHttp({
@@ -1196,7 +1192,7 @@
                             items.value = items.id;
                         });
                         this.remoteUserList = responseData;
-                    };
+                    }
                 }).catch(err => {
                     reject(err);
                 });
@@ -1290,10 +1286,10 @@
                             this.publicPromptStatus = false;
                             this.deleteButtonLoading = false;
                             this.getDetailHttp(res.data.res);
-                        };
+                        }
                     } else {
                         this.deleteButtonLoading = false;
-                    };
+                    }
                 });
             },
             // 保存和提交取消按钮
@@ -1321,18 +1317,18 @@
                                 } else {
                                     if (!this.formCustom.packingModeId || !this.formCustom.packetWeightMin || !this.formCustom.packetWeightMax || !this.formCustom.packetQty) {
                                         emptyTips(this, '包装要求未填写完整!');
-                                    };
+                                    }
                                     this.saveToSubmit = false;
-                                };
+                                }
                             });
                         } else {
                             if (!this.formValidate.productCode || !this.formValidate.twistDirectionId || !this.formValidate.batchCode || !this.formValidate.productionQty || this.formValidate.weightRate === undefined || this.formValidate.weightRate === null) {
                                 emptyTips(this, '基本信息未填写完整!');
-                            };
+                            }
                             this.saveToSubmit = false;
-                        };
+                        }
                     });
-                };
+                }
             },
             // 保存的事件
             saveDropDownEvent () {
@@ -1342,13 +1338,13 @@
                     this.saveHttp();
                 } else {
                     emptyTips(this, '交货时间不能为空!');
-                };
+                }
             },
             // 表格的减少按钮
             reduceTableButton (index) {
                 if (this.tableData.length > 1) {
                     this.tableData.splice(index, 1);
-                };
+                }
             },
             // 表格的添加按钮
             addTableButton (index) {
@@ -1366,7 +1362,7 @@
                 } else {
                     this.formValidate.typeId = null;
                     this.formValidate.typeName = '';
-                };
+                }
             },
             // 提交的请求
             pushHttp (ids) {
@@ -1387,7 +1383,7 @@
                         });
                     } else {
                         this.deleteButtonLoading = false;
-                    };
+                    }
                 });
             },
             // 提交事件
@@ -1418,21 +1414,21 @@
                                         this.publicPromptStatus = true;
                                         this.PromptMsg = `交货数量(${totalNum})大于生产数量(${this.formValidate.productionQty}),无法操作!`;
                                         this.isNoKept = true;
-                                    };
+                                    }
                                 } else {
                                     emptyTips(this, '交货日期应在交货周期范围内!');
-                                };
+                                }
                             } else {
                                 if (!this.formCustom.packingModeId || !this.formCustom.packetWeightMin || !this.formCustom.packetWeightMax || !this.formCustom.packetQty || this.formCustom.packingBag || this.formCustom.bagMouthId || this.formCustom.waistRopeId || this.formCustom.isCardboard || this.formCustom.isWord || this.formCustom.paperTubeId) {
                                     emptyTips(this, '包装要求未填写完整!');
-                                };
-                            };
+                                }
+                            }
                         });
                     } else {
                         if (!this.formValidate.productCode || !this.formValidate.twistDirectionId || !this.formValidate.batchCode || !this.formValidate.productionQty || !!this.formValidate.weightRate) {
                             emptyTips(this, '基本信息未填写完整!');
-                        };
-                    };
+                        }
+                    }
                 });
             },
             // 撤销事件
@@ -1448,7 +1444,7 @@
                     if (res.data.status === 200) {
                         this.getDetailHttp(this.editId);
                         noticeTips(this, 'cancelTips');
-                    };
+                    }
                 });
             },
             // 审核的事件
@@ -1458,7 +1454,7 @@
                     ids.push(this.editId);
                     this.globalLoadingShow = true;
                     this.auditHttp(ids);
-                };
+                }
             },
             // 反审核的事件
             unAuditEvent (e) {
@@ -1467,7 +1463,7 @@
                     ids.push(this.editId);
                     this.globalLoadingShow = true;
                     this.unAuditHttp(ids);
-                };
+                }
             },
             // 反审核
             unAuditHttp (ids) {
@@ -1475,7 +1471,7 @@
                     if (res.data.status === 200) {
                         noticeTips(this, 'unAuditTips');
                         this.getDetailHttp(this.editId);
-                    };
+                    }
                 });
             },
             // 审核的请求
@@ -1484,7 +1480,7 @@
                     if (res.data.status === 200) {
                         noticeTips(this, 'auditTips');
                         this.getDetailHttp(this.editId);
-                    };
+                    }
                 });
             },
             // 关闭的请求
@@ -1493,7 +1489,7 @@
                     if (res.data.status === 200) {
                         noticeTips(this, 'closeTips');
                         this.getDetailHttp(this.editId);
-                    };
+                    }
                 });
             },
             // 反关闭的请求
@@ -1502,7 +1498,7 @@
                     if (res.data.status === 200) {
                         noticeTips(this, 'unCloseTips');
                         this.getDetailHttp(this.editId);
-                    };
+                    }
                 });
             },
             // 关闭的点击事件
@@ -1558,9 +1554,9 @@
                                 this.remoteMaterialMethod(responseData.productCode);
                                 this.formCustom = responseData.orderPackingEntity;
                                 this.globalLoadingShow = false;
-                            };
+                            }
                         });
-                    };
+                    }
                 });
             },
             // 限制期限
@@ -1572,7 +1568,7 @@
                             return date && date.valueOf() > endTime;
                         } else {
                             return false;
-                        };
+                        }
                     }
                 };
                 this.endTimeOptions = {
@@ -1582,7 +1578,7 @@
                             return date && (date.valueOf() < startTime);
                         } else {
                             return false;
-                        };
+                        }
                     }
                 };
                 // 限制动态的交货日期选择范围
@@ -1600,7 +1596,7 @@
                     if (res.data.status === 200) {
                         resolve(res);
                         this.workshopList = res.data.res; ;
-                    };
+                    }
                 }).catch(err => {
                     reject(err);
                 });
@@ -1624,7 +1620,7 @@
                     if (res.data.status === 200) {
                         resolve(res);
                         this.twistDirectionList = res.data.res;
-                    };
+                    }
                 });
             },
             // 获取纱线用途
@@ -1633,7 +1629,7 @@
                     if (res.data.status === 200) {
                         resolve(res);
                         this.purposeList = res.data.res;
-                    };
+                    }
                 });
             },
             // 获取包装方式
@@ -1642,7 +1638,7 @@
                     if (res.data.status === 200) {
                         resolve(res);
                         this.packingModeList = res.data.res;
-                    };
+                    }
                 });
             },
             // 订单优先级
@@ -1651,7 +1647,7 @@
                     if (res.data.status === 200) {
                         resolve(res);
                         this.emergencyStateList = res.data.res;
-                    };
+                    }
                 });
             },
             // 初始化数据
@@ -1665,7 +1661,7 @@
                         if (this.$route.query.id !== undefined) { // 复制操作
                             this.editId = this.$route.query.id;
                             this.getDetailHttp(this.editId);
-                        };
+                        }
                     }, 0);
                 });
             },
@@ -1710,7 +1706,7 @@
                     if (res.data.status === 200) {
                         this.bagMouthList = res.data.res;
                         resolve(res);
-                    };
+                    }
                 });
             },
             // 获取腰绳列表数据
@@ -1722,7 +1718,7 @@
                     if (res.data.status === 200) {
                         this.waistRopeList = res.data.res;
                         resolve(res);
-                    };
+                    }
                 });
             },
             // 获取腰绳列表数据
@@ -1734,7 +1730,7 @@
                     if (res.data.status === 200) {
                         this.paperTubeList = res.data.res;
                         resolve(res);
-                    };
+                    }
                 });
             },
             getAllDataHttp () {
@@ -1769,7 +1765,7 @@
             if (!this.toCreated && this.$route.query.activated === true) {
                 this.defaultActiveTabs = '0';
                 this.initData();
-            };
+            }
             this.toCreated = false;
             this.$route.query.activated = false;
         }

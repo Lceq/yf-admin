@@ -740,20 +740,22 @@
             // 计算具体交期和交货数量
             calculateQty () {
                 if (this.formValidate.deliveryDateFrom && this.formValidate.productionQty && this.formValidate.dailySupplyQty) {
+                    let allDates = [];
+                    allDates = this.getAllDate(this.formValidate.deliveryDateFrom, this.formValidate.deliveryDateTo);
                     this.tableData = [];
-                    let day = Math.ceil(mathJsDiv(this.formValidate.productionQty, this.formValidate.dailySupplyQty));
-                    for (let i = 0; i < parseInt(day); i++) {
+                    allDates.forEach(item => {
                         this.tableData.push({
-                            deliveryDate: formatDate(new Date(this.formValidate.deliveryDateFrom).valueOf() + i * 24 * 60 * 60 * 1000),
+                            deliveryDate: item,
                             deliveredQty: this.formValidate.dailySupplyQty
                         });
-                    };
-                    let accumulationQty = 0; // 当前交货数量
-                    let surplusQty = 0; // 剩余交货数量
-                    accumulationQty = parseFloat(mathJsMul(parseInt(day), this.formValidate.dailySupplyQty));
-                    surplusQty = mathJsSub(this.formValidate.productionQty, accumulationQty);
-                    this.tableData[this.tableData.length - 1].deliveredQty = mathJsAdd(this.tableData[this.tableData.length - 1].deliveredQty, surplusQty);
-                };
+                    });
+                    // 剩余数量
+                    let surplusQty = mathJsSub(this.formValidate.productionQty, mathJsMul(this.formValidate.dailySupplyQty, this.tableData.length));
+                    // 将剩余累加到最后一天
+                    if (surplusQty) {
+                        this.tableData[this.tableData.length - 1].deliveredQty = mathJsAdd(this.tableData[this.tableData.length - 1].deliveredQty, surplusQty)
+                    }
+                }
             },
             // 获取选中的包装方式
             getPackingModelEvent (event) {

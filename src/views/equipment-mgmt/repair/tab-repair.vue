@@ -229,19 +229,24 @@
             </div>
             <!-- 维修人信息 -->
             <div class="">
-              <Row justify='start' type='flex'>
-                <Col span='3'>
-                    <span class="spanTitle">实际维修人员:</span>
+              <Row justify="start" type="flex">
+                <Col span="3">
+                  <span class="spanTitle">实际维修人员:</span>
                 </Col>
-                <Col  span='19'>
-                    <Select  multiple :max-tag-count="6"  >
-                      <Option
-                        v-for="item in userList"
-                        :value="item.id"
-                        :key="item.id"
-                        >{{ item.name  }}</Option
-                      >
-                    </Select>
+                <Col span="19">
+                  <Select
+                    
+                    v-model="actualRepairmanIds"
+                    multiple
+                    :max-tag-count="6"
+                  >
+                    <Option
+                      v-for="item in userList"
+                      :value="item.id"
+                      :key="item.id"
+                      >{{ item.name }}</Option
+                    >
+                  </Select>
                 </Col>
               </Row>
             </div>
@@ -779,19 +784,17 @@ export default {
       isEdit: false,
       //   user
       userList: [],
-      actualRepairmanIds:'',
-      actualRepairmanNames:''
+      actualRepairmanIds: [],
+      actualRepairmanNames: [],
+      actualRepairmanNamesList: []
     };
   },
   methods: {
     getuserListData () {
-      let params = {}
-      this.$api.manufacture.userList(params).then(res => {
+      this.$api.manufacture.userList().then(res => {
         if (res.data.status === 200) {
-            this.userList = res.data.res.filter((item) => item.onJob === true)
-            // console.log(res.data.res);
-            
-          console.log(this.userList);
+          this.userList = res.data.res.filter((item) => item.onJob === true)
+          this.actualRepairmanIds = this.userList.id
         }
       })
     },
@@ -993,6 +996,7 @@ export default {
       this.RepairMachineModalShow = false;
       this.isEdit = false;
     },
+    // ===========================================================================
     RepairMachineModalSubmit () {
       let params = {
         id: this.curRepairMachineId,
@@ -1008,10 +1012,10 @@ export default {
         faultTypeId: this.faultTypeId,
         faultCauseId: this.faultCauseId,
         faultCauseName: this.faultCauseId === '' ? '' : this.faultCauseList.find(x => x.id === this.faultCauseId).name,
-        repairDescription: this.repairDescription
+        repairDescription: this.repairDescription,
+        actualRepairmanIds: JSON.stringify(this.actualRepairmanIds),
+        actualRepairmanNames: JSON.stringify(this.userList.filter((x) => this.actualRepairmanIds.includes(x.id)).map((y) => y.name))
       };
-      actualRepairmanIds
-      actualRepairmanNames
       // 接单  || 维修完成
       if ((this.curCompletionState === 0) || (this.curCompletionState === 1 && !this.isEdit)) {
         this.RepairMachineModalLoading = true;

@@ -46,7 +46,7 @@ export default ({
                             },
                             on: {
                                 'on-change': (val) => {
-                                   
+
                                     _this.processModificationData[params.index].select = val;
 
                                     _this.processModificationData.filter(x => x.select === true).map(y => {
@@ -77,9 +77,10 @@ export default ({
                                     }
                                     setTimeout(() => {
                                         this.prdNoticeIdList = _this.processModificationData.filter(x => x.select === true).map(y => y.id);
-                                        if(_this.processModificationData.select === true){
+                                        if (_this.processModificationData.select === true) {
                                             this.prdNoticeId = params.row.prdNoticeId;
-                                            console.log( this.prdNoticeId ,'');
+                                            // console.log( this.prdNoticeId ,'');
+
                                         }
                                         if (this.prdNoticeIdList.length === 0) {
                                             this.allSelest = true;
@@ -687,9 +688,12 @@ export default ({
                 let content = res.data;
                 if (content.status === 200) {
                     this.tubeColor = content.res.map(item => {
+
                         item.codeName = item.name + '(' + item.shortName + ')';
                         return item;
                     });
+                    console.log(this.tubeColor, 'this.tubeColor');
+
                     this.options2 = this.tubeColor;
                 }
             });

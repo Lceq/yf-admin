@@ -51,11 +51,6 @@
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="纱线捻向:" class="formItemMargin">
-                        <div class="read-only-item">{{ bomDetailData.twistDirectionName }}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="批号:" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.batchCode}}</div>
                     </FormItem>
@@ -83,11 +78,6 @@
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
                     <FormItem label="交货结束时间:" class="formItemMargin">
                         <div class="read-only-item">{{bomDetailData.deliveryDateTo}}</div>
-                    </FormItem>
-                </Col>
-                <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">
-                    <FormItem label="日供货量:" class="formItemMargin">
-                        <div class="read-only-item">{{bomDetailData.dailySupplyQty}}</div>
                     </FormItem>
                 </Col>
                 <Col :sm="12" :md="12" :lg="8" :xl="6" :xxl="6">

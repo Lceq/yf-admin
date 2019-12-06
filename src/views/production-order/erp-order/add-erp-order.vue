@@ -117,7 +117,7 @@
                                     </Select>
                                 </FormItem>
                             </Col>-->
-                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                            <!--<Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
                                 <FormItem label="批号:" class="formItemMargin" prop="batchCode">
                                     <div class="flex-left line-height-27">
                                         <Select
@@ -133,6 +133,16 @@
                                         <Button :disabled="formValidate.productCode ? false : true" @click="clickMainBatchCodeCodeEvent" class="remoteSearchButton" size="small" icon="ios-search"></Button>
                                         <Poptip trigger="hover" content="点击新增批号" placement="bottom">
                                             <Button :disabled="formValidate.productCode ? false : true" @click="addBatchCodeEvent" class="line-height-27 add-batch-code-button" size="small" icon="ios-create"></Button>
+                                        </Poptip>
+                                    </div>
+                                </FormItem>
+                            </Col>-->
+                            <Col :sm="12" :md="12" :lg="8" :xl="8" :xxl="6">
+                                <FormItem label="批号:" class="formItemMargin" prop="batchCode">
+                                    <div class="flex-left line-height-27">
+                                        <Input v-model="formValidate.batchCode" class="widthPercentage"/>
+                                        <Poptip trigger="hover" content="点击创建批号" placement="bottom">
+                                            <Button :disabled="!formValidate.productCode || !formValidate.batchCode" @click="createBatchCodeEvent" class="line-height-27 add-batch-code-button" size="small" icon="ios-create" :loading="createBatchCodeLoading"></Button>
                                         </Poptip>
                                     </div>
                                 </FormItem>
@@ -339,7 +349,7 @@
     </card>
 </template>
 <script>
-    import common, { mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, toDaySeconds, compClientHeight, addNum, setPage, accDivision, emptyTips } from '../../../libs/common';
+    import common, { toDay, mathJsAdd, mathJsSub, mathJsDiv, mathJsMul, noticeTips, formatDate, toDaySeconds, compClientHeight, addNum, setPage, accDivision, emptyTips } from '../../../libs/common';
     import tipsModal from '../../public/deleteWarning';
     import tipsClear from '../../components/tips-modal';
     import selectMaterialModal from '../order/select-material';
@@ -390,8 +400,8 @@
             const validatePackingMode = (rule, value, callback) => _this.formValidate.packingModeId ? callback() : callback(new Error());
             const validateTwistDirection = (rule, value, callback) => value ? callback() : callback(new Error());
             const validateDailySupplyQty = (rule, value, callback) => _this.formValidate.dailySupplyQty ? callback() : callback(new Error());
-
             return {
+                createBatchCodeLoading: false,
                 bagMouthList: [],
                 paperTubeList: [],
                 waistRopeList: [],
@@ -642,6 +652,28 @@
             };
         },
         methods: {
+            createBatchCodeEvent () {
+                let params = {
+                    batchCode: this.formValidate.batchCode,
+                    productId: this.formValidate.productId,
+                    productCode: this.formValidate.productCode,
+                    productName: this.formValidate.productName,
+                    productModels: this.formValidate.productModels,
+                    batchDate: toDay(),
+                    auditState: 3
+                };
+                this.createBatchCodeLoading = true;
+                this.$call('product.batch.save', params).then(res => {
+                    if (res.data.status === 200) {
+                        noticeTips(this, 'saveTips');
+                        this.showModal = false;
+                        this.createBatchCodeLoading = false;
+                    } else {
+                        this.formValidate.batchCode = '';
+                        this.createBatchCodeLoading = false;
+                    }
+                });
+            },
             // 纸管颜色事件
             getPaperTubeIdEvent (e) {
                 if (e) {

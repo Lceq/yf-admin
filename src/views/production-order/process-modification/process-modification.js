@@ -29,9 +29,9 @@ export default ({
             modificationOne: {},
             // 这
             allSelest: true,
-            //zhe
+            // zhe
+            processModificationData: [],
             processModificationColumns: [
-
                 {
                     title: '选择',
                     fixed: 'left',
@@ -46,22 +46,9 @@ export default ({
                             },
                             on: {
                                 'on-change': (val) => {
-                                    this.prdNoticeId = params.row.prdNoticeId;
-                                    this.prdNoticeIdList = this.prdNoticeIdList.concat(params.row.id)
-                                    // params.row.
-                                        _this.processModificationData[params.index].select = val;
-                                    if (params.row.replacementState || params.row.settingState) {
-                                        this.$Modal.warning({
-                                            title: '提示',
-                                            content: '<p>设备工艺状态为已进行或运转工艺状态为已进行</p>'
-                                        });
-                                        setTimeout(() => {
-                                            _this.processModificationData[params.index].select = false;
-                                        }, 100);
-                                    }
-                                    if (_this.processModificationData.length === 1) {
-                                        this.allSelest = false
-                                    }
+                                   
+                                    _this.processModificationData[params.index].select = val;
+
                                     _this.processModificationData.filter(x => x.select === true).map(y => {
                                         let obj = _this.processModificationData.find(x => x.select === true);
                                         if (obj) {
@@ -72,12 +59,32 @@ export default ({
                                                 });
                                                 setTimeout(() => {
                                                     _this.processModificationData[params.index].select = false;
-                                                }, 100);
-                                            } else {
+                                                });
+                                            } else if (y.prdOrderCodes === obj.prdOrderCodes) {
                                                 this.allSelest = false
                                             }
                                         }
                                     });
+                                    if ((this.paramType === 1 && params.row.replacementState) || (this.paramType === 2 && params.row.settingState)) {
+                                        this.allSelest = true;
+                                        this.$Modal.warning({
+                                            title: '提示',
+                                            content: '<p>设备工艺状态为已进行</p>'
+                                        });
+                                        setTimeout(() => {
+                                            _this.processModificationData[params.index].select = false;
+                                        });
+                                    }
+                                    setTimeout(() => {
+                                        this.prdNoticeIdList = _this.processModificationData.filter(x => x.select === true).map(y => y.id);
+                                        if(_this.processModificationData.select === true){
+                                            this.prdNoticeId = params.row.prdNoticeId;
+                                            console.log( this.prdNoticeId ,'');
+                                        }
+                                        if (this.prdNoticeIdList.length === 0) {
+                                            this.allSelest = true;
+                                        }
+                                    }, 100);
                                 }
                             }
                         });
@@ -340,7 +347,7 @@ export default ({
                     }
                 }
             ],
-            processModificationData: [],
+
             tableHeight: '',
             orderSelectedShow: false,
             dateFrom: '',
@@ -567,46 +574,43 @@ export default ({
                 efficiencyPercent: '',
                 tubeTypeId: null,
                 tubeColorIds: []
-            },
+            }
         };
     },
     methods: {
 
         onSelectionEvent (e) {
             // console.log('参数', e)
-            let prdOrderCodesList = e.map((item) => item.prdOrderCodes)
+            let prdOrderCodesList = e.map((item) => item.prdOrderCodes);
             for (var i = 0; i < prdOrderCodesList.length - 1; i++) {
                 if (prdOrderCodesList[i] === prdOrderCodesList[i + 1]) {
-
-                    this.allSelest = false
+                    f = false;
                 } else {
                     this.$Modal.warning({
                         title: '提示',
                         content: '<p>生产工序或者订单号不一致</p>'
                     });
-
                 }
             }
         },
         onSeverseTec () {
-            this.isFlipProcess = true
+            this.isFlipProcess = true;
             let params = {
                 prdNoticeId: this.prdNoticeId,
                 paramType: this.paramType
-            }
+            };
             this.$api.manufacture.rdNoticeMachineSpecObtainByPrdNoticeId(params).then(res => {
                 if (res.data.status === 200) {
-                    this.flipProcessTitleForm = res.data.res
-                    this.isFlipProcessTitleData = res.data.res.prdNoticeMachineSpecParamList
+                    this.flipProcessTitleForm = res.data.res;
+                    this.isFlipProcessTitleData = res.data.res.prdNoticeMachineSpecParamList;
                 }
             });
-
         },
         flipProcessTitleCancel () {
-            this.isFlipProcess = false
+            this.isFlipProcess = false;
         },
         flipProcessTitleSubmit () {
-            this.isFlipProcess = false
+            this.isFlipProcess = false;
             let params = {
                 id: this.flipProcessTitleForm.id ? this.flipProcessTitleForm.id : null,
                 paramType: this.paramType,
@@ -634,7 +638,7 @@ export default ({
                         isBusi: item.isBusi
                     };
                 })
-            }
+            };
             this.$api.manufacture.prdNoticeMachineSpecSaveAll(params).then(res => {
                 if (res.data.status === 200) {
                     this.$Message.success('翻转工艺设定成功');
@@ -764,7 +768,7 @@ export default ({
             this.prdNoticeCode = '';
             this.productNameCode = '';
             this.curCompletionState = val.id;
-            this.paramType = val.id + 1
+            this.paramType = val.id + 1;
             if (val.id === 0) {
                 this.replacementState = 'false';
                 this.settingState = '';
@@ -772,7 +776,7 @@ export default ({
             if (val.id === 1) {
                 this.replacementState = '';
                 this.settingState = 'false';
-                this.isflipProcesSelsct = !this.isflipProcesSelsct
+                this.isflipProcesSelsct = !this.isflipProcesSelsct;
             }
             this.getNum();
         },
@@ -799,11 +803,13 @@ export default ({
                 this.processModificationLoading = false;
                 if (content.status === 200) {
                     this.pageTotal = content.count;
-                    // 有问题
+                    // 
                     this.processModificationData = content.res.map(x => {
                         x.select = false;
                         return x;
                     });
+                    // console.log(this.processModificationData,'this.processModificationData');
+
                 }
             });
         },

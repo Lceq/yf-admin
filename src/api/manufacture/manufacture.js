@@ -93,6 +93,9 @@ export default {
     prdNoticeMachineSpecSaveAll (params) {
         return proxy.call('prd.notice.machine.spec.saveAll', params);
     },
+    userList (params) {
+        return proxy.call('user.list', params);
+    },
     // prdNoticeMachineSpecSaveAll (params) {
     //     return proxy.call('prd.notice.machine.spec.saveAll', params);
     // }

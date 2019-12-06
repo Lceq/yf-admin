@@ -10,7 +10,7 @@
         <div class="flexBetween" id="selectedHeight">
           <div class="leftFlex">
             <Button
-              v-if="curCompletionState === 0 && this.rightItems.cancelCall"
+              v-if="curCompletionState === 0 "
               class="marginBottom marginButtonLeft"
               type="error"
               @click="cancelFaultCall"
@@ -18,7 +18,7 @@
             >
             <Button
               icon="md-close"
-              v-if="curCompletionState === 2 && this.rightItems.close"
+              v-if="curCompletionState === 2 "
               class="marginBottom"
               type="error"
               @click="handleClose"
@@ -26,7 +26,7 @@
             >
             <Button
               icon="md-swap"
-              v-if="curCompletionState === 2 && this.rightItems.unclose"
+              v-if="curCompletionState === 2 "
               class="marginBottom marginButtonLeft"
               type="warning"
               @click="handleUnClose"
@@ -996,7 +996,6 @@ export default {
       this.RepairMachineModalShow = false;
       this.isEdit = false;
     },
-    // ===========================================================================
     RepairMachineModalSubmit () {
       let params = {
         id: this.curRepairMachineId,

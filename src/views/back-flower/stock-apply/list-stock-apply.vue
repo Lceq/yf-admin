@@ -761,6 +761,8 @@
                         this.queryBarWorkshopValue = responseData.defaultDeptId;
                         this.defaultWorkshop = responseData.defaultDeptId;
                         this.queryBarWorkshopList = responseData.userData;
+                        console.log(this.queryBarWorkshopList,'opList');
+                        
                         this.initSaveData.workshopId = responseData.defaultDeptId;
                         this.initSaveData.workshopName = responseData.defaultDeptName;
                     }

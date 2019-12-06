@@ -96,6 +96,9 @@ export default {
     userList (params) {
         return proxy.call('user.list', params);
     },
+    prdOrderList (params) {
+        return proxy.call('prd.order.list', params);
+    },
     // prdNoticeMachineSpecSaveAll (params) {
     //     return proxy.call('prd.notice.machine.spec.saveAll', params);
     // }
